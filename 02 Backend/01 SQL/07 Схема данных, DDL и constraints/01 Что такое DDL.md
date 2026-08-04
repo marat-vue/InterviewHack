@@ -1,0 +1,46 @@
+# Что такое DDL?
+
+> [!NOTE]
+> DDL, Data Definition Language, - часть SQL для описания и изменения структуры базы данных: таблиц, столбцов, индексов, constraints, схем и представлений.
+
+## Основные команды
+
+| Команда | Что делает |
+|---|---|
+| `CREATE` | создать объект |
+| `ALTER` | изменить объект |
+| `DROP` | удалить объект |
+| `TRUNCATE` | быстро очистить таблицу |
+
+## CREATE TABLE
+
+```sql
+CREATE TABLE users (
+  id bigint PRIMARY KEY,
+  email text NOT NULL UNIQUE,
+  created_at timestamp NOT NULL DEFAULT now()
+);
+```
+
+## ALTER TABLE
+
+```sql
+ALTER TABLE users
+ADD COLUMN last_login_at timestamp;
+```
+
+## DROP
+
+```sql
+DROP TABLE old_events;
+```
+
+`DROP` удаляет объект. В production с ним нужно быть предельно осторожным.
+
+## Мини-шпаргалка
+
+- DDL меняет структуру базы.
+- `CREATE` создает.
+- `ALTER` изменяет.
+- `DROP` удаляет.
+- DDL часто выполняют через миграции.

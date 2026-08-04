@@ -1,0 +1,47 @@
+# Что такое UPSERT?
+
+> [!NOTE]
+> UPSERT - операция "insert or update": если строки еще нет, она вставляется; если конфликт уникальности уже есть, существующая строка обновляется или конфликт игнорируется.
+
+## PostgreSQL ON CONFLICT
+
+```sql
+INSERT INTO users (email, name)
+VALUES ('anna@example.com', 'Anna')
+ON CONFLICT (email)
+DO UPDATE SET name = EXCLUDED.name;
+```
+
+Если email новый - будет insert. Если email уже есть - обновится `name`.
+
+## Игнорировать конфликт
+
+```sql
+INSERT INTO users (email)
+VALUES ('anna@example.com')
+ON CONFLICT (email) DO NOTHING;
+```
+
+## Что такое EXCLUDED?
+
+`EXCLUDED` в PostgreSQL содержит значения, которые пытались вставить.
+
+```sql
+SET name = EXCLUDED.name
+```
+
+## Когда использовать?
+
+- синхронизация данных;
+- идемпотентные операции;
+- импорт CSV;
+- сохранение настроек;
+- обновление счетчиков.
+
+## Мини-шпаргалка
+
+- UPSERT = insert или update при конфликте.
+- Нужен уникальный ключ или constraint.
+- В PostgreSQL используется `ON CONFLICT`.
+- `DO NOTHING` игнорирует конфликт.
+- `EXCLUDED` содержит новые значения.

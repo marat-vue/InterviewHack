@@ -1,0 +1,53 @@
+# Что такое PARTITION BY?
+
+> [!NOTE]
+> `PARTITION BY` делит строки на независимые группы внутри оконной функции. Расчет выполняется отдельно для каждой partition, но строки результата не группируются.
+
+## Пример
+
+```sql
+SELECT
+  user_id,
+  id AS order_id,
+  total,
+  SUM(total) OVER (PARTITION BY user_id) AS user_total
+FROM orders;
+```
+
+Сумма считается отдельно для каждого пользователя.
+
+## Без PARTITION BY
+
+```sql
+SELECT
+  id,
+  total,
+  SUM(total) OVER () AS all_orders_total
+FROM orders;
+```
+
+Окно включает все строки результата.
+
+## PARTITION BY и ORDER BY
+
+```sql
+SELECT
+  user_id,
+  created_at,
+  total,
+  SUM(total) OVER (
+    PARTITION BY user_id
+    ORDER BY created_at
+  ) AS running_total
+FROM orders;
+```
+
+Так считается накопительная сумма по каждому пользователю.
+
+## Мини-шпаргалка
+
+- `PARTITION BY` делит окно на группы.
+- Это не то же самое, что `GROUP BY`.
+- Без `PARTITION BY` окно включает весь набор строк.
+- Можно комбинировать с `ORDER BY`.
+- Подходит для метрик "внутри пользователя", "внутри категории", "внутри дня".

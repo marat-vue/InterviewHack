@@ -1,0 +1,53 @@
+# Что такое LAG и LEAD?
+
+> [!NOTE]
+> `LAG` получает значение из предыдущей строки окна, а `LEAD` - из следующей. Эти функции полезны для сравнения текущей строки с прошлым или будущим значением.
+
+## LAG
+
+```sql
+SELECT
+  day,
+  revenue,
+  LAG(revenue) OVER (ORDER BY day) AS previous_revenue
+FROM daily_revenue;
+```
+
+Теперь можно посчитать разницу.
+
+```sql
+SELECT
+  day,
+  revenue,
+  revenue - LAG(revenue) OVER (ORDER BY day) AS diff
+FROM daily_revenue;
+```
+
+## LEAD
+
+```sql
+SELECT
+  user_id,
+  created_at,
+  LEAD(created_at) OVER (
+    PARTITION BY user_id
+    ORDER BY created_at
+  ) AS next_order_at
+FROM orders;
+```
+
+## Default value
+
+```sql
+LAG(revenue, 1, 0) OVER (ORDER BY day)
+```
+
+Третий аргумент задает значение, если предыдущей строки нет.
+
+## Мини-шпаргалка
+
+- `LAG` смотрит назад.
+- `LEAD` смотрит вперед.
+- Нужен стабильный `ORDER BY`.
+- Можно указывать offset и default value.
+- Полезно для разницы между соседними событиями.

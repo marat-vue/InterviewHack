@@ -1,0 +1,48 @@
+# Что такое NULL в SQL?
+
+> [!NOTE]
+> `NULL` означает отсутствие значения или неизвестное значение. Это не ноль, не пустая строка и не `false`. Из-за трехзначной логики SQL работа с `NULL` требует отдельного внимания.
+
+## NULL не равен ничему
+
+```sql
+SELECT *
+FROM users
+WHERE deleted_at = NULL;
+```
+
+Такой запрос неверен. Для проверки нужен `IS NULL`.
+
+```sql
+SELECT *
+FROM users
+WHERE deleted_at IS NULL;
+```
+
+## Трехзначная логика
+
+В SQL есть не только `true` и `false`, но и `unknown`.
+
+```sql
+NULL = NULL -- unknown
+NULL <> 1   -- unknown
+```
+
+Поэтому фильтры с `NULL` могут вести себя неожиданно.
+
+## COALESCE
+
+`COALESCE` возвращает первое не-NULL значение.
+
+```sql
+SELECT COALESCE(nickname, name, 'Без имени') AS display_name
+FROM users;
+```
+
+## Мини-шпаргалка
+
+- `NULL` - отсутствие или неизвестность значения.
+- Проверка: `IS NULL` и `IS NOT NULL`.
+- `NULL = NULL` не true.
+- `COALESCE` задает fallback.
+- `NOT NULL` полезен, если значение обязательно по бизнес-логике.

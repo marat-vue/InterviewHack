@@ -1,0 +1,48 @@
+# Как работает UPDATE?
+
+> [!NOTE]
+> `UPDATE` изменяет существующие строки таблицы. Самая важная привычка - всегда проверять `WHERE`, иначе можно обновить всю таблицу.
+
+## Пример
+
+```sql
+UPDATE users
+SET name = 'Anna'
+WHERE id = 1;
+```
+
+## Несколько колонок
+
+```sql
+UPDATE orders
+SET
+  status = 'paid',
+  paid_at = now()
+WHERE id = 100;
+```
+
+## Обновление по условию
+
+```sql
+UPDATE users
+SET is_active = false
+WHERE last_login_at < now() - interval '1 year';
+```
+
+## UPDATE без WHERE
+
+```sql
+UPDATE users
+SET is_active = false;
+```
+
+Этот запрос обновит всех пользователей. Иногда это нужно, но чаще это авария.
+
+## Мини-шпаргалка
+
+- `UPDATE` меняет строки.
+- `SET` задает новые значения.
+- `WHERE` ограничивает строки.
+- Перед массовым update полезно выполнить `SELECT` с тем же `WHERE`.
+- В транзакции можно откатить ошибочный update через `ROLLBACK`.
+

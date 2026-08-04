@@ -1,0 +1,46 @@
+# Чем отличаются UNION и UNION ALL?
+
+> [!NOTE]
+> `UNION` объединяет результаты запросов и удаляет дубли, а `UNION ALL` просто складывает результаты друг под другом. `UNION ALL` обычно быстрее, потому что не требует удаления повторов.
+
+## UNION ALL
+
+```sql
+SELECT email FROM customers
+UNION ALL
+SELECT email FROM subscribers;
+```
+
+Вернет все email, включая повторы.
+
+## UNION
+
+```sql
+SELECT email FROM customers
+UNION
+SELECT email FROM subscribers;
+```
+
+Вернет уникальные email.
+
+## Требования
+
+У запросов должно быть одинаковое количество колонок и совместимые типы.
+
+```sql
+SELECT id, email FROM users
+UNION ALL
+SELECT id, email FROM archived_users;
+```
+
+## Когда выбирать?
+
+Если дубли допустимы или их не может быть по данным, выбирай `UNION ALL`. Если нужен уникальный результат, выбирай `UNION`.
+
+## Мини-шпаргалка
+
+- `UNION` удаляет дубли.
+- `UNION ALL` не удаляет дубли.
+- `UNION ALL` обычно быстрее.
+- Количество колонок должно совпадать.
+- Типы колонок должны быть совместимы.

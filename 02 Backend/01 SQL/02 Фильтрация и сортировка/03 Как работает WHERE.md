@@ -1,0 +1,54 @@
+# Как работает WHERE?
+
+> [!NOTE]
+> `WHERE` фильтрует строки до группировки и выбора результата. В нем указывают логическое условие, которое каждая строка должна пройти, чтобы попасть дальше в запрос.
+
+## Базовый пример
+
+```sql
+SELECT id, email
+FROM users
+WHERE is_active = true;
+```
+
+Вернутся только активные пользователи.
+
+## Несколько условий
+
+```sql
+SELECT *
+FROM orders
+WHERE status = 'paid'
+  AND total >= 1000
+  AND created_at >= DATE '2026-01-01';
+```
+
+`AND` требует выполнения всех условий, `OR` - хотя бы одного.
+
+## IN
+
+```sql
+SELECT *
+FROM orders
+WHERE status IN ('paid', 'shipped', 'completed');
+```
+
+`IN` удобнее цепочки `OR`.
+
+## NULL
+
+```sql
+SELECT *
+FROM users
+WHERE deleted_at IS NULL;
+```
+
+Для `NULL` нельзя использовать `= NULL`.
+
+## Мини-шпаргалка
+
+- `WHERE` фильтрует строки.
+- `AND`, `OR`, `NOT` комбинируют условия.
+- `IN` проверяет вхождение в список.
+- Для `NULL` используй `IS NULL`.
+- `WHERE` выполняется до `SELECT` в логическом порядке.
