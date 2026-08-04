@@ -1,4 +1,6 @@
-> [!summary]
+# Чем отличаются CommonJS и ES Modules?
+
+> [!NOTE]
 > CommonJS использует `require()` и `module.exports`, а ES Modules используют `import` и `export`. В Node.js обе системы поддерживаются, но отличаются синтаксисом, загрузкой, interop и правилами определения типа файла.
 
 ## Синтаксис

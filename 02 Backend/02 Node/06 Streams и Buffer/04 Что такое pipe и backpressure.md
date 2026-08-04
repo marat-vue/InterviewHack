@@ -1,0 +1,66 @@
+# Что такое pipe и backpressure?
+
+> [!NOTE]
+> `pipe` соединяет readable stream с writable stream, а backpressure защищает приложение от ситуации, когда источник данных пишет быстрее, чем получатель успевает обрабатывать.
+
+## Что делает pipe?
+
+`pipe` передает данные из одного stream в другой.
+
+```js
+import { createReadStream, createWriteStream } from 'node:fs';
+
+createReadStream('input.txt')
+  .pipe(createWriteStream('output.txt'));
+```
+
+Это проще и надежнее, чем вручную слушать `data` и вызывать `write`.
+
+## Цепочка pipe
+
+```js
+import { createReadStream, createWriteStream } from 'node:fs';
+import { createGzip } from 'node:zlib';
+
+createReadStream('input.txt')
+  .pipe(createGzip())
+  .pipe(createWriteStream('input.txt.gz'));
+```
+
+Файл читается, сжимается и записывается без загрузки всего файла в память.
+
+## Что такое backpressure?
+
+Backpressure - это механизм обратного давления. Он нужен, когда writable stream не успевает принимать данные.
+
+Без backpressure источник может быстро создать слишком много чанков, и память процесса начнет расти.
+
+```txt
+Readable слишком быстрый -> Writable не успевает -> очередь в памяти растет
+```
+
+`pipe` умеет учитывать backpressure: если приемник перегружен, чтение временно замедляется.
+
+## pipeline
+
+Для production-кода часто удобнее `pipeline`, потому что он корректно обрабатывает ошибки в цепочке.
+
+```js
+import { pipeline } from 'node:stream/promises';
+import { createReadStream, createWriteStream } from 'node:fs';
+import { createGzip } from 'node:zlib';
+
+await pipeline(
+  createReadStream('input.txt'),
+  createGzip(),
+  createWriteStream('input.txt.gz'),
+);
+```
+
+## Мини-шпаргалка
+
+- `pipe` соединяет streams.
+- Backpressure защищает память от переполнения.
+- `pipe` автоматически управляет потоком данных.
+- `pipeline` удобнее для обработки ошибок.
+- Streams нужны, когда данные большие или идут по сети.

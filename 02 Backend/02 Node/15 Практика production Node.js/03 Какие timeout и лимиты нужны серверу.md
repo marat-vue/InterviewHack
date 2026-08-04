@@ -1,0 +1,56 @@
+# Какие timeout и лимиты нужны серверу?
+
+> [!NOTE]
+> Node.js-серверу нужны лимиты на body, время запроса, idle connections, исходящие HTTP-запросы и параллельные операции. Без лимитов приложение легче уронить медленными или слишком большими запросами.
+
+## Зачем нужны timeout?
+
+Без timeout запрос может зависнуть надолго:
+
+```js
+await fetch('https://slow-api.example.com');
+```
+
+Лучше задавать deadline:
+
+```js
+const controller = new AbortController();
+const timeout = setTimeout(() => controller.abort(), 5000);
+
+try {
+  await fetch('https://api.example.com', {
+    signal: controller.signal,
+  });
+} finally {
+  clearTimeout(timeout);
+}
+```
+
+## Какие лимиты нужны?
+
+| Лимит | От чего защищает |
+|---|---|
+| request body size | огромные payload |
+| headers timeout | медленные клиенты |
+| request timeout | зависшие запросы |
+| keep-alive timeout | слишком долгие idle connections |
+| outbound timeout | зависшие внешние API |
+| concurrency limit | перегрузка БД или внешнего сервиса |
+
+## Body limit
+
+```js
+if (size > 1_000_000) {
+  res.statusCode = 413;
+  res.end('Payload Too Large');
+  return;
+}
+```
+
+## Мини-шпаргалка
+
+- У каждого сетевого ожидания должен быть timeout.
+- Ограничивай размер request body.
+- Ограничивай параллельные тяжелые операции.
+- Для внешних API используй retries с осторожностью.
+- Timeout лучше проектировать как часть контракта, а не добавлять после инцидента.

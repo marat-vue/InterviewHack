@@ -1,0 +1,58 @@
+# Что такое conditional exports?
+
+> [!NOTE]
+> Conditional exports позволяют пакету отдавать разные файлы в зависимости от способа загрузки или окружения: `import`, `require`, `node`, `browser`, `default` и других условий.
+
+## Зачем это нужно?
+
+Один пакет может поддерживать и ESM, и CommonJS.
+
+```json
+{
+  "name": "my-lib",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  }
+}
+```
+
+ESM-код получит один файл:
+
+```js
+import lib from 'my-lib';
+```
+
+CommonJS-код получит другой:
+
+```js
+const lib = require('my-lib');
+```
+
+## Частые условия
+
+| Условие | Когда применяется |
+|---|---|
+| `import` | при ESM `import` |
+| `require` | при CommonJS `require` |
+| `node` | в Node.js |
+| `default` | fallback |
+
+## Подводные камни
+
+Conditional exports могут создать dual package hazard: ESM и CJS-версии пакета могут иметь разные экземпляры состояния.
+
+```js
+// Если разные entry points создают разные singleton-объекты,
+// состояние может разъехаться между import и require.
+```
+
+## Мини-шпаргалка
+
+- Conditional exports выбирают файл по условию.
+- Это важно для библиотек, которые поддерживают CJS и ESM.
+- Порядок условий имеет значение.
+- `default` используют как fallback.
+- Следи, чтобы разные entry points не ломали общий state.

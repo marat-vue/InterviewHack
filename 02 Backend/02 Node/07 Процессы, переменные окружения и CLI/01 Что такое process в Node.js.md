@@ -1,0 +1,68 @@
+# Что такое process в Node.js?
+
+> [!NOTE]
+> `process` - глобальный объект Node.js с информацией о текущем процессе: аргументы запуска, переменные окружения, код выхода, текущая директория, версия Node.js, события завершения и стандартные потоки.
+
+## Что такое процесс?
+
+Когда ты запускаешь команду:
+
+```bash
+node app.js
+```
+
+операционная система создает процесс. Node.js дает доступ к нему через объект `process`.
+
+```js
+console.log(process.version);
+console.log(process.platform);
+console.log(process.pid);
+console.log(process.cwd());
+```
+
+## Частые свойства
+
+| Свойство | Что означает |
+|---|---|
+| `process.argv` | Аргументы командной строки |
+| `process.env` | Переменные окружения |
+| `process.cwd()` | Текущая рабочая директория |
+| `process.exitCode` | Код завершения процесса |
+| `process.stdin` | Стандартный ввод |
+| `process.stdout` | Стандартный вывод |
+| `process.stderr` | Поток ошибок |
+
+## Код выхода
+
+Код `0` обычно означает успешное завершение, ненулевой код - ошибку.
+
+```js
+try {
+  await run();
+  process.exitCode = 0;
+} catch (error) {
+  console.error(error);
+  process.exitCode = 1;
+}
+```
+
+Обычно лучше выставлять `process.exitCode`, а не вызывать `process.exit()` сразу: так Node.js успеет завершить pending операции корректнее.
+
+## События процесса
+
+```js
+process.on('SIGINT', () => {
+  console.log('Получен Ctrl+C');
+  process.exitCode = 0;
+});
+```
+
+Такие события полезны для graceful shutdown: закрыть сервер, соединения с БД, очереди и файлы.
+
+## Мини-шпаргалка
+
+- `process` описывает текущий Node.js-процесс.
+- `process.argv` - аргументы запуска.
+- `process.env` - переменные окружения.
+- `process.cwd()` - папка запуска команды.
+- `process.exitCode` задает код завершения.

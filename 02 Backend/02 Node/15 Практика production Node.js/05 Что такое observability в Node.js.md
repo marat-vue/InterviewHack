@@ -1,0 +1,56 @@
+# Что такое observability в Node.js?
+
+> [!NOTE]
+> Observability - способность понять состояние приложения по внешним сигналам: логам, метрикам, traces, health checks и профилям. Для Node.js это особенно важно из-за долгоживущих процессов и асинхронных цепочек.
+
+## Три базовых сигнала
+
+| Сигнал | Что показывает |
+|---|---|
+| Logs | что произошло |
+| Metrics | сколько и как быстро |
+| Traces | путь запроса между сервисами |
+
+## Полезные метрики Node.js
+
+- latency запросов;
+- error rate;
+- throughput;
+- event loop delay;
+- memory usage;
+- CPU usage;
+- количество активных handles;
+- размер очередей;
+- pool saturation.
+
+## Health check
+
+```js
+app.get('/health', (req, res) => {
+  res.json({ ok: true });
+});
+```
+
+Для readiness check иногда проверяют доступность БД, очереди или критичных зависимостей.
+
+## Request id
+
+```js
+const requestId = req.headers['x-request-id'] || crypto.randomUUID();
+
+console.log(JSON.stringify({
+  level: 'info',
+  requestId,
+  message: 'request started',
+}));
+```
+
+Request id помогает собрать все логи одного запроса.
+
+## Мини-шпаргалка
+
+- Logs отвечают на вопрос "что случилось".
+- Metrics показывают тренды и деградацию.
+- Traces помогают видеть путь запроса.
+- Health check нужен для orchestrator и load balancer.
+- Следи за event loop delay, memory и latency.

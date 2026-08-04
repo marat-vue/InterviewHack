@@ -1,4 +1,6 @@
-> [!summary]
+# Что такое ES Modules в Node.js?
+
+> [!NOTE]
 > **ES Modules** - стандартная система модулей JavaScript с `import` и `export`. Node.js поддерживает ESM наряду с CommonJS.
 
 ## Главное

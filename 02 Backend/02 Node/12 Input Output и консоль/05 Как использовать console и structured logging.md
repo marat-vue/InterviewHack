@@ -1,0 +1,61 @@
+# Как использовать console и structured logging?
+
+> [!NOTE]
+> `console` подходит для простого вывода и отладки, но production-серверам часто нужен structured logging: JSON-записи с уровнем, временем, request id и контекстом ошибки.
+
+## console
+
+```js
+console.log('Обычное сообщение');
+console.info('Информация');
+console.warn('Предупреждение');
+console.error('Ошибка');
+```
+
+Для быстрых скриптов этого достаточно.
+
+## console.time
+
+```js
+console.time('db');
+
+await loadUsers();
+
+console.timeEnd('db');
+```
+
+Удобно для грубого измерения времени выполнения участка кода.
+
+## Почему structured logging полезнее?
+
+Строки тяжело искать и агрегировать. JSON-лог проще отправить в ELK, Datadog, Grafana Loki или другой инструмент.
+
+```js
+console.log(JSON.stringify({
+  level: 'info',
+  message: 'request completed',
+  method: req.method,
+  url: req.url,
+  statusCode: res.statusCode,
+  requestId: req.headers['x-request-id'],
+}));
+```
+
+## Что не логировать?
+
+Не пиши в логи:
+
+- пароли;
+- access tokens;
+- refresh tokens;
+- приватные ключи;
+- полные cookie;
+- персональные данные без необходимости.
+
+## Мини-шпаргалка
+
+- `console.log` хорош для разработки.
+- `console.error` пишет в stderr.
+- Production-логи лучше делать структурированными.
+- Добавляй request id для трассировки.
+- Секреты и токены в логи не пишут.

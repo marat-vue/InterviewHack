@@ -1,0 +1,56 @@
+# Что такое graceful shutdown?
+
+> [!NOTE]
+> Graceful shutdown - корректное завершение приложения: перестать принимать новые запросы, дождаться текущих, закрыть соединения с БД, остановить очереди и завершить процесс с правильным кодом.
+
+## Почему это важно?
+
+В production процесс может получить сигнал завершения:
+
+- при деплое;
+- при рестарте контейнера;
+- при autoscaling;
+- при ручной остановке;
+- при падении health check.
+
+Если завершить процесс резко, можно оборвать запросы и потерять данные.
+
+## Пример для HTTP-сервера
+
+```js
+import http from 'node:http';
+
+const server = http.createServer((req, res) => {
+  res.end('ok');
+});
+
+server.listen(3000);
+
+process.on('SIGTERM', () => {
+  server.close(() => {
+    console.log('HTTP server closed');
+    process.exitCode = 0;
+  });
+});
+```
+
+## Что еще закрывать?
+
+- database pool;
+- Redis connections;
+- message queue consumers;
+- timers;
+- file handles;
+- telemetry exporters.
+
+## Timeout на shutdown
+
+Нельзя ждать бесконечно. Обычно ставят deadline, после которого процесс завершается принудительно.
+
+## Мини-шпаргалка
+
+- `SIGTERM` - типичный сигнал остановки в production.
+- `server.close` перестает принимать новые соединения.
+- Нужно закрыть внешние ресурсы.
+- Shutdown должен иметь timeout.
+- Process manager или orchestrator перезапустит приложение при необходимости.

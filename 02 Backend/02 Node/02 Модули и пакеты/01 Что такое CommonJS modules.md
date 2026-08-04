@@ -1,4 +1,6 @@
-> [!summary]
+# Что такое CommonJS modules?
+
+> [!NOTE]
 > **CommonJS** - историческая система модулей Node.js, где зависимости подключают через `require()`, а экспорт делают через `module.exports` или `exports`.
 
 ## Главное

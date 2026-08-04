@@ -1,0 +1,71 @@
+# Что такое request и response в node-http?
+
+> [!NOTE]
+> `request` - объект входящего HTTP-запроса, а `response` - объект ответа, который сервер отправит клиенту. В Node.js они обычно называются `req` и `res`.
+
+## request
+
+`req` содержит информацию о запросе:
+
+| Свойство | Что означает |
+|---|---|
+| `req.method` | HTTP-метод: `GET`, `POST`, `PUT`, `DELETE` |
+| `req.url` | Путь и query string |
+| `req.headers` | Заголовки запроса |
+| `req.socket` | Сетевое соединение |
+
+```js
+import http from 'node:http';
+
+http.createServer((req, res) => {
+  console.log(req.method);
+  console.log(req.url);
+  console.log(req.headers['user-agent']);
+
+  res.end('ok');
+}).listen(3000);
+```
+
+## response
+
+`res` нужен, чтобы сформировать ответ:
+
+```js
+res.statusCode = 201;
+res.setHeader('Content-Type', 'application/json');
+res.end(JSON.stringify({ id: 1 }));
+```
+
+Можно отправить статус и заголовки сразу:
+
+```js
+res.writeHead(404, {
+  'Content-Type': 'application/json',
+});
+
+res.end(JSON.stringify({ message: 'Not found' }));
+```
+
+## Тело запроса
+
+`req` является readable stream. Поэтому тело `POST`-запроса приходит частями.
+
+```js
+async function readBody(req) {
+  const chunks = [];
+
+  for await (const chunk of req) {
+    chunks.push(chunk);
+  }
+
+  return Buffer.concat(chunks).toString('utf8');
+}
+```
+
+## Мини-шпаргалка
+
+- `req` - входящий запрос.
+- `res` - исходящий ответ.
+- `req.url` не парсит query автоматически.
+- `req` можно читать как stream.
+- Ответ завершается через `res.end()`.

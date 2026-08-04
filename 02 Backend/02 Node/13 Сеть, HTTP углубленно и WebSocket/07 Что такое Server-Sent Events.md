@@ -1,0 +1,64 @@
+# Что такое Server-Sent Events?
+
+> [!NOTE]
+> Server-Sent Events, или SSE, - механизм, при котором сервер держит HTTP-соединение открытым и отправляет клиенту поток текстовых событий. Клиент слушает события через `EventSource`.
+
+## Когда SSE лучше WebSocket?
+
+SSE проще, если данные идут только от сервера к клиенту:
+
+- уведомления;
+- прогресс долгой операции;
+- live-статусы;
+- новостная лента;
+- server logs viewer.
+
+## Пример SSE-сервера
+
+```js
+import http from 'node:http';
+
+http.createServer((req, res) => {
+  if (req.url !== '/events') {
+    res.statusCode = 404;
+    res.end();
+    return;
+  }
+
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    Connection: 'keep-alive',
+  });
+
+  const timer = setInterval(() => {
+    res.write(`data: ${new Date().toISOString()}\n\n`);
+  }, 1000);
+
+  req.on('close', () => {
+    clearInterval(timer);
+  });
+}).listen(3000);
+```
+
+## Клиент
+
+```js
+const events = new EventSource('/events');
+
+events.onmessage = (event) => {
+  console.log(event.data);
+};
+```
+
+## Ограничения
+
+SSE не подходит, если клиенту нужно часто отправлять сообщения по тому же соединению. Тогда лучше WebSocket.
+
+## Мини-шпаргалка
+
+- SSE - поток событий от сервера к клиенту.
+- Работает поверх обычного HTTP.
+- Формат события: `data: value\n\n`.
+- Для двусторонней связи выбирай WebSocket.
+- Не забывай чистить interval при `req.close`.

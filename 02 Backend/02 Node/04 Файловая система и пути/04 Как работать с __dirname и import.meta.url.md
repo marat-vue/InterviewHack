@@ -1,4 +1,6 @@
-> [!summary]
+# Как работать с __dirname и import.meta.url?
+
+> [!NOTE]
 > `__dirname` показывает папку текущего файла в CommonJS. В ES Modules его нет, поэтому обычно используют `import.meta.url` и `fileURLToPath`.
 
 ## В CommonJS

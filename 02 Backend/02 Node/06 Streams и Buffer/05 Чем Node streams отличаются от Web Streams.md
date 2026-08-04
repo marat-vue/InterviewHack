@@ -1,0 +1,61 @@
+# Чем Node streams отличаются от Web Streams?
+
+> [!NOTE]
+> Node streams - исторический stream API Node.js, а Web Streams - стандартный API веб-платформы. Современный Node.js поддерживает оба подхода и умеет частично преобразовывать их друг в друга.
+
+## Node streams
+
+Node streams используются во многих встроенных модулях:
+
+```js
+import { createReadStream } from 'node:fs';
+
+const nodeStream = createReadStream('file.txt');
+```
+
+Они работают через события, методы `pipe`, `read`, `write`, `end` и совместимы с большим количеством npm-библиотек.
+
+## Web Streams
+
+Web Streams пришли из веб-стандартов и используются в Fetch API.
+
+```js
+const response = await fetch('https://example.com');
+const webStream = response.body;
+```
+
+У них другой интерфейс: `ReadableStream`, `WritableStream`, `TransformStream`, `getReader`.
+
+```js
+const reader = webStream.getReader();
+const { value, done } = await reader.read();
+```
+
+## Когда это важно?
+
+Разница появляется, когда ты смешиваешь:
+
+- `fetch` в Node.js;
+- файловые streams;
+- web API;
+- библиотеки, которые ждут именно Node stream.
+
+## Преобразование
+
+Многие Node streams умеют преобразовываться в Web Streams и обратно через специальные методы.
+
+```js
+import { Readable } from 'node:stream';
+import { createReadStream } from 'node:fs';
+
+const nodeStream = createReadStream('file.txt');
+const webStream = Readable.toWeb(nodeStream);
+```
+
+## Мини-шпаргалка
+
+- Node streams - классический API Node.js.
+- Web Streams - стандарт веб-платформы.
+- `fetch().body` возвращает Web Stream.
+- `fs.createReadStream` возвращает Node stream.
+- При интеграции библиотек проверяй, какой stream API ожидается.

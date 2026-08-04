@@ -1,0 +1,52 @@
+# Как работают cookies, sessions и JWT?
+
+> [!NOTE]
+> Cookies хранят небольшие данные в браузере и автоматически отправляются на сервер. Session хранит состояние на сервере, а JWT обычно хранит утверждения прямо в токене, который клиент отправляет с запросами.
+
+## Cookie
+
+Сервер задает cookie через заголовок `Set-Cookie`.
+
+```js
+res.setHeader('Set-Cookie', [
+  'sessionId=abc123; HttpOnly; Secure; SameSite=Lax; Path=/',
+]);
+```
+
+Важные флаги:
+
+| Флаг | Зачем нужен |
+|---|---|
+| `HttpOnly` | JS в браузере не читает cookie |
+| `Secure` | отправлять только по HTTPS |
+| `SameSite` | снижает риск CSRF |
+| `Path` | область действия cookie |
+
+## Session
+
+Классическая session-схема:
+
+```txt
+browser cookie: sessionId=abc123
+server storage: abc123 -> userId=42
+```
+
+Плюс: сервер может отозвать session. Минус: нужно хранилище сессий.
+
+## JWT
+
+JWT часто отправляют в `Authorization`.
+
+```http
+Authorization: Bearer <token>
+```
+
+Плюс: токен сам содержит данные и подпись. Минус: отозвать уже выданный токен сложнее, если не хранить blacklist или версию токена.
+
+## Мини-шпаргалка
+
+- Cookie - механизм браузера.
+- Session - состояние на сервере.
+- JWT - подписанный токен с claims.
+- `HttpOnly` защищает cookie от чтения через JS.
+- JWT не стоит хранить бессрочно и без refresh-стратегии.
