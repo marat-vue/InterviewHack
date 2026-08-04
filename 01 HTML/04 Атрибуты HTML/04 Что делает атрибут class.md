@@ -1,0 +1,67 @@
+# Что делает атрибут class?
+
+> [!NOTE]
+> Атрибут `class` задает один или несколько CSS-классов элемента. Классы используют для стилизации, состояний, переиспользуемых UI-паттернов и иногда как JavaScript-хуки.
+
+## Главное
+
+```html
+<button class="button button--primary is-loading">
+  Отправить
+</button>
+```
+
+У элемента сразу три класса:
+
+- `button` - базовый стиль;
+- `button--primary` - вариант;
+- `is-loading` - состояние.
+
+## CSS по class
+
+```css
+.button {
+  padding: 8px 12px;
+}
+
+.button--primary {
+  background: #2563eb;
+  color: white;
+}
+```
+
+Классы хорошо подходят для переиспользуемых стилей.
+
+## Один класс можно использовать много раз
+
+В отличие от `id`, класс не обязан быть уникальным.
+
+```html
+<article class="card">...</article>
+<article class="card">...</article>
+<article class="card">...</article>
+```
+
+Это удобно для списков, карточек, кнопок и компонентов.
+
+## JavaScript и class
+
+```js
+const cards = document.querySelectorAll(".card");
+```
+
+Для тестов и JavaScript иногда лучше использовать отдельные `data-*` атрибуты, чтобы изменение CSS-класса не ломало логику.
+
+```html
+<button class="button" data-test="submit-button">
+  Отправить
+</button>
+```
+
+## Мини-шпаргалка
+
+- `class` задает CSS-классы.
+- У элемента может быть несколько классов.
+- Один класс можно использовать на многих элементах.
+- Для повторяемых стилей `class` лучше, чем `id`.
+- Для тестов часто используют `data-test`, а не CSS-класс.
