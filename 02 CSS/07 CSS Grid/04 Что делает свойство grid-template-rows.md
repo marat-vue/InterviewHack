@@ -1,0 +1,66 @@
+# Что делает свойство grid-template-rows?
+
+> [!NOTE]
+> `grid-template-rows` задает структуру строк в CSS Grid: их количество и размеры.
+
+## Главное
+
+```css
+.page {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+```
+
+Такая сетка часто используется для страницы с шапкой, основным контентом и подвалом.
+
+## Пример
+
+```html
+<div class="page">
+  <header>Шапка</header>
+  <main>Контент</main>
+  <footer>Подвал</footer>
+</div>
+```
+
+```css
+.page {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+```
+
+Шапка и подвал займут свою естественную высоту, а `main` заберет оставшееся пространство.
+
+## Фиксированные и гибкие строки
+
+```css
+.dashboard {
+  display: grid;
+  grid-template-rows: 64px 1fr 200px;
+}
+```
+
+Можно комбинировать фиксированные размеры и `fr`.
+
+## Неявные строки
+
+Если элементов больше, чем заданных строк, Grid создаст неявные строки. Их размер можно контролировать через `grid-auto-rows`.
+
+```css
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(160px, auto);
+}
+```
+
+## Мини-шпаргалка
+
+- `grid-template-rows` задает строки.
+- `auto 1fr auto` удобно для page-layout.
+- Дополнительные строки могут создаваться неявно.
+- `grid-auto-rows` управляет неявными строками.
+- Для колонок используется `grid-template-columns`.

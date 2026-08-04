@@ -1,0 +1,67 @@
+# Что делает свойство transition-timing-function?
+
+> [!NOTE]
+> `transition-timing-function` задает кривую скорости перехода: как быстро свойство изменяется в начале, середине и конце анимации.
+
+## Главное
+
+```css
+.button {
+  transition-property: transform;
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+}
+```
+
+Даже при одинаковой длительности переход может ощущаться по-разному из-за timing function.
+
+## Частые значения
+
+| Значение | Поведение |
+| --- | --- |
+| `linear` | Равномерная скорость |
+| `ease` | Медленное начало, ускорение, медленный конец |
+| `ease-in` | Медленное начало |
+| `ease-out` | Медленный конец |
+| `ease-in-out` | Медленное начало и конец |
+| `steps()` | Дискретные шаги |
+| `cubic-bezier()` | Пользовательская кривая |
+
+## Пример
+
+```css
+.toast {
+  transition: transform 250ms ease-out, opacity 250ms ease-out;
+}
+```
+
+`ease-out` часто подходит для появления элементов: движение быстро стартует и мягко замедляется.
+
+## cubic-bezier
+
+```css
+.panel {
+  transition: transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+```
+
+`cubic-bezier()` позволяет точнее настроить характер движения.
+
+## steps()
+
+```css
+.sprite {
+  animation-timing-function: steps(8);
+}
+```
+
+`steps()` полезен для покадровых анимаций и счетчиков.
+
+## Мини-шпаргалка
+
+- Timing function управляет скоростью изменения.
+- `linear` - равномерно.
+- `ease-out` часто хорош для появления.
+- `ease-in` часто используют для исчезновения.
+- `cubic-bezier()` дает ручную кривую.
+- `steps()` делает изменение дискретным.

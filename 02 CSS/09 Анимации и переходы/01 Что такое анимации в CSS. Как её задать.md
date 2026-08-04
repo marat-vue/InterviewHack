@@ -1,0 +1,82 @@
+# Что такое анимации в CSS. Как ее задать?
+
+> [!NOTE]
+> **CSS-анимация** - это изменение CSS-свойств во времени по заранее описанным ключевым кадрам. Ее задают через `@keyframes` и свойства `animation-*`.
+
+## Главное
+
+```css
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  animation: fade-in 200ms ease-out;
+}
+```
+
+Браузер плавно изменит `opacity` от `0` до `1`.
+
+## Из чего состоит CSS-анимация
+
+- `@keyframes` - сценарий изменения.
+- `animation-name` - имя keyframes.
+- `animation-duration` - длительность.
+- `animation-timing-function` - кривая скорости.
+- `animation-delay` - задержка.
+- `animation-iteration-count` - количество повторов.
+- `animation-fill-mode` - стили до и после анимации.
+
+## Сокращенная запись
+
+```css
+.loader {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+```
+
+## Что лучше анимировать
+
+Для производительности чаще выбирают `transform` и `opacity`.
+
+```css
+.card:hover {
+  transform: translateY(-4px);
+  opacity: 0.95;
+}
+```
+
+Свойства вроде `top`, `left`, `width`, `height` могут чаще вызывать layout и быть дороже.
+
+## Доступность
+
+Для пользователей с чувствительностью к движению нужно учитывать `prefers-reduced-motion`.
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+  }
+}
+```
+
+## Мини-шпаргалка
+
+- CSS-анимация задается через `@keyframes`.
+- Применяется через `animation`.
+- Для плавности чаще анимируют `transform` и `opacity`.
+- `infinite` делает анимацию бесконечной.
+- Для доступности учитывают `prefers-reduced-motion`.

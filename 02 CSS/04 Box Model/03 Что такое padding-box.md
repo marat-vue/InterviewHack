@@ -1,0 +1,56 @@
+# Что такое padding-box?
+
+> [!NOTE]
+> **Padding box** - это область элемента, которая включает content и padding, но не включает border и margin. Она важна для понимания фона, clipping и расчета внутренних областей.
+
+## Главное
+
+В Box Model можно выделить несколько областей:
+
+```text
+content box  -> только содержимое
+padding box  -> content + padding
+border box   -> content + padding + border
+margin box   -> все вместе с margin
+```
+
+Padding box находится между content box и border box.
+
+## Пример
+
+```css
+.card {
+  padding: 16px;
+  border: 2px solid #d1d5db;
+  background: #f9fafb;
+}
+```
+
+Padding создает пространство между содержимым карточки и ее рамкой.
+
+## background-clip
+
+Свойство `background-clip` может ограничить фон padding box.
+
+```css
+.box {
+  border: 8px dashed black;
+  padding: 16px;
+  background: #bfdbfe;
+  background-clip: padding-box;
+}
+```
+
+Фон будет рисоваться до края padding, но не под border.
+
+## Чем отличается от padding
+
+`padding` - это свойство, которое задает внутренний отступ. `padding box` - область, которая получается после добавления padding к content.
+
+## Мини-шпаргалка
+
+- Padding box = content + padding.
+- Он не включает border и margin.
+- Padding создает внутренний отступ.
+- `background-clip: padding-box` ограничивает фон этой областью.
+- Понимание padding box помогает читать Box Model.

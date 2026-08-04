@@ -1,0 +1,72 @@
+# Что делает flex-shrink?
+
+> [!NOTE]
+> `flex-shrink` определяет, насколько flex item может сжиматься, если в контейнере не хватает места по main axis.
+
+## Главное
+
+```css
+.item {
+  flex-shrink: 1;
+}
+```
+
+По умолчанию flex items могут сжиматься.
+
+## Запретить сжатие
+
+```css
+.avatar {
+  flex-shrink: 0;
+}
+```
+
+Так аватар не будет уменьшаться, даже если рядом длинный текст.
+
+```css
+.media {
+  display: flex;
+  gap: 12px;
+}
+
+.media__avatar {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+```
+
+## Почему текст иногда не сжимается
+
+У flex items есть минимальный размер содержимого. Длинный текст может не давать элементу ужаться.
+
+```css
+.title {
+  min-width: 0;
+}
+```
+
+`min-width: 0` часто нужен для корректного обрезания текста внутри flex-контейнера.
+
+## Пример с ellipsis
+
+```css
+.row {
+  display: flex;
+}
+
+.row__title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+```
+
+## Мини-шпаргалка
+
+- `flex-shrink` отвечает за сжатие.
+- Значение по умолчанию `1`.
+- `0` запрещает сжиматься.
+- Для иконок и аватаров часто ставят `flex-shrink: 0`.
+- Для текста в flex часто нужен `min-width: 0`.

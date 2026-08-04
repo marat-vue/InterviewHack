@@ -1,0 +1,86 @@
+# Что такое @keyframes в анимациях?
+
+> [!NOTE]
+> `@keyframes` описывает ключевые кадры CSS-анимации: какие значения свойств должны быть в начале, середине и конце движения.
+
+## Главное
+
+```css
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+```
+
+Чтобы запустить keyframes, нужно применить их через `animation`.
+
+```css
+.modal {
+  animation: fade-in 200ms ease-out;
+}
+```
+
+## Проценты
+
+```css
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+```
+
+Проценты позволяют описать промежуточные состояния.
+
+## from и to
+
+`from` и `to` - это псевдонимы для `0%` и `100%`.
+
+```css
+@keyframes slide-in {
+  from {
+    transform: translateX(16px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+```
+
+## Переиспользование
+
+Один `@keyframes` можно применять к разным элементам с разной длительностью.
+
+```css
+.toast {
+  animation: slide-in 200ms ease-out;
+}
+
+.drawer {
+  animation: slide-in 320ms ease-out;
+}
+```
+
+## Мини-шпаргалка
+
+- `@keyframes` описывает сценарий анимации.
+- `from` = `0%`, `to` = `100%`.
+- Проценты задают промежуточные кадры.
+- Для запуска нужен `animation-name` или shorthand `animation`.
+- Лучше анимировать `transform` и `opacity`.
