@@ -1,0 +1,67 @@
+# Как использовать useState без hydration проблем?
+
+> [!NOTE]
+> `useState` - SSR-friendly замена `ref` для shared state в Nuxt. Значение `useState` сохраняется в Nuxt payload после SSR и переиспользуется на клиенте, что помогает избегать hydration mismatch.
+
+## Почему не всегда `ref`?
+
+```ts
+const token = ref(Math.random());
+```
+
+На сервере и клиенте значение может отличаться. Если оно участвует в initial render, будет mismatch.
+
+## `useState`
+
+```ts
+const token = useState('token', () => Math.random());
+```
+
+Nuxt сгенерирует значение на сервере, положит его в payload и использует то же значение на клиенте.
+
+## Shared state
+
+```ts
+// app/composables/useCart.ts
+export function useCart() {
+  const items = useState<CartItem[]>('cart:items', () => []);
+
+  function addItem(item: CartItem) {
+    items.value.push(item);
+  }
+
+  return { items, addItem };
+}
+```
+
+Любой компонент, который вызовет `useCart`, получит общий state по key `cart:items`.
+
+## Важное правило
+
+Factory в `useState` должна возвращать serializable value:
+
+```ts
+useState('user', () => ({
+  id: 1,
+  name: 'Ann',
+}));
+```
+
+Не стоит хранить там functions, class instances или complex non-serializable objects.
+
+## `useState` или Pinia?
+
+| Задача | Выбор |
+|---|---|
+| маленький shared state | `useState` |
+| сложный store с actions/getters | Pinia |
+| SSR-safe random/date value | `useState` |
+| большая domain state model | Pinia |
+
+## Мини-шпаргалка
+
+- `useState` - SSR-friendly shared state.
+- Значение сохраняется через payload.
+- Key должен быть стабильным.
+- Factory должна возвращать serializable data.
+- Для сложного state часто удобнее Pinia.

@@ -1,0 +1,78 @@
+# Как использовать Nuxt Icon?
+
+> [!NOTE]
+> Nuxt Icon добавляет компонент `<Icon />` и доступ к огромной базе Iconify-иконок. Он SSR-friendly, поддерживает CSS/SVG mode, local icon collections, custom SVG и помогает не тащить вручную тяжелые icon bundles.
+
+## Установка
+
+```bash
+npx nuxi@latest module add icon
+```
+
+Вручную:
+
+```ts
+export default defineNuxtConfig({
+  modules: ['@nuxt/icon'],
+});
+```
+
+## Использование
+
+```vue
+<template>
+  <Icon name="uil:github" size="24" />
+  <Icon name="lucide:search" class="text-gray-500" />
+</template>
+```
+
+## CSS mode и SVG mode
+
+```vue
+<Icon name="lucide:home" mode="svg" />
+<Icon name="lucide:home" mode="css" />
+```
+
+CSS mode часто хорош для styling и bundle efficiency. SVG mode дает inline SVG.
+
+## Local icon collections
+
+Рекомендуется ставить нужные collections локально:
+
+```bash
+npm install -D @iconify-json/lucide
+```
+
+Так icons могут отдаваться локально, быстрее и надежнее, чем runtime fetch с внешнего API.
+
+## Custom SVG
+
+Можно хранить свои SVG:
+
+```ts
+export default defineNuxtConfig({
+  icon: {
+    customCollections: [
+      {
+        prefix: 'local',
+        dir: './app/assets/icons',
+      },
+    ],
+  },
+});
+```
+
+Использование:
+
+```vue
+<Icon name="local:logo" />
+```
+
+## Мини-шпаргалка
+
+- Установка: `npx nuxi module add icon`.
+- Использование: `<Icon name="lucide:search" />`.
+- `size` задает размер.
+- `mode` может быть `css` или `svg`.
+- Для performance ставь нужные Iconify collections локально.
+- Не ставь весь `@iconify/json` без необходимости.

@@ -1,0 +1,72 @@
+# Как обрабатывать ошибки в server routes?
+
+> [!NOTE]
+> В server routes Nuxt/Nitro ошибки обычно выбрасывают через `createError`. Так можно задать HTTP status code, status message и data, а клиент получит предсказуемый error response.
+
+## Пример 404
+
+```ts
+export default defineEventHandler((event) => {
+  const id = getRouterParam(event, 'id');
+  const product = findProduct(id);
+
+  if (!product) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Product not found',
+    });
+  }
+
+  return product;
+});
+```
+
+## Validation error
+
+```ts
+export default defineEventHandler(async (event) => {
+  const body = await readBody(event);
+
+  if (!body.email) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Email is required',
+    });
+  }
+
+  return { ok: true };
+});
+```
+
+## Клиентская обработка
+
+```ts
+const { data, error } = await useFetch('/api/products/999');
+
+if (error.value?.statusCode === 404) {
+  console.log('Not found');
+}
+```
+
+## Что не стоит делать?
+
+Плохо:
+
+```ts
+return {
+  ok: false,
+  error: 'Product not found',
+};
+```
+
+при успешном HTTP status `200`. Для настоящей ошибки лучше вернуть правильный status code.
+
+## Мини-шпаргалка
+
+- Ошибки в server routes выбрасывают через `createError`.
+- Используй правильные HTTP status codes.
+- `400` - плохой input.
+- `401` - нет authentication.
+- `403` - нет permissions.
+- `404` - ресурс не найден.
+

@@ -1,0 +1,58 @@
+# Как проверять SEO в Nuxt проекте?
+
+> [!NOTE]
+> SEO-проверка Nuxt проекта включает rendered HTML, meta tags, canonical, sitemap, robots, status codes, structured data, social preview, performance и индексацию. Проверять нужно не только исходный Vue-код, а итоговый response.
+
+## Что проверить руками?
+
+- `title` уникален;
+- `description` уникальна и осмысленна;
+- есть один H1;
+- canonical корректный;
+- OG/Twitter tags есть;
+- `robots.txt` не блокирует нужные страницы;
+- sitemap содержит нужные URL;
+- 404 реально возвращает 404;
+- страницы не имеют hydration errors.
+
+## Проверка HTML
+
+Важно смотреть именно server response:
+
+```bash
+curl -L https://example.com/blog/nuxt
+```
+
+Если SEO-контент появляется только после client JS, SSR/SSG может быть настроен неправильно.
+
+## Инструменты
+
+- Lighthouse;
+- Google Search Console;
+- Rich Results Test;
+- Schema.org validator;
+- social share debuggers;
+- XML sitemap validator;
+- robots.txt tester;
+- Nuxt DevTools;
+- Nuxt SEO debugging tools.
+
+## Что проверить перед релизом?
+
+```text
+/                  -> indexable
+/blog/post         -> indexable
+/admin             -> not indexable + protected
+/drafts/post       -> not indexable
+/unknown           -> 404
+/sitemap.xml       -> 200
+/robots.txt        -> 200
+```
+
+## Мини-шпаргалка
+
+- Проверяй итоговый HTML, не только Vue source.
+- Sitemap и robots должны отдавать `200`.
+- Неизвестные страницы должны отдавать `404`.
+- Protected pages нельзя защищать только robots.txt.
+- Social previews лучше проверять отдельными debuggers.

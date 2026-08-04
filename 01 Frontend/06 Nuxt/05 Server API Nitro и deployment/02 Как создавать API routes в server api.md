@@ -1,0 +1,83 @@
+# Как создавать API routes в server api?
+
+> [!NOTE]
+> API routes в Nuxt создаются файлами в `server/api`. Имя файла определяет URL и HTTP method. Handler пишется через `defineEventHandler`, а данные запроса читаются через h3 utilities.
+
+## GET endpoint
+
+```ts
+// server/api/products.get.ts
+export default defineEventHandler(() => {
+  return [
+    { id: 1, title: 'Keyboard' },
+    { id: 2, title: 'Mouse' },
+  ];
+});
+```
+
+URL:
+
+```text
+GET /api/products
+```
+
+## POST endpoint
+
+```ts
+// server/api/products.post.ts
+export default defineEventHandler(async (event) => {
+  const body = await readBody(event);
+
+  return {
+    id: 1,
+    ...body,
+  };
+});
+```
+
+URL:
+
+```text
+POST /api/products
+```
+
+## Dynamic route
+
+```ts
+// server/api/products/[id].get.ts
+export default defineEventHandler((event) => {
+  const id = getRouterParam(event, 'id');
+
+  return {
+    id,
+    title: 'Keyboard',
+  };
+});
+```
+
+URL:
+
+```text
+GET /api/products/42
+```
+
+## Query params
+
+```ts
+export default defineEventHandler((event) => {
+  const query = getQuery(event);
+
+  return {
+    search: query.search,
+  };
+});
+```
+
+## Мини-шпаргалка
+
+- `server/api/products.get.ts` -> `GET /api/products`.
+- `server/api/products.post.ts` -> `POST /api/products`.
+- `[id].get.ts` создает dynamic param.
+- `readBody(event)` читает body.
+- `getQuery(event)` читает query params.
+- `getRouterParam(event, 'id')` читает route param.

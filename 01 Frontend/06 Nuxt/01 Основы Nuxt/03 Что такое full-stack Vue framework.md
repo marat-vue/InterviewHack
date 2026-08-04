@@ -1,0 +1,66 @@
+# Что такое full-stack Vue framework?
+
+> [!NOTE]
+> Full-stack Vue framework означает, что Nuxt умеет работать не только с Vue UI, но и с серверной частью: API routes, server middleware, cookies, runtime config, server utilities, deployment presets и caching через Nitro.
+
+## Что значит full-stack в Nuxt?
+
+Nuxt-приложение может содержать:
+
+```text
+app/      -> Vue UI, pages, layouts, components
+server/   -> API routes, server middleware, Nitro plugins
+shared/   -> код, доступный app и server
+```
+
+Это не значит, что Nuxt всегда должен заменять полноценный backend. Но он умеет закрывать много server-side задач внутри одного проекта.
+
+## Пример API route
+
+```ts
+// server/api/hello.get.ts
+export default defineEventHandler(() => {
+  return {
+    message: 'Hello from Nitro',
+  };
+});
+```
+
+Frontend может вызвать:
+
+```ts
+const { data } = await useFetch('/api/hello');
+```
+
+## Какие server-задачи можно делать в Nuxt?
+
+- API endpoints;
+- proxy к backend;
+- server-side auth helpers;
+- чтение cookies;
+- отправка form data;
+- генерация sitemap/OG images;
+- server middleware;
+- caching;
+- работа с environment variables.
+
+## Когда нужен отдельный backend?
+
+Отдельный backend лучше, если:
+
+- сложная domain-логика;
+- много интеграций;
+- очереди и фоновые jobs;
+- отдельная команда backend;
+- несколько клиентов: web, mobile, partners;
+- жесткие требования к масштабированию и безопасности.
+
+Nuxt может быть BFF, backend-for-frontend: тонкий серверный слой специально для frontend.
+
+## Мини-шпаргалка
+
+- Full-stack Nuxt = Vue app + Nitro server.
+- `server/api` создает API endpoints.
+- `useFetch('/api/...')` удобно вызывает свои endpoints.
+- Nuxt может быть BFF.
+- Для сложного backend часто нужен отдельный сервис.

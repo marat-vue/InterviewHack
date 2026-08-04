@@ -1,0 +1,73 @@
+# Как настраивать canonical, OG и Twitter cards?
+
+> [!NOTE]
+> Canonical помогает указать основную версию страницы, Open Graph и Twitter cards управляют отображением ссылки в соцсетях и мессенджерах. В Nuxt это делают через `useSeoMeta`, `useHead` и Nuxt SEO/OG Image.
+
+## Canonical
+
+Canonical нужен, если один и тот же контент доступен по нескольким URL:
+
+```ts
+useHead({
+  link: [
+    {
+      rel: 'canonical',
+      href: 'https://example.com/blog/nuxt-seo',
+    },
+  ],
+});
+```
+
+## Open Graph
+
+```ts
+useSeoMeta({
+  ogTitle: 'Nuxt SEO Guide',
+  ogDescription: 'Как настроить SEO в Nuxt.',
+  ogImage: 'https://example.com/og/nuxt-seo.png',
+  ogType: 'article',
+});
+```
+
+## Twitter card
+
+```ts
+useSeoMeta({
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Nuxt SEO Guide',
+  twitterDescription: 'Практический разбор SEO в Nuxt.',
+  twitterImage: 'https://example.com/og/nuxt-seo.png',
+});
+```
+
+## Dynamic values
+
+```ts
+const route = useRoute();
+const canonical = computed(() => `https://example.com${route.path}`);
+
+useHead({
+  link: [
+    {
+      rel: 'canonical',
+      href: canonical,
+    },
+  ],
+});
+```
+
+## Частые ошибки
+
+- canonical ведет на неправильный URL;
+- OG image относительная там, где нужна absolute;
+- title и description одинаковые на всех страницах;
+- OG image слишком тяжелая;
+- meta формируется только на клиенте.
+
+## Мини-шпаргалка
+
+- Canonical указывает основную версию страницы.
+- OG tags управляют preview в соцсетях.
+- Twitter cards управляют preview в X/Twitter.
+- `useSeoMeta` удобен для typed meta.
+- Dynamic meta лучше формировать во время SSR.

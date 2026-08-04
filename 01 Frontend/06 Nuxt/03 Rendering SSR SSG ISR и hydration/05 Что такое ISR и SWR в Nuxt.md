@@ -1,0 +1,72 @@
+# Что такое ISR и SWR в Nuxt?
+
+> [!NOTE]
+> ISR и SWR - cache-стратегии для hybrid rendering. ISR кэширует страницу и регенерирует ее после TTL, а SWR быстро отдает stale response и обновляет cache в фоне. В Nuxt их настраивают через `routeRules`.
+
+## ISR
+
+ISR, Incremental Static Regeneration:
+
+```ts
+export default defineNuxtConfig({
+  routeRules: {
+    '/blog/**': { isr: 3600 },
+  },
+});
+```
+
+Идея:
+
+```text
+Первый request -> сгенерировать страницу
+Следующие requests -> отдать cache
+TTL истек -> обновить страницу
+```
+
+Поддержка ISR зависит от платформы deployment.
+
+## SWR
+
+SWR, stale-while-revalidate:
+
+```ts
+export default defineNuxtConfig({
+  routeRules: {
+    '/products/**': { swr: 300 },
+  },
+});
+```
+
+Идея:
+
+```text
+Отдать старый cache быстро
+Параллельно обновить cache для следующих requests
+```
+
+## Что выбрать?
+
+| Сценарий | Стратегия |
+|---|---|
+| blog updates раз в час | ISR |
+| каталог товаров, где нужна скорость | SWR |
+| всегда свежие user-specific данные | SSR |
+| редко меняющийся landing | SSG/prerender |
+
+## Важное ограничение
+
+ISR/SWR не подходят для персонализированного HTML, где разные пользователи должны видеть разные данные на одной URL.
+
+Для user-specific content лучше:
+
+- SSR без общего page cache;
+- client fetch после login;
+- API caching на уровне данных, а не страницы.
+
+## Мини-шпаргалка
+
+- ISR регенерирует cache после TTL.
+- SWR отдает stale cache и обновляет в фоне.
+- Оба режима задаются через `routeRules`.
+- Не кэшируй персонализированный HTML как общий response.
+- Поддержка поведения зависит от deployment platform.

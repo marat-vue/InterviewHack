@@ -1,0 +1,50 @@
+# Какие вопросы по Nuxt задают на собеседовании?
+
+> [!NOTE]
+> На собеседовании по Nuxt чаще проверяют понимание SSR, hydration, routing, data fetching, server API, runtime config, routeRules, SEO и performance. Важно не просто знать API, а объяснять архитектурные trade-offs.
+
+## База
+
+**Что такое Nuxt?**  
+Nuxt - full-stack Vue framework с SSR, файловым роутингом, data fetching, auto-imports, modules и Nitro server.
+
+**Чем Nuxt отличается от Vue SPA?**  
+Vue SPA обычно рендерится в браузере. Nuxt может рендерить HTML на сервере, генерировать static pages и иметь server API.
+
+**Что делает Nitro?**  
+Nitro - server engine Nuxt: API routes, server middleware, plugins, caching, deployment output.
+
+## Rendering
+
+**Что такое SSR?**  
+Server рендерит HTML на request, browser получает готовую страницу, затем Vue выполняет hydration.
+
+**Что такое hydration mismatch?**  
+Это ситуация, когда server HTML и первый client render отличаются.
+
+**Чем отличаются SSG, ISR и SWR?**  
+SSG генерирует HTML на build-time. ISR регенерирует cache после TTL. SWR отдает stale cache и обновляет его в фоне.
+
+## Data fetching
+
+**Чем отличаются `useFetch`, `useAsyncData`, `$fetch`?**  
+`$fetch` делает request. `useAsyncData` связывает async result с Nuxt payload. `useFetch` - удобная обертка для HTTP, построенная поверх них.
+
+**Почему `$fetch` в setup может быть проблемой?**  
+Он не передает данные через payload сам по себе, поэтому при SSR может случиться double fetch.
+
+## SEO и modules
+
+**Как Nuxt помогает SEO?**  
+Через SSR/SSG, meta management, sitemap, robots, structured data, OG images и performance.
+
+**Зачем Nuxt Image/Fonts/Scripts?**  
+Image оптимизирует изображения, Fonts оптимизирует шрифты, Scripts контролирует third-party scripts.
+
+## Мини-шпаргалка
+
+- Говори не только "как", но и "почему".
+- SSR, hydration и data fetching - центральные темы.
+- RouteRules показывают зрелое понимание Nuxt.
+- `$fetch` vs `useFetch` часто спрашивают.
+- SEO и performance - частые причины выбора Nuxt.

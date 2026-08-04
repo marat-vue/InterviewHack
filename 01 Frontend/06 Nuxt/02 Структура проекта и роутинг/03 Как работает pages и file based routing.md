@@ -1,0 +1,74 @@
+# Как работает pages и file based routing?
+
+> [!NOTE]
+> Nuxt создает routes по файлам в `app/pages`. Файл `index.vue` становится корневым route папки, динамические параметры задаются через квадратные скобки, а вложенные папки создают вложенные URL.
+
+## Базовый пример
+
+```text
+app/pages/
+  index.vue        -> /
+  about.vue        -> /about
+  blog/
+    index.vue      -> /blog
+    [slug].vue     -> /blog/:slug
+```
+
+Nuxt сам создает Vue Router configuration.
+
+## Динамический route
+
+```text
+app/pages/products/[id].vue
+```
+
+URL:
+
+```text
+/products/42
+```
+
+Получить параметр:
+
+```vue
+<script setup lang="ts">
+const route = useRoute();
+
+const productId = route.params.id;
+</script>
+```
+
+## Catch-all route
+
+```text
+app/pages/docs/[...slug].vue
+```
+
+Подойдет для:
+
+```text
+/docs
+/docs/nuxt
+/docs/nuxt/rendering
+```
+
+## Page meta
+
+```vue
+<script setup lang="ts">
+definePageMeta({
+  layout: 'docs',
+  middleware: ['auth'],
+});
+</script>
+```
+
+Так page может указать layout, middleware, access rules и другие meta.
+
+## Мини-шпаргалка
+
+- `app/pages/index.vue` -> `/`.
+- `app/pages/about.vue` -> `/about`.
+- `[id].vue` создает dynamic param.
+- `[...slug].vue` создает catch-all route.
+- `definePageMeta` задает meta страницы.

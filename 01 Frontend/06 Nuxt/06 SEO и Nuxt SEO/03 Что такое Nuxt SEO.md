@@ -1,0 +1,73 @@
+# Что такое Nuxt SEO?
+
+> [!NOTE]
+> Nuxt SEO - ecosystem SEO-модулей для Nuxt. Meta-module `@nuxtjs/seo` объединяет Sitemap, Robots, OG Image, Schema.org, Link Checker, SEO Utils и Site Config, чтобы закрыть техническое SEO в одном стеке.
+
+## Зачем нужен Nuxt SEO?
+
+Техническое SEO состоит из многих частей:
+
+- meta tags;
+- sitemap.xml;
+- robots.txt;
+- structured data;
+- OG images;
+- canonical;
+- link checks;
+- site config.
+
+Можно подключать модули отдельно, но `@nuxtjs/seo` дает стандартный набор сразу.
+
+## Установка
+
+```bash
+npx nuxi@latest module add seo
+```
+
+или вручную:
+
+```ts
+export default defineNuxtConfig({
+  modules: ['@nuxtjs/seo'],
+  site: {
+    url: 'https://example.com',
+    name: 'Example',
+  },
+});
+```
+
+## Что входит?
+
+| Модуль | Зачем |
+|---|---|
+| Sitemap | XML sitemap |
+| Robots | robots.txt и robots meta |
+| Schema.org | structured data |
+| OG Image | dynamic social images |
+| Link Checker | проверка ссылок |
+| Site Config | единая конфигурация сайта |
+| SEO Utils | вспомогательные SEO utilities |
+
+## Можно ли отключать части?
+
+Да. Если часть не нужна, ее можно отключить в config.
+
+Идея:
+
+```ts
+export default defineNuxtConfig({
+  seo: {
+    // module-specific options
+  },
+});
+```
+
+Конкретные ключи зависят от версии модулей, поэтому при настройке смотри docs используемой версии.
+
+## Мини-шпаргалка
+
+- Nuxt SEO - SEO ecosystem для Nuxt.
+- `@nuxtjs/seo` подключает стандартный SEO stack.
+- Site Config хранит `url` и `name`.
+- Sitemap, Robots, Schema.org и OG Image часто нужны production-сайту.
+- Модули можно подключать all-in-one или отдельно.

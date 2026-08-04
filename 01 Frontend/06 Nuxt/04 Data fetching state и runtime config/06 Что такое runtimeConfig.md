@@ -1,0 +1,83 @@
+# Что такое runtimeConfig?
+
+> [!NOTE]
+> `runtimeConfig` хранит настройки, которые могут меняться между окружениями. Server-only поля доступны только на сервере, а `runtimeConfig.public` попадает и на клиент, поэтому secrets можно хранить только вне `public`.
+
+## Пример
+
+```ts
+export default defineNuxtConfig({
+  runtimeConfig: {
+    apiSecret: '',
+    public: {
+      apiBase: '/api',
+    },
+  },
+});
+```
+
+Использование:
+
+```ts
+const config = useRuntimeConfig();
+
+console.log(config.public.apiBase);
+```
+
+На сервере можно читать:
+
+```ts
+const config = useRuntimeConfig();
+
+console.log(config.apiSecret);
+```
+
+На клиенте `apiSecret` недоступен.
+
+## Environment variables
+
+Nuxt может переопределять runtime config через env variables.
+
+Типичный пример:
+
+```text
+NUXT_PUBLIC_API_BASE=https://api.example.com
+NUXT_API_SECRET=secret
+```
+
+## Что можно хранить?
+
+`runtimeConfig.public`:
+
+- public API base URL;
+- публичный site URL;
+- feature flags, которые можно показать клиенту.
+
+Server-only runtime config:
+
+- API secrets;
+- private tokens;
+- backend URLs;
+- database credentials.
+
+## Частая ошибка
+
+Плохо:
+
+```ts
+runtimeConfig: {
+  public: {
+    stripeSecretKey: 'sk_live_...',
+  },
+}
+```
+
+Все, что лежит в `public`, можно увидеть в browser.
+
+## Мини-шпаргалка
+
+- `runtimeConfig` читают через `useRuntimeConfig()`.
+- `public` доступен клиенту.
+- Secrets только вне `public`.
+- Runtime config можно переопределять env variables.
+- Для UI-токенов часто лучше `app.config.ts`.

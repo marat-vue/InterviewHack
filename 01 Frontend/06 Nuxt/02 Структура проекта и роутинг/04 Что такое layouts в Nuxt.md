@@ -1,0 +1,76 @@
+# Что такое layouts в Nuxt?
+
+> [!NOTE]
+> Layout в Nuxt - общая оболочка для страниц: header, sidebar, footer, navigation, page container. Layouts лежат в `app/layouts` и подключаются через `<NuxtLayout>` или `definePageMeta`.
+
+## Default layout
+
+```vue
+<!-- app/layouts/default.vue -->
+<template>
+  <div>
+    <AppHeader />
+    <main>
+      <slot />
+    </main>
+    <AppFooter />
+  </div>
+</template>
+```
+
+Если в `app.vue` есть `<NuxtLayout>`, Nuxt использует `default.vue` по умолчанию.
+
+## Custom layout
+
+```vue
+<!-- app/layouts/admin.vue -->
+<template>
+  <div class="admin-shell">
+    <AdminSidebar />
+    <slot />
+  </div>
+</template>
+```
+
+Подключение на странице:
+
+```vue
+<script setup lang="ts">
+definePageMeta({
+  layout: 'admin',
+});
+</script>
+```
+
+## Когда нужны layouts?
+
+Layouts нужны, когда есть разные оболочки:
+
+- public site;
+- auth pages;
+- dashboard;
+- admin panel;
+- docs;
+- error pages.
+
+## Что не стоит делать?
+
+Не надо делать один огромный layout со всеми условиями:
+
+```vue
+<template>
+  <AdminSidebar v-if="isAdmin" />
+  <MarketingHeader v-else-if="isMarketing" />
+  <AuthHeader v-else />
+</template>
+```
+
+Лучше разделить layouts.
+
+## Мини-шпаргалка
+
+- Layout - оболочка страницы.
+- Layouts лежат в `app/layouts`.
+- `default.vue` используется по умолчанию.
+- `definePageMeta({ layout: 'admin' })` выбирает layout.
+- Разные зоны приложения лучше разделять layouts.

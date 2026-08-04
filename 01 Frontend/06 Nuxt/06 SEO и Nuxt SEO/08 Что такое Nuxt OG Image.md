@@ -1,0 +1,61 @@
+# Что такое Nuxt OG Image?
+
+> [!NOTE]
+> Nuxt OG Image генерирует Open Graph images для страниц Nuxt. Это помогает делать красивые и актуальные preview-картинки для соцсетей, мессенджеров и ссылок без ручного создания PNG для каждой страницы.
+
+## Зачем нужны OG images?
+
+Когда ссылкой делятся в соцсетях или мессенджерах, preview часто берет:
+
+- `og:title`;
+- `og:description`;
+- `og:image`.
+
+Если `og:image` нет или она плохая, ссылка выглядит беднее и хуже кликается.
+
+## Через Nuxt SEO
+
+Nuxt SEO включает OG Image как часть SEO stack.
+
+```ts
+export default defineNuxtConfig({
+  modules: ['@nuxtjs/seo'],
+});
+```
+
+## Пример идеи
+
+```ts
+defineOgImage({
+  title: 'Nuxt SSR и SEO',
+  description: 'Учебный материал по Nuxt',
+  theme: '#00DC82',
+});
+```
+
+Конкретный API зависит от версии Nuxt OG Image, поэтому при production-настройке сверяй docs.
+
+## Когда полезно?
+
+- blog posts;
+- docs pages;
+- product pages;
+- user-generated pages;
+- course lessons;
+- changelog/release pages.
+
+## Что важно помнить?
+
+- OG image должна быть absolute URL в meta;
+- текст должен помещаться;
+- картинка должна быстро генерироваться или кэшироваться;
+- для разных страниц нужны разные title/description;
+- fonts могут потребовать настройки, часто через Nuxt Fonts.
+
+## Мини-шпаргалка
+
+- OG Image делает social preview лучше.
+- Nuxt SEO может подключать OG Image module.
+- Dynamic OG images полезны для blog/product pages.
+- Картинки нужно кэшировать и проверять в social debuggers.
+- Font rendering для OG images требует внимания.

@@ -1,0 +1,81 @@
+# Как писать SSR safe код?
+
+> [!NOTE]
+> SSR safe код не предполагает, что он всегда выполняется в браузере. В Nuxt часть кода может выполняться на сервере, поэтому browser-only APIs нужно использовать только на клиенте, а данные для первого render должны быть стабильными.
+
+## Проблема
+
+На сервере нет:
+
+- `window`;
+- `document`;
+- `localStorage`;
+- `navigator`;
+- DOM APIs;
+- browser-only libraries.
+
+Плохой пример:
+
+```ts
+const width = window.innerWidth;
+```
+
+На сервере это упадет.
+
+## Проверка client/server
+
+```ts
+if (import.meta.client) {
+  console.log(window.innerWidth);
+}
+```
+
+```ts
+if (import.meta.server) {
+  console.log('Runs on server');
+}
+```
+
+## Client-only component
+
+```vue
+<template>
+  <ClientOnly>
+    <MapWidget />
+  </ClientOnly>
+</template>
+```
+
+`ClientOnly` полезен для компонентов, которые не могут рендериться на сервере.
+
+## Client-only plugin
+
+```text
+app/plugins/analytics.client.ts
+```
+
+Так plugin не выполнится на сервере.
+
+## SSR-safe data
+
+Плохо:
+
+```vue
+<template>
+  <span>{{ new Date().toLocaleString() }}</span>
+</template>
+```
+
+Лучше передать стабильное значение:
+
+```ts
+const renderedAt = useState('rendered-at', () => new Date().toISOString());
+```
+
+## Мини-шпаргалка
+
+- На сервере нет `window` и `document`.
+- Browser-only код оборачивай в `import.meta.client`.
+- Browser-only components можно оборачивать в `<ClientOnly>`.
+- Plugins можно разделять `.client.ts` и `.server.ts`.
+- Избегай нестабильных значений в initial render.

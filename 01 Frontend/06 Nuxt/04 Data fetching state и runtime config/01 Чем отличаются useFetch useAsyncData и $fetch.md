@@ -1,0 +1,67 @@
+# Чем отличаются useFetch, useAsyncData и $fetch?
+
+> [!NOTE]
+> `$fetch` просто выполняет запрос, `useAsyncData` связывает async data с Nuxt payload, а `useFetch` является удобной SSR-friendly оберткой над `useAsyncData` и `$fetch` для HTTP-запросов.
+
+## `$fetch`
+
+`$fetch` - универсальная функция для HTTP-запросов.
+
+```ts
+const user = await $fetch('/api/user');
+```
+
+Но если вызвать `$fetch` прямо в component setup при SSR, данные могут запроситься дважды: на сервере и потом на клиенте при hydration.
+
+## `useAsyncData`
+
+`useAsyncData` подходит для любой async-функции:
+
+```ts
+const { data, pending, error, refresh } = await useAsyncData(
+  'products',
+  () => productRepository.findAll(),
+);
+```
+
+Nuxt положит результат в payload, чтобы клиент не делал повторный запрос при hydration.
+
+## `useFetch`
+
+`useFetch` удобен для HTTP:
+
+```ts
+const { data, status, error, refresh } = await useFetch('/api/products');
+```
+
+Он использует `$fetch` и `useAsyncData` внутри.
+
+## Что выбрать?
+
+| Задача | Инструмент |
+|---|---|
+| простой HTTP в page/component | `useFetch` |
+| async function не обязательно HTTP | `useAsyncData` |
+| request в event handler | `$fetch` |
+| custom API client с payload | `useAsyncData` + `$api` |
+
+## Пример event handler
+
+```ts
+async function submitForm() {
+  await $fetch('/api/orders', {
+    method: 'POST',
+    body: form.value,
+  });
+}
+```
+
+Здесь `$fetch` нормален, потому что действие происходит после hydration по действию пользователя.
+
+## Мини-шпаргалка
+
+- `useFetch` - лучший старт для HTTP data fetching.
+- `useAsyncData` - для любой async data с payload.
+- `$fetch` - низкоуровневый request.
+- `$fetch` в setup может дать double fetch.
+- Для SSR data используй `useFetch` или `useAsyncData`.
