@@ -1,0 +1,106 @@
+# Как работают depends_on и healthcheck?
+
+> [!NOTE]
+> `depends_on` задает зависимости между services и порядок запуска/остановки, но сам по себе не всегда означает, что зависимый сервис уже готов принимать запросы. Для readiness используют `healthcheck` и условие `service_healthy`.
+
+## Обычный depends_on
+
+```yaml
+services:
+  api:
+    build: .
+    depends_on:
+      - db
+
+  db:
+    image: postgres:18
+```
+
+Compose запустит `db` перед `api`.
+
+Но PostgreSQL может быть еще не готов принимать соединения, когда `api` уже стартует.
+
+## depends_on с healthcheck
+
+```yaml
+services:
+  api:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: app
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+```
+
+Теперь `api` будет ждать, пока `db` станет healthy.
+
+## Условия depends_on
+
+В современном Compose можно встретить:
+
+- `service_started` - сервис запущен;
+- `service_healthy` - сервис прошел healthcheck;
+- `service_completed_successfully` - одноразовый сервис завершился успешно.
+
+## Для migrations
+
+```yaml
+services:
+  migrate:
+    build: .
+    command: npx prisma migrate deploy
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    build: .
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+```
+
+Так API стартует после успешных миграций.
+
+## Но приложение все равно должно иметь retry
+
+Даже с healthcheck база может стать временно недоступной позже:
+
+- restart database;
+- network hiccup;
+- migration lock;
+- cloud failover.
+
+Поэтому backend должен уметь переподключаться, а не полностью полагаться на Compose.
+
+## Что отвечать на собеседовании?
+
+`depends_on` управляет порядком запуска services, но готовность сервиса нужно проверять через `healthcheck`. Для базы часто используют `pg_isready`, а backend ставят в зависимость от `condition: service_healthy`. При этом приложение все равно должно иметь retry/reconnect logic, потому что Docker Compose не решает все runtime-сбои.
+
+## Частые ошибки
+
+- Думать, что `depends_on: [db]` означает готовность базы.
+- Не добавлять healthcheck для stateful services.
+- Делать healthcheck слишком тяжелым.
+- Считать Compose заменой retry logic.
+- Запускать migrations одновременно с несколькими API replicas.
+
+## Мини-шпаргалка
+
+- `depends_on` - порядок.
+- `healthcheck` - проверка readiness.
+- `service_healthy` - ждать healthy.
+- `pg_isready` - частый check для Postgres.
+- Migrations можно вынести в отдельный service.
+- Retry logic все равно нужен.

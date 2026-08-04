@@ -1,0 +1,107 @@
+# Что такое multi-stage build?
+
+> [!NOTE]
+> Multi-stage build - это техника Dockerfile, где используется несколько `FROM`. Один stage может собирать приложение, а другой содержит только минимальный runtime и готовый output. Это уменьшает размер image и отделяет build-зависимости от production.
+
+## Проблема обычной сборки
+
+Если собирать приложение в одном stage, в production image могут попасть:
+
+- TypeScript;
+- devDependencies;
+- compilers;
+- source maps;
+- package manager cache;
+- тестовые файлы;
+- build tools.
+
+Это делает image больше и увеличивает поверхность атаки.
+
+## Пример для Node.js API
+
+```dockerfile
+FROM node:22-alpine AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+
+FROM node:22-alpine AS build
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+
+FROM node:22-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY --from=build /app/dist ./dist
+USER node
+CMD ["node", "dist/main.js"]
+```
+
+Final image содержит только то, что нужно для запуска.
+
+## Пример для frontend static build
+
+```dockerfile
+FROM node:22-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine AS runner
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+Node.js нужен только для сборки. В production работает Nginx со статическими файлами.
+
+## Как работает COPY --from?
+
+```dockerfile
+COPY --from=build /app/dist ./dist
+```
+
+Эта команда копирует файлы из stage `build` в текущий stage.
+
+Stage можно назвать:
+
+```dockerfile
+FROM node:22-alpine AS build
+```
+
+## Зачем это нужно?
+
+- меньше final image;
+- меньше vulnerabilities;
+- меньше secrets и build мусора;
+- отдельные stages легче читать;
+- production image ближе к реальному runtime;
+- можно использовать разные base images для build и runtime.
+
+## Что отвечать на собеседовании?
+
+Multi-stage build - это Dockerfile с несколькими `FROM`. В первых stages устанавливают зависимости и собирают приложение, а в final stage копируют только готовые артефакты и runtime-зависимости. Это уменьшает размер image, ускоряет доставку и снижает поверхность атаки.
+
+## Частые ошибки
+
+- Копировать весь проект в final stage.
+- Оставлять devDependencies в production image.
+- Забывать `NODE_ENV=production`.
+- Использовать один большой stage для build и runtime.
+- Копировать secrets из build stage в final image.
+- Не использовать named stages.
+
+## Мини-шпаргалка
+
+- Несколько `FROM` - несколько stages.
+- `AS build` - имя stage.
+- `COPY --from=build` - копирование между stages.
+- Final stage должен быть маленьким.
+- Build dependencies не должны попадать в runtime.
+- Multi-stage особенно полезен для Node, Go, frontend.

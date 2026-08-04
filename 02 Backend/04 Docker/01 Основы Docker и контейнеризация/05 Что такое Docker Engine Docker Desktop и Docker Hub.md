@@ -1,0 +1,101 @@
+# Что такое Docker Engine Docker Desktop и Docker Hub?
+
+> [!NOTE]
+> Docker Engine запускает контейнеры, Docker Desktop дает удобную локальную среду разработки, а Docker Hub хранит и распространяет images. Эти части часто используют вместе, но они решают разные задачи.
+
+## Docker Engine
+
+Docker Engine - это основная серверная часть Docker.
+
+Он отвечает за:
+
+- создание containers;
+- запуск и остановку процессов;
+- работу с images;
+- networks;
+- volumes;
+- взаимодействие с container runtime.
+
+Команды CLI обращаются к Docker Engine:
+
+```bash
+docker ps
+docker run nginx
+docker build -t app .
+```
+
+## Docker CLI
+
+Docker CLI - это командная строка:
+
+```bash
+docker <command>
+```
+
+CLI сам контейнеры не запускает. Он отправляет команды Docker Engine.
+
+## Docker Desktop
+
+Docker Desktop - приложение для Windows, macOS и Linux, которое устанавливает и настраивает Docker для локальной разработки.
+
+Оно обычно дает:
+
+- Docker Engine;
+- Docker CLI;
+- Docker Compose;
+- GUI для containers/images/volumes;
+- настройки ресурсов;
+- интеграцию с WSL на Windows;
+- Kubernetes optional mode.
+
+## Docker Hub
+
+Docker Hub - registry для images.
+
+Например:
+
+```bash
+docker pull node:22-alpine
+docker pull postgres:18
+docker pull redis:8-alpine
+```
+
+Images можно:
+
+- скачивать;
+- публиковать;
+- версионировать через tags;
+- использовать в CI/CD;
+- брать как base images.
+
+## Registry не обязательно Docker Hub
+
+Registry может быть другим:
+
+- GitHub Container Registry;
+- GitLab Container Registry;
+- AWS ECR;
+- Google Artifact Registry;
+- Azure Container Registry;
+- private registry компании.
+
+## Что отвечать на собеседовании?
+
+Docker Engine - это runtime и daemon, который управляет containers, images, networks и volumes. Docker Desktop - локальная среда с Engine, CLI, Compose и GUI. Docker Hub - публичный registry для хранения и скачивания Docker images. CLI отправляет команды Engine, а registry нужен для распространения images.
+
+## Частые ошибки
+
+- Путать Docker Desktop и Docker Engine.
+- Думать, что Docker Hub обязателен для Docker.
+- Не понимать, куда отправляется `docker push`.
+- Использовать tag `latest` без осознанности.
+- Считать CLI самостоятельным runtime.
+
+## Мини-шпаргалка
+
+- Engine запускает containers.
+- CLI отправляет команды Engine.
+- Desktop удобен для локальной разработки.
+- Hub хранит images.
+- Registry может быть приватным.
+- `docker pull` скачивает, `docker push` публикует.

@@ -1,0 +1,119 @@
+# Что такое Docker Compose?
+
+> [!NOTE]
+> Docker Compose - это инструмент для описания и запуска multi-container приложений через YAML-файл. Вместо набора длинных `docker run` команд ты описываешь services, networks, volumes, env и ports в `compose.yaml`, а затем запускаешь все одной командой.
+
+## Какую проблему решает Compose?
+
+Современное приложение редко состоит из одного процесса.
+
+Например:
+
+```text
+frontend
+backend API
+PostgreSQL
+Redis
+Nginx
+worker
+```
+
+Без Compose нужно запускать много команд:
+
+```bash
+docker network create app-net
+docker run ... postgres
+docker run ... redis
+docker run ... api
+docker run ... frontend
+```
+
+Compose заменяет это одним файлом.
+
+## Минимальный compose.yaml
+
+```yaml
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+```
+
+Запуск:
+
+```bash
+docker compose up
+```
+
+В фоне:
+
+```bash
+docker compose up -d
+```
+
+Остановка:
+
+```bash
+docker compose down
+```
+
+## Что такое service?
+
+Service - это описание контейнера или группы одинаковых контейнеров.
+
+```yaml
+services:
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+```
+
+Compose создаст container для service `api`.
+
+## Что Compose создает автоматически?
+
+Обычно:
+
+- containers;
+- default network;
+- DNS по именам services;
+- named volumes;
+- build images, если указан `build`;
+- logs aggregation.
+
+## Основные команды
+
+```bash
+docker compose up
+docker compose up -d
+docker compose down
+docker compose ps
+docker compose logs -f
+docker compose exec api sh
+docker compose build
+docker compose pull
+```
+
+## Что отвечать на собеседовании?
+
+Docker Compose - это инструмент для определения и запуска multi-container applications. В `compose.yaml` описывают services, networks, volumes, ports, environment и build-настройки. Compose создает нужные контейнеры и сеть, позволяет управлять всем стеком командами `docker compose up`, `down`, `logs`, `exec`, `build`.
+
+## Частые ошибки
+
+- Использовать старую команду `docker-compose` и не знать про современную `docker compose`.
+- Писать много `docker run`, когда проект уже multi-service.
+- Думать, что Compose - это Kubernetes.
+- Публиковать наружу все ports без необходимости.
+- Не понимать, что service name становится DNS name.
+
+## Мини-шпаргалка
+
+- Compose управляет несколькими containers.
+- Главный файл - `compose.yaml`.
+- `services` - приложения и зависимости.
+- `networks` - связь.
+- `volumes` - данные.
+- `docker compose up -d` - запуск в фоне.
+- `docker compose down` - остановка и удаление containers/network.

@@ -1,0 +1,134 @@
+# Как работают Docker networks и DNS между контейнерами?
+
+> [!NOTE]
+> Docker networks позволяют контейнерам общаться друг с другом. В user-defined network Docker дает встроенный DNS, поэтому контейнеры могут обращаться друг к другу по имени container или service, например `db:5432`.
+
+## Зачем нужны networks?
+
+Контейнеры изолированы. Чтобы сервисы общались, их подключают к одной сети.
+
+```text
+api container -> docker network -> db container
+```
+
+В Compose сеть создается автоматически для проекта.
+
+## Пример в Compose
+
+```yaml
+services:
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgres://app:secret@db:5432/app
+    depends_on:
+      - db
+
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: app
+```
+
+Backend подключается к PostgreSQL по host `db`, потому что `db` - имя service.
+
+## Почему не localhost?
+
+Внутри container:
+
+```text
+localhost = сам container
+```
+
+Если backend внутри контейнера делает:
+
+```text
+postgres://localhost:5432/app
+```
+
+он ищет Postgres внутри backend-container, а не в `db`.
+
+Правильно:
+
+```text
+postgres://db:5432/app
+```
+
+## User-defined bridge network
+
+Для обычного Docker CLI можно создать сеть:
+
+```bash
+docker network create app-net
+```
+
+Запустить базу:
+
+```bash
+docker run -d --name db --network app-net postgres:18
+```
+
+Запустить API:
+
+```bash
+docker run -d --name api --network app-net my-api
+```
+
+Теперь `api` может обращаться к `db`.
+
+## Посмотреть networks
+
+```bash
+docker network ls
+docker network inspect app-net
+```
+
+## Когда нужны custom networks в Compose?
+
+```yaml
+services:
+  api:
+    build: .
+    networks:
+      - backend
+
+  db:
+    image: postgres:18
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:alpine
+    networks:
+      - frontend
+      - backend
+
+networks:
+  frontend:
+  backend:
+```
+
+Так можно разделить публичный proxy и внутреннюю сеть backend/database.
+
+## Что отвечать на собеседовании?
+
+Docker network - это виртуальная сеть для связи контейнеров. В user-defined network Docker предоставляет DNS, поэтому контейнеры обращаются друг к другу по имени service или container. В Compose services автоматически попадают в общую сеть проекта, и backend должен ходить к базе по имени `db`, а не по `localhost`.
+
+## Частые ошибки
+
+- Использовать `localhost` для подключения к другому контейнеру.
+- Публиковать порты вместо использования внутренней docker-сети.
+- Не понимать разницу между host port и container port.
+- Не разделять публичные и приватные services.
+- Забывать, что service name в Compose становится DNS name.
+
+## Мини-шпаргалка
+
+- Network связывает containers.
+- Compose создает default network.
+- Service name работает как DNS name.
+- `localhost` внутри container - сам container.
+- `docker network inspect` показывает детали.
+- Custom networks помогают разделять зоны.

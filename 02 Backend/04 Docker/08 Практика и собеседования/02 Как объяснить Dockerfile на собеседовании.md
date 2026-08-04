@@ -1,0 +1,74 @@
+# Как объяснить Dockerfile на собеседовании?
+
+> [!NOTE]
+> Хорошее объяснение Dockerfile идет сверху вниз: base image, рабочая директория, установка зависимостей, копирование кода, build, runtime command, user, ports, cache и безопасность.
+
+## Пример
+
+```dockerfile
+FROM node:22-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:22-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY --from=build /app/dist ./dist
+USER node
+EXPOSE 3000
+CMD ["node", "dist/main.js"]
+```
+
+## Как объяснять
+
+1. `FROM node:22-alpine AS build` - беру Node.js base image и называю stage.
+2. `WORKDIR /app` - задаю рабочую папку.
+3. `COPY package*.json ./` - копирую manifest зависимостей отдельно для cache.
+4. `RUN npm ci` - ставлю зависимости воспроизводимо по lock-файлу.
+5. `COPY . .` - копирую source code.
+6. `RUN npm run build` - собираю TypeScript/приложение.
+7. Второй `FROM` - создаю clean runtime stage.
+8. `npm ci --omit=dev` - ставлю только production dependencies.
+9. `COPY --from=build` - переношу готовый output.
+10. `USER node` - запускаю не под root.
+11. `EXPOSE` - документирую порт.
+12. `CMD` - задаю команду запуска.
+
+## Что обязательно упомянуть?
+
+- Dockerfile собирает image.
+- Инструкции создают layers.
+- Порядок важен для cache.
+- Multi-stage уменьшает final image.
+- `.dockerignore` защищает от лишних файлов.
+- Secrets нельзя класть в image.
+- `EXPOSE` не публикует порт.
+- `CMD` выполняется при запуске container.
+
+## Что отвечать на собеседовании?
+
+Я бы объяснил Dockerfile как рецепт production image: сначала выбираю base image, затем копирую lock-файлы и ставлю зависимости для хорошего cache, потом копирую код и собираю приложение. В final stage переношу только runtime-часть, ставлю production dependencies, переключаюсь на non-root user, документирую порт и задаю `CMD`. Это делает image меньше, безопаснее и быстрее в сборке.
+
+## Частые ошибки
+
+- Просто читать инструкции без объяснения зачем.
+- Не упомянуть cache.
+- Не объяснить multi-stage.
+- Сказать, что `EXPOSE` открывает порт наружу.
+- Не различать build stage и runtime stage.
+- Забыть про `.dockerignore`.
+
+## Мини-шпаргалка
+
+- Начинай с цели Dockerfile.
+- Объясняй порядок слоев.
+- Расскажи про cache.
+- Объясни multi-stage.
+- Упомяни non-root.
+- Упомяни secrets.
+- Заверши `CMD` и port mapping.

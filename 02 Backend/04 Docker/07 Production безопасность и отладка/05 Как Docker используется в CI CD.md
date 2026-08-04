@@ -1,0 +1,87 @@
+# Как Docker используется в CI CD?
+
+> [!NOTE]
+> В CI/CD Docker обычно используют для воспроизводимой сборки image, запуска тестов, публикации image в registry и дальнейшего деплоя на сервер, Kubernetes, PaaS или другую платформу.
+
+## Типичный pipeline
+
+```text
+checkout code
+install/build/test
+docker build
+docker scan
+docker push
+deploy
+```
+
+Docker помогает сделать artifact деплоя одинаковым для всех окружений.
+
+## Build image
+
+```bash
+docker build -t registry.example.com/team/api:${GIT_SHA} .
+```
+
+Хороший tag:
+
+- commit SHA;
+- semver release;
+- build number;
+- environment-specific tag как дополнительный, но не единственный.
+
+## Push image
+
+```bash
+docker login registry.example.com
+docker push registry.example.com/team/api:${GIT_SHA}
+```
+
+После push production уже может скачать конкретный image.
+
+## Почему image лучше собирать один раз?
+
+Хорошая практика:
+
+```text
+build once -> promote same image through environments
+```
+
+Не нужно пересобирать image отдельно для staging и production, иначе это уже разные artifacts.
+
+Конфигурацию окружения лучше передавать через runtime env/secrets.
+
+## Tests в Docker
+
+Иногда тесты запускают внутри build stage или отдельного service:
+
+```bash
+docker compose -f compose.test.yaml up --abort-on-container-exit
+```
+
+Например:
+
+- API tests с PostgreSQL;
+- integration tests с Redis;
+- e2e tests против поднятого стека.
+
+## Что отвечать на собеседовании?
+
+В CI/CD Docker используется для создания воспроизводимого deployment artifact: pipeline собирает image, запускает тесты и security scan, пушит image в registry, а deploy-среда скачивает и запускает этот image. Версии лучше тегировать commit SHA или release tag, а конфиг окружения передавать runtime env/secrets.
+
+## Частые ошибки
+
+- Использовать только `latest`.
+- Собирать разные images для staging и production из одного commit.
+- Хранить secrets в build args.
+- Не кешировать dependencies.
+- Не сканировать image.
+- Не фиксировать base image versions.
+
+## Мини-шпаргалка
+
+- CI собирает image.
+- Registry хранит image.
+- Deploy запускает image.
+- Tag = commit SHA/release.
+- Build once, promote same artifact.
+- Runtime config через env/secrets.

@@ -1,0 +1,101 @@
+# Чем image отличается от container?
+
+> [!NOTE]
+> Image - это неизменяемый шаблон приложения, а container - запущенный экземпляр этого image. Из одного image можно создать много containers, как из одного класса можно создать много объектов.
+
+## Image
+
+Image содержит:
+
+- filesystem layers;
+- runtime;
+- зависимости;
+- код приложения;
+- metadata;
+- default command;
+- exposed ports;
+- env defaults.
+
+Пример:
+
+```bash
+docker pull postgres:18
+```
+
+Ты скачал image, но база еще не запущена.
+
+## Container
+
+Container появляется, когда image запускают:
+
+```bash
+docker run --name db -e POSTGRES_PASSWORD=secret postgres:18
+```
+
+Теперь есть running process PostgreSQL.
+
+## Аналогия
+
+```text
+Image     -> class
+Container -> object
+```
+
+Или:
+
+```text
+Image     -> установочный шаблон
+Container -> запущенное приложение
+```
+
+## Почему image immutable?
+
+Image состоит из слоев. Когда ты меняешь файлы внутри running container, ты не меняешь исходный image.
+
+```bash
+docker exec -it app sh
+echo "debug" > /tmp/file
+```
+
+Файл появился в контейнере. Но если удалить контейнер и создать новый из того же image, изменения исчезнут.
+
+## Как сохранить изменения правильно?
+
+Обычно не через ручную правку контейнера, а через Dockerfile:
+
+```dockerfile
+FROM node:22-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+CMD ["npm", "start"]
+```
+
+Потом:
+
+```bash
+docker build -t my-api .
+docker run my-api
+```
+
+## Что отвечать на собеседовании?
+
+Image - это read-only шаблон, собранный из layers, в котором описаны файлы, зависимости и команда запуска. Container - это runtime instance image, то есть запущенное окружение с процессом, writable layer, сетью и env. Один image можно запускать много раз, создавая разные containers.
+
+## Частые ошибки
+
+- Пытаться "зайти в image" как в работающую систему.
+- Править container вручную вместо изменения Dockerfile.
+- Думать, что удаление container удаляет image.
+- Думать, что удаление image остановит уже запущенный container.
+- Хранить важные данные в writable layer контейнера.
+
+## Мини-шпаргалка
+
+- Image - шаблон.
+- Container - запущенный image.
+- Image immutable.
+- Container имеет writable layer.
+- Один image -> много containers.
+- Изменения в container не меняют image.

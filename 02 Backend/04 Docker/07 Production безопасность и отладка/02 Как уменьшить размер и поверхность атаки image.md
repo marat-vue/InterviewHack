@@ -1,0 +1,101 @@
+# Как уменьшить размер и поверхность атаки image?
+
+> [!NOTE]
+> Размер и поверхность атаки image уменьшают через маленькие base images, multi-stage build, удаление dev-зависимостей, `.dockerignore`, non-root user, минимальное количество пакетов и регулярное сканирование vulnerabilities.
+
+## Почему размер image важен?
+
+Большой image:
+
+- дольше собирается;
+- дольше скачивается в CI/CD и production;
+- занимает больше места в registry;
+- содержит больше потенциальных vulnerabilities;
+- сложнее анализируется.
+
+## Multi-stage build
+
+```dockerfile
+FROM node:22-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:22-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY --from=build /app/dist ./dist
+USER node
+CMD ["node", "dist/main.js"]
+```
+
+Final stage содержит меньше лишнего.
+
+## Маленький base image
+
+Популярные варианты:
+
+- `alpine` - маленький, но иногда есть нюансы с native dependencies;
+- `slim` - больше, но часто совместимее;
+- distroless - минимальный runtime без shell/package manager.
+
+Выбор зависит от проекта.
+
+## .dockerignore
+
+```dockerignore
+node_modules
+.git
+.env
+coverage
+dist
+*.log
+```
+
+Чем меньше context, тем меньше риск случайно скопировать лишнее.
+
+## Не устанавливать лишние системные пакеты
+
+Плохо:
+
+```dockerfile
+RUN apk add --no-cache curl git vim bash
+```
+
+Если `git`, `vim` и `bash` не нужны runtime, они не должны быть в final image.
+
+## Сканирование
+
+Images стоит проверять на vulnerabilities:
+
+```bash
+docker scout quickview my-api:latest
+```
+
+Также часто используют registry scanning и CI security checks.
+
+## Что отвечать на собеседовании?
+
+Чтобы уменьшить image и поверхность атаки, используют multi-stage build, маленький base image, `.dockerignore`, production dependencies, non-root user и минимум runtime-пакетов. Также фиксируют версии base images и сканируют image на vulnerabilities. В final image должен попадать только runtime минимум.
+
+## Частые ошибки
+
+- Использовать полный Debian image без причины.
+- Оставлять build tools в final stage.
+- Устанавливать debug tools в production image.
+- Не удалять package manager cache.
+- Не использовать `.dockerignore`.
+- Думать, что Alpine всегда лучший выбор.
+
+## Мини-шпаргалка
+
+- Меньше image - быстрее delivery.
+- Multi-stage убирает build мусор.
+- `.dockerignore` уменьшает context.
+- `--omit=dev` убирает devDependencies.
+- Non-root снижает риск.
+- Сканируй vulnerabilities.

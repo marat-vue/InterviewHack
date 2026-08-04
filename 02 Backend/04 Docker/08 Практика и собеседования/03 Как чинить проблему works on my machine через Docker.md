@@ -1,0 +1,101 @@
+# Как чинить проблему works on my machine через Docker?
+
+> [!NOTE]
+> Docker помогает чинить "works on my machine", потому что фиксирует runtime, зависимости, системные пакеты, команды запуска и сервисы окружения. Но Dockerfile и Compose должны быть частью проекта, а не набором ручных действий внутри контейнера.
+
+## Почему возникает проблема?
+
+```text
+developer A: Node 22, pnpm 10, Postgres 18
+developer B: Node 20, npm 9, Postgres 15
+server: другой Linux, другие env, другой OpenSSL
+```
+
+Итог:
+
+- зависимости ставятся по-разному;
+- native modules ломаются;
+- база другой версии;
+- env отсутствуют;
+- команды запуска отличаются.
+
+## Что делает Docker?
+
+Docker фиксирует:
+
+- base image;
+- runtime version;
+- system packages;
+- install command;
+- build command;
+- start command;
+- services окружения;
+- ports;
+- volumes;
+- networks.
+
+## Пример
+
+```yaml
+services:
+  api:
+    build: .
+    env_file:
+      - .env.example
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: app
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      retries: 10
+```
+
+Теперь новый разработчик запускает:
+
+```bash
+docker compose up --build
+```
+
+## Но Docker не спасает автоматически
+
+Все еще можно ошибиться:
+
+- не зафиксировать версии;
+- использовать `latest`;
+- не добавить `.dockerignore`;
+- держать важные шаги только в README;
+- ставить пакеты вручную внутри container;
+- не описать migrations;
+- не добавить `.env.example`.
+
+## Что отвечать на собеседовании?
+
+Docker решает "works on my machine" тем, что окружение описывается как код: Dockerfile фиксирует runtime и сборку приложения, Compose фиксирует внешние сервисы вроде Postgres и Redis. Новый разработчик или CI запускает одинаковые команды и получает одинаковое окружение. Но важно фиксировать версии, не полагаться на ручные действия и хранить конфиг явно.
+
+## Частые ошибки
+
+- Использовать Docker, но устанавливать зависимости вручную в контейнере.
+- Не коммитить Dockerfile/Compose.
+- Использовать разные `.env` без примера.
+- Не фиксировать версии images.
+- Не описывать migrations.
+- Не проверять Docker-сценарий в CI.
+
+## Мини-шпаргалка
+
+- Dockerfile фиксирует app runtime.
+- Compose фиксирует services.
+- Versions must be pinned.
+- `.env.example` помогает onboarding.
+- Migrations должны быть описаны.
+- Manual container changes не воспроизводимы.
