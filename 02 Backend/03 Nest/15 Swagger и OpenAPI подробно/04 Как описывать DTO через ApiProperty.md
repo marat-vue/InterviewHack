@@ -1,0 +1,55 @@
+# Как описывать DTO через ApiProperty?
+
+> [!NOTE]
+> `@ApiProperty` и `@ApiPropertyOptional` добавляют OpenAPI metadata для DTO-полей. Без них Swagger может увидеть class, но не всегда сможет корректно описать поля, особенно без CLI plugin.
+
+## DTO
+
+```ts
+export class CreateUserDto {
+  @ApiProperty({
+    example: 'anna@example.com',
+    description: 'User email',
+  })
+  @IsEmail()
+  email: string;
+
+  @ApiPropertyOptional({
+    example: 'Anna',
+  })
+  @IsOptional()
+  @IsString()
+  name?: string;
+}
+```
+
+## Enum
+
+```ts
+export enum UserRole {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+}
+
+export class UserDto {
+  @ApiProperty({ enum: UserRole })
+  role: UserRole;
+}
+```
+
+## Arrays
+
+```ts
+export class UsersListDto {
+  @ApiProperty({ type: [UserDto] })
+  items: UserDto[];
+}
+```
+
+## Мини-шпаргалка
+
+- `@ApiProperty` описывает обязательное поле.
+- `@ApiPropertyOptional` описывает optional поле.
+- Добавляй `example` для удобства.
+- Для enum указывай `enum`.
+- Для arrays указывай `type: [Dto]`.

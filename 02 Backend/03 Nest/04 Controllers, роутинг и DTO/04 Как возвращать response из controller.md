@@ -1,0 +1,56 @@
+# Как возвращать response из controller?
+
+> [!NOTE]
+> В NestJS controller method может вернуть object, array, primitive, Promise или Observable. NestJS сам сериализует результат и отправит HTTP-response, если не использовать low-level `@Res()`.
+
+## Обычный return
+
+```ts
+@Get()
+findAll() {
+  return [{ id: 1, email: 'a@test.com' }];
+}
+```
+
+NestJS вернет JSON.
+
+## Promise
+
+```ts
+@Get(':id')
+async findOne(@Param('id') id: string) {
+  return this.usersService.findOne(id);
+}
+```
+
+`async` method возвращает Promise, NestJS дождется результата.
+
+## Status code
+
+```ts
+@Post()
+@HttpCode(201)
+create(@Body() dto: CreateUserDto) {
+  return this.usersService.create(dto);
+}
+```
+
+Для POST статус `201` обычно идет по умолчанию, но decorator позволяет задать код явно.
+
+## Headers
+
+```ts
+@Header('Cache-Control', 'no-store')
+@Get()
+findAll() {
+  return [];
+}
+```
+
+## Мини-шпаргалка
+
+- Возвращай value, Promise или Observable.
+- NestJS сам сериализует object в JSON.
+- `@HttpCode` задает статус.
+- `@Header` задает response header.
+- Избегай `@Res()`, если не нужен полный контроль.

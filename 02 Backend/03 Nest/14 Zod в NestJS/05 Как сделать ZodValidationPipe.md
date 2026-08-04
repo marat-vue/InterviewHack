@@ -1,0 +1,58 @@
+# Как сделать ZodValidationPipe?
+
+> [!NOTE]
+> Чтобы использовать Zod в NestJS controllers, можно написать custom pipe. Pipe получает schema, вызывает `safeParse`, а при ошибке выбрасывает `BadRequestException`.
+
+## Pipe
+
+```ts
+@Injectable()
+export class ZodValidationPipe implements PipeTransform {
+  constructor(private readonly schema: z.ZodType) {}
+
+  transform(value: unknown) {
+    const result = this.schema.safeParse(value);
+
+    if (!result.success) {
+      throw new BadRequestException({
+        message: 'Validation failed',
+        issues: result.error.issues,
+      });
+    }
+
+    return result.data;
+  }
+}
+```
+
+## Использование для body
+
+```ts
+@Post()
+create(
+  @Body(new ZodValidationPipe(createUserSchema))
+  body: CreateUserInput,
+) {
+  return this.usersService.create(body);
+}
+```
+
+## Использование для query
+
+```ts
+@Get()
+findAll(
+  @Query(new ZodValidationPipe(findUsersQuerySchema))
+  query: FindUsersQuery,
+) {
+  return this.usersService.findAll(query);
+}
+```
+
+## Мини-шпаргалка
+
+- NestJS применяет Zod через custom pipe.
+- Pipe должен вернуть parsed data.
+- При ошибке выбрасывай `BadRequestException`.
+- Тип берется через `z.infer`.
+- Для async validation нужен async `transform`.

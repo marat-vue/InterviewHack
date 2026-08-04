@@ -1,0 +1,54 @@
+# Как документировать file upload?
+
+> [!NOTE]
+> File upload в Swagger описывают через `multipart/form-data`, `@ApiConsumes` и `@ApiBody` со schema, где файл имеет type `string` и format `binary`.
+
+## Controller
+
+```ts
+@Post('avatar')
+@UseInterceptors(FileInterceptor('file'))
+@ApiConsumes('multipart/form-data')
+@ApiBody({
+  schema: {
+    type: 'object',
+    properties: {
+      file: {
+        type: 'string',
+        format: 'binary',
+      },
+    },
+  },
+})
+uploadAvatar(@UploadedFile() file: Express.Multer.File) {
+  return { filename: file.originalname };
+}
+```
+
+## Несколько файлов
+
+```ts
+@UseInterceptors(FilesInterceptor('files'))
+@ApiBody({
+  schema: {
+    type: 'object',
+    properties: {
+      files: {
+        type: 'array',
+        items: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  },
+})
+```
+
+## Мини-шпаргалка
+
+- File upload использует `multipart/form-data`.
+- `@ApiConsumes` задает content type.
+- File schema: `type: string`, `format: binary`.
+- Имя поля должно совпадать с `FileInterceptor`.
+- Ограничения размера файла документируй явно.

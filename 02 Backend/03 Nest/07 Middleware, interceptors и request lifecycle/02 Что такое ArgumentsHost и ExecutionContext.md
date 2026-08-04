@@ -1,0 +1,39 @@
+# Что такое ArgumentsHost и ExecutionContext?
+
+> [!NOTE]
+> `ArgumentsHost` дает доступ к аргументам текущего handler в разных контекстах, а `ExecutionContext` расширяет его информацией о class и method. Они нужны для универсальных guards, filters и interceptors.
+
+## ArgumentsHost
+
+```ts
+catch(exception: unknown, host: ArgumentsHost) {
+  const ctx = host.switchToHttp();
+  const request = ctx.getRequest();
+  const response = ctx.getResponse();
+}
+```
+
+`switchToHttp()` переключает host в HTTP-context.
+
+## ExecutionContext
+
+```ts
+canActivate(context: ExecutionContext) {
+  const handler = context.getHandler();
+  const controller = context.getClass();
+}
+```
+
+`ExecutionContext` часто нужен, чтобы читать metadata с controller или route method.
+
+## Почему это важно?
+
+NestJS работает не только с HTTP, но и с WebSockets, GraphQL, microservices. Context utilities помогают писать переиспользуемые компоненты.
+
+## Мини-шпаргалка
+
+- `ArgumentsHost` дает доступ к runtime arguments.
+- `switchToHttp()` используется в HTTP.
+- `ExecutionContext` знает handler и class.
+- Guards часто используют `ExecutionContext`.
+- Filters часто используют `ArgumentsHost`.

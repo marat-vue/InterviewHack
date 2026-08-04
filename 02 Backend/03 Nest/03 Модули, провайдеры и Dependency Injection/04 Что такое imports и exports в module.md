@@ -1,0 +1,40 @@
+# Что такое imports и exports в module?
+
+> [!NOTE]
+> `imports` подключает другие modules, а `exports` делает providers текущего module доступными для modules, которые его импортируют.
+
+## Пример
+
+```ts
+@Module({
+  providers: [UsersService],
+  exports: [UsersService],
+})
+export class UsersModule {}
+```
+
+```ts
+@Module({
+  imports: [UsersModule],
+  providers: [OrdersService],
+})
+export class OrdersModule {}
+```
+
+Теперь `OrdersService` может внедрить `UsersService`.
+
+## Без exports
+
+Если `UsersModule` не экспортирует `UsersService`, другой module не сможет его внедрить, даже если импортирует `UsersModule`.
+
+## Что экспортировать?
+
+Экспортируй только публичный API module. Не нужно отдавать наружу все repositories, helpers и internal services.
+
+## Мини-шпаргалка
+
+- `imports` подключает module.
+- `exports` публикует providers.
+- Provider не становится глобальным автоматически.
+- Экспортируй только то, что нужно другим modules.
+- Ошибки DI часто связаны с забытым `imports` или `exports`.

@@ -1,0 +1,50 @@
+# Что такое lifecycle hooks?
+
+> [!NOTE]
+> Lifecycle hooks - методы, которые NestJS вызывает при запуске и завершении приложения. Они нужны для инициализации ресурсов, закрытия соединений и graceful shutdown.
+
+## OnModuleInit
+
+```ts
+@Injectable()
+export class CacheService implements OnModuleInit {
+  onModuleInit() {
+    console.log('CacheService initialized');
+  }
+}
+```
+
+## OnApplicationShutdown
+
+```ts
+@Injectable()
+export class DatabaseService implements OnApplicationShutdown {
+  async onApplicationShutdown(signal?: string) {
+    await this.close();
+  }
+}
+```
+
+## Shutdown hooks
+
+Чтобы NestJS слушал shutdown signals, их включают в bootstrap.
+
+```ts
+app.enableShutdownHooks();
+```
+
+## Когда использовать?
+
+- подключение к broker;
+- прогрев cache;
+- закрытие database pool;
+- остановка consumers;
+- graceful shutdown.
+
+## Мини-шпаргалка
+
+- Lifecycle hooks вызываются NestJS runtime.
+- `OnModuleInit` - инициализация module/provider.
+- `OnApplicationShutdown` - завершение приложения.
+- Для signals нужны shutdown hooks.
+- Не делай долгую бизнес-работу в lifecycle без необходимости.

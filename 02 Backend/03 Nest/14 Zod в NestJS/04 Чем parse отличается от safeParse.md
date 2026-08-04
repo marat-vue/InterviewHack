@@ -1,0 +1,51 @@
+# Чем parse отличается от safeParse?
+
+> [!NOTE]
+> `parse` валидирует данные и выбрасывает `ZodError` при ошибке. `safeParse` возвращает result object с `success`, поэтому удобен там, где не хочется использовать `try/catch`.
+
+## parse
+
+```ts
+const data = createUserSchema.parse(input);
+```
+
+Если input невалиден, будет exception.
+
+```ts
+try {
+  const data = createUserSchema.parse(input);
+} catch (error) {
+  if (error instanceof z.ZodError) {
+    console.log(error.issues);
+  }
+}
+```
+
+## safeParse
+
+```ts
+const result = createUserSchema.safeParse(input);
+
+if (!result.success) {
+  console.log(result.error.issues);
+} else {
+  console.log(result.data);
+}
+```
+
+## Async schemas
+
+Если в schema есть async refine/transform, используй:
+
+```ts
+await schema.parseAsync(input);
+await schema.safeParseAsync(input);
+```
+
+## Мини-шпаргалка
+
+- `parse` бросает exception.
+- `safeParse` возвращает discriminated union.
+- `result.success` сужает тип.
+- Для async validation нужен `parseAsync`.
+- В Nest pipe удобно использовать `safeParse` или ловить `ZodError`.

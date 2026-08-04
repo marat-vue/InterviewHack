@@ -1,0 +1,38 @@
+# Что такое Swagger и OpenAPI в NestJS?
+
+> [!NOTE]
+> OpenAPI - спецификация REST API, а Swagger UI - удобный интерфейс для просмотра и тестирования этой спецификации. В NestJS пакет `@nestjs/swagger` генерирует OpenAPI document из controllers, DTO и decorators.
+
+## Зачем нужен OpenAPI?
+
+- документация для frontend;
+- контракт для внешних клиентов;
+- тестирование endpoints через Swagger UI;
+- генерация SDK;
+- согласование request/response схем;
+- onboarding команды.
+
+## Как NestJS строит документ?
+
+Nest Swagger читает:
+
+- route decorators;
+- `@Body`, `@Query`, `@Param`;
+- DTO classes;
+- decorators `@ApiProperty`, `@ApiResponse`, `@ApiTags`;
+- security decorators.
+
+## Swagger UI vs OpenAPI document
+
+```txt
+OpenAPI document = JSON/YAML контракт
+Swagger UI = HTML-интерфейс для этого контракта
+```
+
+## Мини-шпаргалка
+
+- OpenAPI - машинно-читаемый контракт API.
+- Swagger UI - визуальный интерфейс.
+- `@nestjs/swagger` генерирует document из Nest metadata.
+- DTO без metadata могут отображаться неполно.
+- Документация должна совпадать с реальным validation.

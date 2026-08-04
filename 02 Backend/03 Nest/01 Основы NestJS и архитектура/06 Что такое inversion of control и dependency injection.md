@@ -1,0 +1,45 @@
+# Что такое inversion of control и dependency injection?
+
+> [!NOTE]
+> Inversion of Control означает, что объекты создаются и связываются не вручную внутри класса, а контейнером фреймворка. Dependency Injection - способ передать классу его зависимости извне.
+
+## Без DI
+
+```ts
+export class UsersController {
+  private usersService = new UsersService();
+}
+```
+
+Контроллер сам создает сервис и жестко зависит от конкретной реализации.
+
+## С DI
+
+```ts
+@Controller('users')
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+}
+```
+
+NestJS создает `UsersService` и передает его в controller.
+
+## Почему это удобно?
+
+- проще тестировать;
+- легче менять реализации;
+- зависимости видны в constructor;
+- меньше ручного wiring;
+- можно использовать mocks.
+
+## Собеседовательный ответ
+
+DI в NestJS - это механизм, через который IoC container создает providers и внедряет их туда, где они нужны, обычно через constructor injection.
+
+## Мини-шпаргалка
+
+- IoC - управление созданием объектов передано контейнеру.
+- DI - зависимости приходят извне.
+- NestJS DI строится вокруг providers.
+- Constructor injection - основной стиль.
+- DI делает код тестируемее.

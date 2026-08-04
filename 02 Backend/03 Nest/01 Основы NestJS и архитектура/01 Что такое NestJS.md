@@ -1,0 +1,44 @@
+# Что такое NestJS?
+
+> [!NOTE]
+> NestJS - фреймворк для создания серверных Node.js-приложений. Он построен с сильной поддержкой TypeScript, использует decorators, dependency injection и модульную архитектуру, а под капотом может работать поверх Express или Fastify.
+
+## Главное определение
+
+NestJS помогает строить backend-приложения не как набор разрозненных route handlers, а как систему модулей, controllers и providers.
+
+```ts
+@Controller('users')
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Get()
+  findAll() {
+    return this.usersService.findAll();
+  }
+}
+```
+
+Контроллер принимает HTTP-запрос, а бизнес-логика уходит в service.
+
+## Зачем NestJS нужен?
+
+- единая архитектура для больших backend-проектов;
+- dependency injection из коробки;
+- модульность;
+- удобная validation-система;
+- guards, interceptors, filters;
+- поддержка REST, GraphQL, WebSockets, microservices;
+- хорошая тестируемость.
+
+## NestJS не заменяет Node.js
+
+NestJS работает внутри Node.js. Поэтому важно понимать event loop, async/await, HTTP, env, streams и ошибки.
+
+## Мини-шпаргалка
+
+- NestJS - backend framework для Node.js.
+- Основной язык - TypeScript.
+- Архитектура вдохновлена Angular.
+- Базовые элементы: modules, controllers, providers.
+- Под капотом чаще Express, но можно Fastify.

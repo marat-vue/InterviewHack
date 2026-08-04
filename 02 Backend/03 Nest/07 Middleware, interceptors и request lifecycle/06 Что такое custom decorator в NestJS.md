@@ -1,0 +1,40 @@
+# Что такое custom decorator в NestJS?
+
+> [!NOTE]
+> Custom decorator позволяет вынести повторяющуюся логику получения данных из request или установки metadata. В NestJS часто делают decorators вроде `@CurrentUser()` и `@Public()`.
+
+## CurrentUser decorator
+
+```ts
+export const CurrentUser = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest();
+    return request.user;
+  },
+);
+```
+
+Использование:
+
+```ts
+@Get('me')
+getMe(@CurrentUser() user: UserPayload) {
+  return user;
+}
+```
+
+## Metadata decorator
+
+```ts
+export const Public = () => SetMetadata('isPublic', true);
+```
+
+Такой decorator потом читает guard через `Reflector`.
+
+## Мини-шпаргалка
+
+- Param decorator достает данные для argument handler.
+- `createParamDecorator` получает `ExecutionContext`.
+- Metadata decorator сохраняет metadata.
+- Custom decorators уменьшают повторение.
+- Не прячь сложную бизнес-логику в decorator.

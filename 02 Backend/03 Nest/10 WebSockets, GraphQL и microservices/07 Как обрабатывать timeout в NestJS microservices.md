@@ -1,0 +1,38 @@
+# Как обрабатывать timeout в NestJS microservices?
+
+> [!NOTE]
+> В distributed systems другой сервис может зависнуть или быть недоступен. Для NestJS microservices вызов `ClientProxy.send()` нужно ограничивать timeout через RxJS, чтобы не ждать бесконечно.
+
+## Пример
+
+```ts
+const result = await firstValueFrom(
+  this.client.send('get-user', { id }).pipe(
+    timeout(3000),
+    catchError((error) => {
+      throw new ServiceUnavailableException('Users service unavailable');
+    }),
+  ),
+);
+```
+
+## Почему timeout обязателен?
+
+Без timeout request может зависнуть и занять ресурсы приложения.
+
+## Что еще нужно?
+
+- retries с ограничением;
+- circuit breaker;
+- fallback;
+- idempotency;
+- correlation id;
+- logs и metrics.
+
+## Мини-шпаргалка
+
+- Distributed calls должны иметь timeout.
+- `ClientProxy.send()` возвращает Observable.
+- RxJS `timeout` ограничивает ожидание.
+- Retry без idempotency опасен.
+- Ошибку удаленного сервиса нужно переводить в понятную ошибку API.

@@ -1,0 +1,53 @@
+# Как создать auth.ts для Better Auth?
+
+> [!NOTE]
+> `auth.ts` создает и экспортирует Better Auth instance. В нем задают database adapter, trusted origins, auth methods, plugins и production-настройки.
+
+## Минимальный auth.ts
+
+```ts
+import { betterAuth } from 'better-auth';
+
+export const auth = betterAuth({
+  emailAndPassword: {
+    enabled: true,
+  },
+});
+```
+
+## С env
+
+```ts
+import { betterAuth } from 'better-auth';
+
+export const auth = betterAuth({
+  baseURL: process.env.BETTER_AUTH_URL,
+  secret: process.env.BETTER_AUTH_SECRET,
+  trustedOrigins: [
+    'http://localhost:5173',
+    'https://app.example.com',
+  ],
+  emailAndPassword: {
+    enabled: true,
+  },
+});
+```
+
+## Что настраивать?
+
+| Опция | Зачем |
+|---|---|
+| `secret` | подпись/шифрование auth-данных |
+| `baseURL` | базовый URL auth server |
+| `trustedOrigins` | защита от CSRF/open redirect |
+| `database` | хранение users/sessions/accounts |
+| `emailAndPassword` | email/password flow |
+| `socialProviders` | OAuth |
+
+## Мини-шпаргалка
+
+- `auth.ts` экспортирует `auth`.
+- Better Auth ищет config для CLI в стандартных местах.
+- `trustedOrigins` должен быть allowlist.
+- Не оставляй localhost в production origins.
+- Database adapter подключается здесь же.

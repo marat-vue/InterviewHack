@@ -1,0 +1,54 @@
+# Как описывать nested objects, arrays, enums и unions?
+
+> [!NOTE]
+> Zod хорошо описывает сложные структуры: вложенные objects, arrays, enums, discriminated unions и reusable schemas. Это полезно для сложных DTO и payload-ов внешних API.
+
+## Nested object
+
+```ts
+const addressSchema = z.object({
+  city: z.string(),
+  street: z.string(),
+});
+
+const createUserSchema = z.object({
+  email: z.email(),
+  address: addressSchema,
+});
+```
+
+## Array
+
+```ts
+const createOrderSchema = z.object({
+  items: z.array(
+    z.object({
+      productId: z.string(),
+      quantity: z.number().int().min(1),
+    }),
+  ).min(1),
+});
+```
+
+## Enum
+
+```ts
+const statusSchema = z.enum(['new', 'paid', 'cancelled']);
+```
+
+## Discriminated union
+
+```ts
+const paymentSchema = z.discriminatedUnion('type', [
+  z.object({ type: z.literal('card'), cardToken: z.string() }),
+  z.object({ type: z.literal('cash') }),
+]);
+```
+
+## Мини-шпаргалка
+
+- Reusable schemas уменьшают дублирование.
+- `z.array(schema)` валидирует массив.
+- `z.enum([...])` ограничивает значения.
+- Discriminated union удобен для разных вариантов payload.
+- Вложенные schemas хорошо типизируются через `z.infer`.

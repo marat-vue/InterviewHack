@@ -1,0 +1,189 @@
+# Какие built-in pipes есть в NestJS?
+
+> [!NOTE]
+> NestJS предоставляет built-in pipes для частых преобразований и проверок: `ValidationPipe`, `ParseIntPipe`, `ParseBoolPipe`, `ParseArrayPipe`, `ParseUUIDPipe`, `DefaultValuePipe` и другие.
+
+## ParseIntPipe
+
+```ts
+@Get(':id')
+findOne(@Param('id', ParseIntPipe) id: number) {}
+```
+
+`ParseIntPipe` берет строку из URL и пытается превратить ее в integer. Если приходит `abc`, NestJS вернет `400 Bad Request`.
+
+Это лучше, чем писать:
+
+```ts
+const id = Number(params.id);
+```
+
+Ручной `Number` может дать `NaN`, а дальше ошибка всплывет уже глубже в service или database layer.
+
+## ParseUUIDPipe
+
+```ts
+@Get(':id')
+findOne(@Param('id', ParseUUIDPipe) id: string) {}
+```
+
+`ParseUUIDPipe` проверяет, что параметр похож на UUID. Его часто используют, если в Prisma id описан так:
+
+```prisma
+model User {
+  id String @id @default(uuid()) @db.Uuid
+}
+```
+
+```ts
+@Get(':id')
+findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+  return this.usersService.findOne(id);
+}
+```
+
+Если версия UUID не важна, можно использовать pipe без options.
+
+## DefaultValuePipe
+
+```ts
+@Get()
+findAll(
+  @Query('page', new DefaultValuePipe(1), ParseIntPipe)
+  page: number,
+) {}
+```
+
+`DefaultValuePipe` полезен для query params, потому что отсутствующий query parameter обычно приходит как `undefined`.
+
+Важно: порядок pipes имеет значение. Сначала подставляем default, потом парсим:
+
+```ts
+@Query('page', new DefaultValuePipe(1), ParseIntPipe)
+page: number
+```
+
+Если поменять порядок, `ParseIntPipe` сначала получит `undefined` и выбросит ошибку.
+
+## ParseArrayPipe
+
+```ts
+@Get()
+find(@Query('ids', new ParseArrayPipe({ items: Number, separator: ',' })) ids: number[]) {}
+```
+
+Такой endpoint сможет принять:
+
+```txt
+GET /users?ids=1,2,3
+```
+
+и превратить `ids` в массив чисел.
+
+Для body arrays:
+
+```ts
+@Post('bulk')
+createMany(
+  @Body(new ParseArrayPipe({ items: CreateUserDto }))
+  users: CreateUserDto[],
+) {
+  return this.usersService.createMany(users);
+}
+```
+
+## Другие useful built-in pipes
+
+| Pipe | Что делает | Пример |
+|---|---|---|
+| `ParseBoolPipe` | парсит boolean | `?active=true` |
+| `ParseFloatPipe` | парсит float | `?rating=4.5` |
+| `ParseEnumPipe` | проверяет enum | `?role=admin` |
+| `ParseFilePipe` | валидирует uploaded file | avatar upload |
+| `ValidationPipe` | валидирует DTO/class | body DTO |
+
+## ParseBoolPipe
+
+```ts
+@Get()
+findAll(@Query('active', ParseBoolPipe) active: boolean) {
+  return this.usersService.findAll({ active });
+}
+```
+
+`ParseBoolPipe` полезен, когда query parameter должен быть настоящим boolean, а не строкой `'true'`.
+
+## ParseEnumPipe
+
+```ts
+enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
+@Get()
+findAll(@Query('role', new ParseEnumPipe(UserRole)) role: UserRole) {
+  return this.usersService.findAll({ role });
+}
+```
+
+Так controller не пропустит `?role=random`.
+
+## ValidationPipe
+
+```ts
+@Post()
+create(@Body(new ValidationPipe()) dto: CreateUserDto) {
+  return this.usersService.create(dto);
+}
+```
+
+На практике `ValidationPipe` чаще включают глобально:
+
+```ts
+app.useGlobalPipes(
+  new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
+  }),
+);
+```
+
+`whitelist` убирает поля без decorators, `forbidNonWhitelisted` выбрасывает ошибку на лишние поля, `transform` преобразует plain object в DTO class и может помогать с primitive conversion.
+
+## Pipe на parameter vs global pipe
+
+```ts
+@Param('id', ParseIntPipe)
+```
+
+Parameter pipe хорош для маленькой локальной проверки.
+
+```ts
+app.useGlobalPipes(new ValidationPipe());
+```
+
+Global pipe хорош для общей политики validation во всем приложении.
+
+## Частые ошибки
+
+| Ошибка | Почему плохо | Как лучше |
+|---|---|---|
+| Не парсить `id` из params | в service уходит string вместо number | `ParseIntPipe` |
+| Ставить `ParseIntPipe` перед `DefaultValuePipe` | default не успевает подставиться | сначала `DefaultValuePipe` |
+| Валидировать сложный body через много parameter pipes | controller разрастается | DTO + `ValidationPipe` или Zod pipe |
+| Полагаться только на TypeScript types | runtime input не проверяется | использовать pipes |
+| Не ограничивать массивы | можно принять огромный payload | `ParseArrayPipe` или schema с `max` |
+
+## Мини-шпаргалка
+
+- Built-in pipes закрывают частые parsing cases.
+- `ParseIntPipe` - string to number.
+- `ParseUUIDPipe` проверяет UUID.
+- `DefaultValuePipe` задает default.
+- `ParseBoolPipe` парсит boolean query params.
+- `ParseEnumPipe` ограничивает значение enum.
+- `ParseArrayPipe` помогает с массивами в query/body.
+- Порядок pipes важен.
+- Для сложных body лучше DTO + ValidationPipe.
