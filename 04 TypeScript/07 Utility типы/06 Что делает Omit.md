@@ -1,0 +1,65 @@
+# Что делает Omit?
+
+> [!NOTE] Коротко
+> `Omit<T, K>` создает новый тип из `T`, исключая указанные ключи `K`.
+
+## Вопрос
+
+Что делает `Omit`?
+
+## Базовый пример
+
+```typescript
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  passwordHash: string;
+};
+
+type PublicUser = Omit<User, "passwordHash">;
+```
+
+`PublicUser` будет таким:
+
+```typescript
+type PublicUser = {
+  id: number;
+  name: string;
+  email: string;
+};
+```
+
+## Несколько исключений
+
+```typescript
+type CreateUserInput = Omit<User, "id" | "passwordHash">;
+```
+
+Так удобно описывать данные, которые приходят при создании сущности.
+
+## Где полезен
+
+`Omit` часто используют, чтобы не дублировать почти одинаковые типы.
+
+```typescript
+type Product = {
+  id: string;
+  title: string;
+  price: number;
+  createdAt: Date;
+};
+
+type ProductForm = Omit<Product, "id" | "createdAt">;
+```
+
+## Отличие от Pick
+
+`Pick` перечисляет то, что нужно оставить. `Omit` перечисляет то, что нужно убрать.
+
+## Мини-шпаргалка
+
+- `Omit<T, K>` удаляет ключи `K` из типа `T`.
+- `K` может быть union ключей.
+- Удобен для form/input/public DTO.
+- Если оставляемых полей меньше, часто читаемее `Pick`.

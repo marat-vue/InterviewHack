@@ -1,0 +1,58 @@
+# Conditional generics
+
+> [!NOTE] Коротко
+> Conditional generics - это generic-типы с условием: `T extends U ? X : Y`. Они выбирают один тип или другой в зависимости от входного типа.
+
+## Вопрос
+
+Что такое conditional generics?
+
+## Базовый пример
+
+```typescript
+type IsString<T> = T extends string ? true : false;
+
+type A = IsString<"hello">;
+// true
+
+type B = IsString<number>;
+// false
+```
+
+## Практический пример
+
+```typescript
+type ApiResult<T> = T extends Error
+  ? { ok: false; error: T }
+  : { ok: true; data: T };
+
+type UserResult = ApiResult<User>;
+type ErrorResult = ApiResult<Error>;
+```
+
+## С `infer`
+
+```typescript
+type UnwrapPromise<T> = T extends Promise<infer Value> ? Value : T;
+
+type User = UnwrapPromise<Promise<{ id: number }>>;
+// { id: number }
+```
+
+## Дистрибутивность
+
+Если `T` является union, conditional type обычно применяется к каждому варианту отдельно.
+
+```typescript
+type ToArray<T> = T extends unknown ? T[] : never;
+
+type Result = ToArray<string | number>;
+// string[] | number[]
+```
+
+## Мини-шпаргалка
+
+- Форма: `T extends U ? X : Y`.
+- Используется для выбора типа по условию.
+- `infer` помогает достать вложенный тип.
+- С union работает дистрибутивно, если `T` "голый".

@@ -1,0 +1,72 @@
+# structural typing в интерфейсах
+
+> [!NOTE] Коротко
+> Structural typing означает, что объект подходит интерфейсу, если у него есть нужная структура, даже без явного объявления.
+
+## Вопрос
+
+Что означает structural typing в контексте интерфейсов?
+
+## Определение
+
+TypeScript проверяет совместимость по форме объекта. Если значение содержит все обязательные свойства интерфейса с подходящими типами, оно совместимо с этим интерфейсом.
+
+## Пример
+
+```typescript
+interface User {
+  name: string;
+}
+
+function greet(user: User) {
+  console.log(user.name);
+}
+
+const person = {
+  name: 'Ann',
+  age: 25,
+};
+
+greet(person); // ok
+```
+
+`person` не объявлен как `User`, но его структура подходит.
+
+## Лишние свойства
+
+```typescript
+const person = {
+  name: 'Ann',
+  age: 25,
+};
+
+greet(person); // ok
+```
+
+Лишнее поле `age` не мешает, потому что для `User` важно наличие `name`.
+
+## Excess property check
+
+```typescript
+greet({
+  name: 'Ann',
+  age: 25,
+}); // ошибка для object literal
+```
+
+Для свежих объектных литералов TypeScript строже проверяет лишние свойства, чтобы ловить опечатки.
+
+## Практический вывод
+
+В TypeScript важнее не имя типа, а набор полей и методов. Это хорошо подходит JavaScript-объектам и duck typing стилю.
+
+## Мини-шпаргалка
+
+```typescript
+interface HasId {
+  id: number;
+}
+
+const item = { id: 1, title: 'Book' };
+const value: HasId = item; // ok
+```

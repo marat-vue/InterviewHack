@@ -1,0 +1,63 @@
+# Что такое type guard?
+
+> [!NOTE] Коротко
+> Type guard - это проверка, которая помогает TypeScript сузить тип. Guard может быть обычным условием или функцией с возвращаемым типом `value is Type`.
+
+## Вопрос
+
+Что такое `type guard`?
+
+## Встроенные guards
+
+```typescript
+function format(value: string | number): string {
+  if (typeof value === "string") {
+    return value.trim();
+  }
+
+  return value.toFixed(2);
+}
+```
+
+`typeof`, `instanceof`, `in` и сравнение литералов - встроенные способы сужения.
+
+## Пользовательский guard
+
+```typescript
+type User = { type: "user"; name: string };
+type Admin = { type: "admin"; permissions: string[] };
+
+function isAdmin(person: User | Admin): person is Admin {
+  return person.type === "admin";
+}
+
+function render(person: User | Admin) {
+  if (isAdmin(person)) {
+    console.log(person.permissions);
+  }
+}
+```
+
+## Guard для unknown
+
+```typescript
+function isUser(value: unknown): value is User {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "type" in value &&
+    (value as { type: unknown }).type === "user"
+  );
+}
+```
+
+## Важный нюанс
+
+Type guard должен быть честным. Если функция возвращает `true` для неподходящих данных, TypeScript поверит ей и ошибка уйдет в runtime.
+
+## Мини-шпаргалка
+
+- Type guard сужает тип после проверки.
+- Пользовательская форма: `value is Type`.
+- Особенно полезен для `unknown` и API-ответов.
+- Неверный guard опасен, потому что компилятор ему доверяет.

@@ -1,0 +1,60 @@
+# Как достать тип аргументов функции через infer?
+
+> [!NOTE] Коротко
+> Тип аргументов функции можно достать через conditional type с `infer`: `T extends (...args: infer P) => any ? P : never`.
+
+## Вопрос
+
+Как достать тип аргументов функции через `infer`?
+
+## Базовый helper
+
+```typescript
+type MyParameters<T> = T extends (...args: infer P) => any ? P : never;
+```
+
+`P` становится кортежем параметров функции.
+
+```typescript
+type Fn = (name: string, age: number) => boolean;
+
+type Args = MyParameters<Fn>;
+// [name: string, age: number]
+```
+
+## Использование с `typeof`
+
+```typescript
+function createUser(name: string, age: number) {
+  return { name, age };
+}
+
+type Args = MyParameters<typeof createUser>;
+// [name: string, age: number]
+```
+
+## Достать первый аргумент
+
+```typescript
+type FirstArgument<T> = T extends (first: infer First, ...args: any[]) => any
+  ? First
+  : never;
+
+type First = FirstArgument<typeof createUser>;
+// string
+```
+
+## Сравнение со встроенным типом
+
+Для реального кода чаще достаточно встроенного `Parameters<T>`.
+
+```typescript
+type Args = Parameters<typeof createUser>;
+```
+
+## Мини-шпаргалка
+
+- `infer P` в `...args` достает параметры как tuple.
+- Для функции-значения нужен `typeof`.
+- Встроенный аналог - `Parameters<T>`.
+- Этот паттерн полезен для понимания utility-типов.

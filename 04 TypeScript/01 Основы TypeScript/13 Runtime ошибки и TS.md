@@ -1,0 +1,63 @@
+# Runtime ошибки и TypeScript
+
+> [!NOTE] Коротко
+> TypeScript уменьшает количество ошибок, но не устраняет runtime-ошибки: после компиляции выполняется обычный JavaScript.
+
+## Вопрос
+
+Может ли TypeScript полностью защитить от ошибок во время выполнения?
+
+## Короткий ответ
+
+Нет. TypeScript проверяет типы до запуска, но не гарантирует, что во время выполнения данные будут корректными, сеть не упадет, DOM-элемент найдется, а JSON будет правильной формы.
+
+## Пример с внешними данными
+
+```typescript
+type User = {
+  id: number;
+  name: string;
+};
+
+const user = (await response.json()) as User;
+
+console.log(user.name.toUpperCase());
+```
+
+Если сервер вернет `{ "name": null }`, код может упасть в runtime, несмотря на тип `User`.
+
+## Что TypeScript не проверяет автоматически
+
+- форму JSON от сервера;
+- существование DOM-элемента;
+- доступность сети;
+- ошибки в бизнес-логике;
+- деление на ноль;
+- реальное содержимое `localStorage`;
+- данные из URL или формы.
+
+## Как защищаться
+
+```typescript
+function isUser(value: unknown): value is User {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as { id?: unknown }).id === 'number' &&
+    typeof (value as { name?: unknown }).name === 'string'
+  );
+}
+```
+
+Для внешних данных нужны runtime-проверки, type guards или схемы валидации.
+
+## Практический вывод
+
+TypeScript хорош для проверки кода, который ты написал. Все, что приходит извне, нужно считать `unknown`, пока оно не проверено.
+
+## Мини-шпаргалка
+
+```text
+TypeScript checks compile-time types
+Runtime data still needs validation
+```

@@ -1,0 +1,60 @@
+# Что такое Map в TypeScript?
+
+> [!NOTE] Коротко
+> `Map<K, V>` - коллекция пар "ключ-значение", где `K` описывает тип ключа, а `V` - тип значения.
+
+## Вопрос
+
+Что такое `Map` в TypeScript?
+
+## Базовый пример
+
+```typescript
+const users = new Map<number, string>();
+
+users.set(1, "Анна");
+users.set(2, "Олег");
+
+console.log(users.get(1)); // string | undefined
+```
+
+`get` возвращает `undefined`, если ключа нет.
+
+## Создание из массива пар
+
+```typescript
+const roles = new Map<string, number>([
+  ["admin", 10],
+  ["user", 1],
+]);
+```
+
+## Объекты как значения
+
+```typescript
+type User = {
+  id: number;
+  name: string;
+};
+
+const usersById = new Map<number, User>();
+usersById.set(1, { id: 1, name: "Анна" });
+```
+
+## Map против обычного объекта
+
+`Map` удобен, когда ключи не только строки, когда важен порядок вставки или нужны методы коллекции.
+
+```typescript
+const cache = new Map<object, string>();
+const key = { url: "/api/users" };
+
+cache.set(key, "cached response");
+```
+
+## Мини-шпаргалка
+
+- `Map<K, V>` - ключи типа `K`, значения типа `V`.
+- `get` возвращает `V | undefined`.
+- Основные методы: `set`, `get`, `has`, `delete`, `clear`.
+- Для простых словарей со строковыми ключами часто хватает `Record`.

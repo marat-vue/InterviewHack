@@ -1,0 +1,64 @@
+# Что делает модификатор доступа private?
+
+> [!NOTE] Коротко
+> `private` запрещает обращаться к полю или методу снаружи класса. Это помогает скрывать внутреннее состояние и оставлять наружу только публичный API.
+
+## Вопрос
+
+Что делает модификатор доступа `private`?
+
+## Базовый пример
+
+```typescript
+class Account {
+  private balance = 0;
+
+  deposit(amount: number): void {
+    this.balance += amount;
+  }
+
+  getBalance(): number {
+    return this.balance;
+  }
+}
+
+const account = new Account();
+account.deposit(100);
+// account.balance; // ошибка
+```
+
+## Зачем нужен private
+
+`private` защищает инварианты класса: внешний код не может произвольно поменять внутренние данные.
+
+```typescript
+class Cart {
+  private items: string[] = [];
+
+  add(item: string): void {
+    this.items.push(item);
+  }
+}
+```
+
+## TypeScript private и `#private`
+
+```typescript
+class Counter {
+  private tsPrivate = 0;
+  #jsPrivate = 0;
+}
+```
+
+`private` - проверка TypeScript. `#jsPrivate` - приватность самого JavaScript во время выполнения.
+
+## В наследниках
+
+`private` недоступен даже в дочерних классах. Для доступа в наследниках используют `protected`.
+
+## Мини-шпаргалка
+
+- `private` доступен только внутри класса.
+- Помогает скрывать реализацию.
+- Не доступен наследникам.
+- Для runtime-приватности используй `#field`.

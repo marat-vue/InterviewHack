@@ -1,0 +1,56 @@
+# Чем дженерики отличаются от any?
+
+> [!NOTE] Коротко
+> `any` отключает проверку типов, а generic сохраняет типовую информацию и переиспользует ее. Поэтому generic безопаснее и точнее.
+
+## Вопрос
+
+Чем дженерики отличаются от `any`?
+
+## Пример с any
+
+```typescript
+function firstAny(items: any[]): any {
+  return items[0];
+}
+
+const value = firstAny(["a", "b"]);
+value.toFixed(); // TypeScript не ругается, но runtime упадет
+```
+
+`any` говорит компилятору: "не проверяй это".
+
+## Пример с generic
+
+```typescript
+function first<T>(items: T[]): T | undefined {
+  return items[0];
+}
+
+const value = first(["a", "b"]);
+// value: string | undefined
+```
+
+TypeScript понимает, что на вход пришел массив строк, значит результат - строка или `undefined`.
+
+## Generic сохраняет связь
+
+```typescript
+function pair<T>(left: T, right: T): [T, T] {
+  return [left, right];
+}
+
+pair(1, 2); // [number, number]
+// pair(1, "two"); // ошибка
+```
+
+## Когда `any` все же встречается
+
+Иногда `any` используют внутри низкоуровневых helper-типов или в местах, где ограничение TypeScript слишком узкое. В публичном API лучше выбирать `unknown` или generic.
+
+## Мини-шпаргалка
+
+- `any` отключает проверку.
+- Generic переносит конкретный тип через код.
+- Generic дает автодополнение и ошибки компиляции.
+- Если тип неизвестен, чаще лучше `unknown`, не `any`.

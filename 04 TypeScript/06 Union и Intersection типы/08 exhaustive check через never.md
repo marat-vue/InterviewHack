@@ -1,0 +1,73 @@
+# exhaustive check через never
+
+> [!NOTE] Коротко
+> Exhaustive check через `never` заставляет TypeScript проверить, что в `switch` или `if` обработаны все варианты union.
+
+## Вопрос
+
+Как сделать exhaustive check через `never`?
+
+## Основная идея
+
+Если все варианты union обработаны, в последней ветке значение должно стать `never`, то есть невозможным.
+
+```typescript
+type Status = "idle" | "loading" | "success";
+
+function render(status: Status): string {
+  switch (status) {
+    case "idle":
+      return "Ожидание";
+    case "loading":
+      return "Загрузка";
+    case "success":
+      return "Готово";
+    default: {
+      const exhaustive: never = status;
+      return exhaustive;
+    }
+  }
+}
+```
+
+## Что произойдет при новом варианте
+
+```typescript
+type Status = "idle" | "loading" | "success" | "error";
+```
+
+Теперь `status` в `default` уже не `never`, а `"error"`. TypeScript покажет ошибку и напомнит обработать новый случай.
+
+## Helper-функция
+
+Часто делают отдельную функцию.
+
+```typescript
+function assertNever(value: never): never {
+  throw new Error(`Unexpected value: ${value}`);
+}
+
+function render(status: Status): string {
+  switch (status) {
+    case "idle":
+      return "Ожидание";
+    case "loading":
+      return "Загрузка";
+    case "success":
+      return "Готово";
+    default:
+      return assertNever(status);
+  }
+}
+```
+
+## Где полезно
+
+Этот паттерн особенно хорош для discriminated union: состояний UI, команд, событий и результатов API.
+
+## Мини-шпаргалка
+
+- Exhaustive check проверяет полноту обработки union.
+- `never` означает: вариантов больше не осталось.
+- Новый вариант union ломает проверку в нужном месте.
+- Helper `assertNever` делает код аккуратнее.

@@ -1,0 +1,64 @@
+# Что такое кортеж в TypeScript?
+
+> [!NOTE] Коротко
+> Кортеж, или tuple, - это массив с заранее известной длиной и типом каждого элемента по позиции.
+
+## Вопрос
+
+Что такое кортеж в TypeScript?
+
+## Главная идея
+
+Обычный массив описывает тип элементов, но не фиксирует их порядок и количество. Кортеж фиксирует структуру.
+
+```typescript
+const user: [number, string] = [1, "Анна"];
+
+// user[0] - number
+// user[1] - string
+```
+
+## Именованные элементы
+
+Имена внутри кортежа помогают читать тип как документацию.
+
+```typescript
+type Point = [x: number, y: number];
+
+const center: Point = [0, 0];
+```
+
+## Опциональные элементы
+
+```typescript
+type SearchParams = [query: string, page?: number];
+
+const first: SearchParams = ["typescript"];
+const second: SearchParams = ["typescript", 2];
+```
+
+## Rest внутри кортежа
+
+```typescript
+type Command = [name: string, ...args: string[]];
+
+const command: Command = ["git", "status", "--short"];
+```
+
+## Где полезен tuple
+
+Кортежи часто встречаются в координатах, возвращаемых парах, `useState`-подобных API и rest-параметрах.
+
+```typescript
+function useCounter(): [count: number, increment: () => void] {
+  let count = 0;
+  return [count, () => { count += 1; }];
+}
+```
+
+## Мини-шпаргалка
+
+- `[string, number]` - строго два элемента: строка, потом число.
+- Tuple фиксирует порядок, обычный массив - нет.
+- Имена элементов улучшают читаемость.
+- `readonly [A, B]` запрещает менять tuple.
