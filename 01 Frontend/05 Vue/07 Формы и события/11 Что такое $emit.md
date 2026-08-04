@@ -1,0 +1,71 @@
+# Что такое $emit?
+
+> [!NOTE] Коротко
+> `$emit` - метод Options API для отправки события из дочернего компонента родителю. В Composition API чаще используют `defineEmits`.
+
+## Вопрос
+
+Что такое `$emit`?
+
+## Options API
+
+```vue
+<script>
+export default {
+  emits: ["close"],
+  methods: {
+    close() {
+      this.$emit("close");
+    },
+  },
+};
+</script>
+
+<template>
+  <button @click="close">Закрыть</button>
+</template>
+```
+
+Родитель слушает событие:
+
+```vue
+<BaseModal @close="isOpen = false" />
+```
+
+## С payload
+
+```javascript
+this.$emit("select", user.id);
+```
+
+```vue
+<UserCard @select="selectedId = $event" />
+```
+
+## Composition API
+
+```vue
+<script setup>
+const emit = defineEmits<{ select: [id: number] }>();
+
+function select() {
+  emit("select", 42);
+}
+</script>
+```
+
+## Для v-model
+
+```typescript
+emit("update:modelValue", newValue);
+```
+
+Так дочерний компонент обновляет модель родителя.
+
+## Мини-шпаргалка
+
+- `$emit` отправляет событие наверх.
+- В Options API: `this.$emit("event", payload)`.
+- В `<script setup>`: `defineEmits`.
+- Для `v-model`: `update:modelValue`.
+- События помогают не мутировать props напрямую.

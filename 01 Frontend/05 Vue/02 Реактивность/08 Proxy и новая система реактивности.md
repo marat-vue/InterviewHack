@@ -1,0 +1,76 @@
+# Proxy и новая система реактивности
+
+> [!NOTE] Коротко
+> В Vue 3 `Proxy` используется для реактивных объектов. Он позволяет перехватывать операции чтения и записи и связывать данные с эффектами, которые должны обновиться.
+
+## Вопрос
+
+Как `Proxy` связан с новой системой реактивности Vue?
+
+## Что делает Proxy
+
+`Proxy` оборачивает объект и перехватывает операции с ним.
+
+```typescript
+const target = { count: 0 };
+
+const proxy = new Proxy(target, {
+  get(object, key) {
+    console.log("read", key);
+    return object[key];
+  },
+  set(object, key, value) {
+    console.log("write", key, value);
+    object[key] = value;
+    return true;
+  },
+});
+
+proxy.count;
+proxy.count = 1;
+```
+
+Vue использует эту идею для сбора зависимостей и запуска обновлений.
+
+## Reactive во Vue
+
+```typescript
+import { reactive } from "vue";
+
+const state = reactive({
+  count: 0,
+  user: {
+    name: "Анна",
+  },
+});
+
+state.count++;
+state.user.name = "Мария";
+```
+
+Когда компонент читает `state.count`, Vue запоминает зависимость. Когда `state.count` меняется, Vue обновляет зависимый render.
+
+## Что Proxy дает Vue 3
+
+- Отслеживание добавления и удаления свойств.
+- Более естественную работу с массивами.
+- Реактивность для `Map` и `Set`.
+- Возможность вынести реактивность в Composition API.
+
+## Ограничение
+
+Реактивным становится proxy-объект, а не исходный объект.
+
+```typescript
+const raw = { count: 0 };
+const state = reactive(raw);
+
+console.log(raw === state); // false
+```
+
+## Мини-шпаргалка
+
+- `Proxy` перехватывает чтение и запись.
+- Vue использует чтение для `track`, запись для `trigger`.
+- Работай с proxy-объектом, который вернул `reactive`.
+- Не путай исходный объект и его reactive-обертку.

@@ -1,0 +1,57 @@
+# Какие composables VueUse нужно знать?
+
+> [!NOTE]
+> В VueUse много функций, но для повседневной Vue-разработки чаще всего нужны composables для storage, events, network, browser state, dark mode, debounce/throttle, clipboard и lifecycle helpers.
+
+## Базовый набор
+
+| Composable | Для чего нужен |
+|---|---|
+| `useStorage` | reactive localStorage/sessionStorage |
+| `useLocalStorage` | localStorage-ref |
+| `useSessionStorage` | sessionStorage-ref |
+| `useFetch` | reactive fetch |
+| `useEventListener` | listener с auto cleanup |
+| `useWindowSize` | размер окна |
+| `useWindowScroll` | scroll position |
+| `useDark` | dark mode state |
+| `useColorMode` | color scheme |
+| `useDebounceFn` | debounce function |
+| `useThrottleFn` | throttle function |
+| `useClipboard` | clipboard API |
+| `useOnline` | online/offline state |
+| `useIntervalFn` | interval с lifecycle control |
+
+## Как выбирать composable?
+
+Сначала спроси:
+
+- это browser API?
+- нужна ли автоматическая cleanup?
+- нужно ли reactive value?
+- есть ли edge cases SSR?
+- умеет ли VueUse уже это делать?
+
+## Пример
+
+```typescript
+import { useEventListener, useOnline } from "@vueuse/core";
+
+const isOnline = useOnline();
+
+useEventListener(window, "keydown", (event) => {
+  if (event.key === "Escape") closeModal();
+});
+```
+
+`useEventListener` сам снимет listener при unmount компонента.
+
+## Мини-шпаргалка
+
+- Storage: `useStorage`, `useLocalStorage`.
+- Network: `useFetch`.
+- Events: `useEventListener`.
+- Viewport: `useWindowSize`, `useWindowScroll`.
+- Theme: `useDark`, `useColorMode`.
+- Performance: `useDebounceFn`, `useThrottleFn`.
+- Browser APIs: `useClipboard`, `useOnline`.

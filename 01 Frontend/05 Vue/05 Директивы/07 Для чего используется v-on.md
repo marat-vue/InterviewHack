@@ -1,0 +1,65 @@
+# Для чего используется v-on?
+
+> [!NOTE] Коротко
+> `v-on` подписывает элемент или компонент на событие. Сокращенная запись - `@`.
+
+## Вопрос
+
+Для чего используется `v-on`?
+
+## DOM-события
+
+```vue
+<script setup>
+function save() {
+  console.log("saved");
+}
+</script>
+
+<template>
+  <button v-on:click="save">Сохранить</button>
+</template>
+```
+
+При клике Vue вызовет функцию `save`.
+
+## Сокращенная запись
+
+```vue
+<button @click="save">Сохранить</button>
+<input @input="onInput" />
+```
+
+`@click` - то же самое, что `v-on:click`.
+
+## Передача аргументов
+
+```vue
+<button @click="selectUser(user.id)">Выбрать</button>
+```
+
+Можно вызывать метод с параметрами.
+
+## Доступ к событию
+
+```vue
+<input @input="onInput($event)" />
+```
+
+`$event` - исходное DOM-событие.
+
+## События компонентов
+
+```vue
+<UserCard @select="selectedUserId = $event" />
+```
+
+Так родитель слушает событие, которое дочерний компонент отправил через `emit`.
+
+## Мини-шпаргалка
+
+- `v-on:event="handler"` слушает событие.
+- `@event="handler"` - короткая запись.
+- `$event` дает доступ к объекту события.
+- Модификаторы: `.prevent`, `.stop`, `.once`.
+- Компонентные события слушаются так же: `@select`.

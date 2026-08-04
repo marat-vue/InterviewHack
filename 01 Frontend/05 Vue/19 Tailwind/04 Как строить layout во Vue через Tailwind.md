@@ -1,0 +1,75 @@
+# Как строить layout во Vue через Tailwind?
+
+> [!NOTE]
+> Tailwind хорошо подходит для layout: flex, grid, spacing, sizing, containers и responsive modifiers позволяют быстро собирать страницы и компоненты без отдельного CSS-файла.
+
+## Flex layout
+
+```vue
+<template>
+  <header class="flex items-center justify-between gap-4 px-6 py-4">
+    <Logo />
+    <nav class="flex items-center gap-3">
+      <RouterLink to="/products">Товары</RouterLink>
+      <RouterLink to="/profile">Профиль</RouterLink>
+    </nav>
+  </header>
+</template>
+```
+
+Частые flex classes:
+
+- `flex`;
+- `items-center`;
+- `justify-between`;
+- `gap-4`;
+- `flex-col`;
+- `flex-wrap`.
+
+## Grid layout
+
+```vue
+<template>
+  <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <ProductCard v-for="product in products" :key="product.id" :product="product" />
+  </section>
+</template>
+```
+
+На мобильном будет одна колонка, на `md` - две, на `xl` - четыре.
+
+## Page container
+
+```vue
+<template>
+  <main class="mx-auto w-full max-w-6xl px-4 py-8">
+    <RouterView />
+  </main>
+</template>
+```
+
+Это типичная оболочка страницы: ограничить ширину, центрировать, добавить padding.
+
+## Component spacing
+
+```vue
+<template>
+  <form class="space-y-4">
+    <InputEmail />
+    <InputPassword />
+    <button class="w-full rounded-lg bg-blue-600 px-4 py-2 text-white">
+      Войти
+    </button>
+  </form>
+</template>
+```
+
+`space-y-4` добавляет вертикальный промежуток между детьми.
+
+## Мини-шпаргалка
+
+- `flex` хорош для одномерных layout.
+- `grid` хорош для сеток.
+- `gap-*` лучше ручных margins между элементами.
+- `max-w-* mx-auto px-*` часто создают page container.
+- Responsive prefixes позволяют менять layout на разных ширинах.

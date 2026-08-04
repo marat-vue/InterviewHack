@@ -1,0 +1,60 @@
+# Почему props являются readonly?
+
+> [!NOTE] Коротко
+> Props readonly, потому что ими владеет родительский компонент. Дочерний компонент должен читать props и отправлять события наверх, а не менять входные данные напрямую.
+
+## Вопрос
+
+Почему props являются `readonly`?
+
+## Главная причина
+
+Props приходят сверху вниз. Если ребенок начнет менять их сам, источник правды станет неясным.
+
+```vue
+<script setup lang="ts">
+const props = defineProps<{ count: number }>();
+
+// props.count++; // ошибка
+</script>
+```
+
+## Правильная схема
+
+```vue
+<script setup lang="ts">
+defineProps<{ count: number }>();
+const emit = defineEmits<{ increment: [] }>();
+</script>
+
+<template>
+  <button @click="emit('increment')">{{ count }}</button>
+</template>
+```
+
+Родитель обновляет состояние:
+
+```vue
+<CounterButton :count="count" @increment="count++" />
+```
+
+## Локальная копия
+
+Если ребенку нужно редактировать начальное значение, создай локальный state.
+
+```typescript
+const props = defineProps<{ initialName: string }>();
+const name = ref(props.initialName);
+```
+
+## Вложенные объекты
+
+Вложенные мутации объекта-prop могут технически пройти, но их лучше избегать: они создают скрытое изменение родительских данных.
+
+## Мини-шпаргалка
+
+- Props - входные данные от родителя.
+- Ребенок не владеет props.
+- Для изменений используй `emit`.
+- Для внутреннего редактирования делай локальную копию.
+- Вложенные мутации props - плохой сигнал.

@@ -1,0 +1,72 @@
+# В чем разница между params и query?
+
+> [!NOTE] Коротко
+> `params` - часть пути маршрута, например `/users/:id`. `query` - параметры после `?`, например `/users?page=2&sort=name`.
+
+## Вопрос
+
+В чем разница между `params` и `query`?
+
+## Params
+
+Params описывают обязательные или смысловые части пути.
+
+```typescript
+{
+  path: "/users/:id",
+  name: "user",
+  component: UserPage,
+}
+```
+
+URL:
+
+```text
+/users/42
+```
+
+Получение:
+
+```typescript
+const route = useRoute();
+const id = route.params.id;
+```
+
+## Query
+
+Query описывает дополнительные настройки отображения: фильтры, сортировку, страницу.
+
+```text
+/users?page=2&sort=name
+```
+
+Получение:
+
+```typescript
+const page = route.query.page;
+const sort = route.query.sort;
+```
+
+## Навигация
+
+```typescript
+router.push({
+  name: "user",
+  params: { id: "42" },
+  query: { tab: "settings" },
+});
+```
+
+Результат может быть вроде `/users/42?tab=settings`.
+
+## Как выбирать
+
+Если без значения страница теряет смысл, это обычно `params`. Если значение настраивает отображение, это `query`.
+
+## Мини-шпаргалка
+
+- `params` находятся внутри path.
+- `query` находится после `?`.
+- И params, и query приходят строками.
+- Params чаще идентифицируют ресурс.
+- Query чаще описывает фильтры и настройки.

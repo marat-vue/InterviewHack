@@ -1,0 +1,66 @@
+# Для чего нужен watch?
+
+> [!NOTE] Коротко
+> `watch` в Options API нужен для реакции на изменение данных. Его используют для side effects: запросов, синхронизации, валидации и работы с внешними API.
+
+## Вопрос
+
+Для чего нужен `watch`?
+
+## Базовый пример
+
+```javascript
+export default {
+  data() {
+    return {
+      query: "",
+    };
+  },
+  watch: {
+    query(newValue, oldValue) {
+      console.log("Было:", oldValue);
+      console.log("Стало:", newValue);
+    },
+  },
+};
+```
+
+Watcher запускается при изменении `query`.
+
+## Запрос при изменении
+
+```javascript
+watch: {
+  async query(value) {
+    if (value.length < 3) return;
+    this.results = await searchUsers(value);
+  }
+}
+```
+
+## Deep и immediate
+
+```javascript
+watch: {
+  filters: {
+    handler(value) {
+      this.loadData(value);
+    },
+    deep: true,
+    immediate: true,
+  },
+}
+```
+
+`deep` следит за вложенными изменениями, `immediate` запускает watcher сразу.
+
+## watch против computed
+
+`computed` возвращает производное значение. `watch` выполняет побочный эффект при изменении.
+
+## Мини-шпаргалка
+
+- `watch` реагирует на изменение state.
+- Callback получает новое и старое значение.
+- Используй для side effects.
+- Для производных данных выбирай `computed`.

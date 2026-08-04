@@ -1,0 +1,74 @@
+# Как читать utility classes Tailwind?
+
+> [!NOTE]
+> Utility class - маленький класс, который делает одно CSS-действие. Tailwind-код читается слева направо: layout, spacing, size, typography, colors, borders, effects, states и responsive modifiers.
+
+## Пример
+
+```vue
+<template>
+  <article class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+    <h2 class="text-lg font-semibold text-slate-900">
+      Карточка
+    </h2>
+    <p class="mt-2 text-sm text-slate-600">
+      Описание карточки
+    </p>
+  </article>
+</template>
+```
+
+## Как расшифровать?
+
+| Class | CSS-смысл |
+|---|---|
+| `rounded-lg` | border radius |
+| `border` | border width |
+| `border-slate-200` | border color |
+| `bg-white` | background color |
+| `p-4` | padding |
+| `shadow-sm` | shadow |
+| `text-lg` | font size |
+| `font-semibold` | font weight |
+| `mt-2` | margin-top |
+
+## Частые группы utilities
+
+```txt
+Layout: flex, grid, block, hidden
+Spacing: p-4, px-6, mt-2, gap-4
+Sizing: w-full, h-10, max-w-xl
+Typography: text-sm, font-medium, leading-6
+Colors: bg-white, text-slate-900, border-slate-200
+Borders: rounded-lg, border
+Effects: shadow, opacity-50
+Interactivity: cursor-pointer, pointer-events-none
+```
+
+## Порядок классов
+
+Tailwind технически не требует идеального порядка, но человеку проще читать, если классы сгруппированы:
+
+```txt
+layout -> spacing -> sizing -> typography -> color -> border -> effects -> states
+```
+
+## Когда class list слишком длинный?
+
+Если один и тот же набор классов повторяется, создай компонент:
+
+```vue
+<BaseButton variant="primary">
+  Сохранить
+</BaseButton>
+```
+
+Не нужно сразу выносить все в CSS. Но повторяющийся UI-паттерн лучше оформить компонентом.
+
+## Мини-шпаргалка
+
+- Utility class обычно делает одно CSS-действие.
+- `p`, `m`, `gap` отвечают за spacing.
+- `text-*` может означать size или color по контексту.
+- Длинные повторяющиеся class lists лучше прятать в компонент.
+- Tailwind требует хорошей дисциплины чтения.

@@ -1,0 +1,57 @@
+# Что такое scoped slot?
+
+> [!NOTE] Коротко
+> Scoped slot - слот, в который дочерний компонент передает данные родительскому шаблону. Родитель сам решает, как эти данные отрисовать.
+
+## Вопрос
+
+Что такое `scoped slot`?
+
+## Базовый пример
+
+```vue
+<!-- UserList.vue -->
+<template>
+  <ul>
+    <li v-for="user in users" :key="user.id">
+      <slot :user="user" />
+    </li>
+  </ul>
+</template>
+```
+
+```vue
+<!-- Parent.vue -->
+<template>
+  <UserList :users="users">
+    <template #default="{ user }">
+      <strong>{{ user.name }}</strong>
+    </template>
+  </UserList>
+</template>
+```
+
+`UserList` управляет списком, а родитель управляет отображением элемента.
+
+## Зачем это нужно
+
+Scoped slots полезны для таблиц, списков, dropdown, headless-компонентов и библиотек UI, где компонент дает поведение, а внешний код задает разметку.
+
+## Именованный scoped slot
+
+```vue
+<slot name="row" :item="item" :index="index" />
+```
+
+```vue
+<template #row="{ item, index }">
+  {{ index + 1 }}. {{ item.title }}
+</template>
+```
+
+## Мини-шпаргалка
+
+- Scoped slot передает данные из ребенка родителю.
+- Данные слота называются slot props.
+- Родитель получает их через `#default="{ value }"`.
+- Полезен для гибких списков, таблиц и headless UI.

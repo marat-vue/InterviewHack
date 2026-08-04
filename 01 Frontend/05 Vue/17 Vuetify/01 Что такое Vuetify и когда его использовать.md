@@ -1,0 +1,53 @@
+# Что такое Vuetify и когда его использовать?
+
+> [!NOTE]
+> Vuetify - UI framework для Vue с готовыми компонентами, темизацией, grid/layout системой, формами, навигацией и Material Design подходом. Его используют, когда нужно быстро собрать консистентный интерфейс без написания всех компонентов с нуля.
+
+## Что дает Vuetify?
+
+- готовые buttons, inputs, selects, dialogs, menus;
+- layout components;
+- grid system;
+- themes;
+- icons;
+- form validation helpers;
+- data tables;
+- display/breakpoint utilities;
+- accessibility patterns внутри многих компонентов.
+
+## Когда Vuetify подходит?
+
+Хорошие сценарии:
+
+- admin panel;
+- CRM;
+- dashboard;
+- internal tool;
+- CRUD-приложение;
+- prototype с production-quality UI;
+- приложение, где важна скорость сборки интерфейса.
+
+## Когда Vuetify может мешать?
+
+- нужен полностью кастомный дизайн;
+- важен минимальный bundle;
+- команда уже использует другой design system;
+- нужно тонко контролировать HTML/CSS каждого элемента;
+- проект строится вокруг Tailwind-only подхода.
+
+## Vuetify vs Tailwind
+
+| Инструмент | Что дает |
+|---|---|
+| Vuetify | готовые Vue components и design system |
+| Tailwind | utility classes для написания собственного UI |
+
+Их можно совмещать, но нужно следить за style conflicts и дизайн-консистентностью.
+
+## Мини-шпаргалка
+
+- Vuetify - component framework для Vue.
+- Особенно полезен для dashboard/admin UI.
+- Дает готовые компоненты и themes.
+- Может быть избыточен для полностью кастомного дизайна.
+- Не заменяет понимание Vue state, props, slots и events.

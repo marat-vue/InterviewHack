@@ -1,0 +1,66 @@
+# Что такое VueUse и зачем он нужен?
+
+> [!NOTE]
+> VueUse - коллекция готовых Composition API composables для Vue: browser APIs, sensors, storage, events, network, state helpers, animation, time и utilities. Он уменьшает количество ручного boilerplate.
+
+## Что дает VueUse?
+
+Вместо ручного lifecycle-кода:
+
+```typescript
+const x = ref(0);
+
+function update() {
+  x.value = window.scrollX;
+}
+
+onMounted(() => window.addEventListener("scroll", update));
+onUnmounted(() => window.removeEventListener("scroll", update));
+```
+
+можно использовать composable:
+
+```typescript
+const { x } = useWindowScroll();
+```
+
+## Установка
+
+```bash
+npm install @vueuse/core
+```
+
+## Использование
+
+```vue
+<script setup lang="ts">
+import { useWindowSize } from "@vueuse/core";
+
+const { width, height } = useWindowSize();
+</script>
+
+<template>
+  <p>{{ width }} x {{ height }}</p>
+</template>
+```
+
+## Когда VueUse особенно полезен?
+
+- localStorage/sessionStorage;
+- media queries;
+- dark mode;
+- event listeners;
+- debounce/throttle;
+- mouse/scroll/window state;
+- fetch helpers;
+- clipboard;
+- intervals/timeouts;
+- online/offline state.
+
+## Мини-шпаргалка
+
+- VueUse - набор готовых composables.
+- Установка: `npm install @vueuse/core`.
+- Большинство функций возвращают reactive refs.
+- VueUse часто сам чистит listeners на unmount.
+- Не нужно писать свой composable, если VueUse уже решает задачу.

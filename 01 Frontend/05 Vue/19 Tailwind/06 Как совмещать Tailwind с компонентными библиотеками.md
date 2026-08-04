@@ -1,0 +1,59 @@
+# Как совмещать Tailwind с компонентными библиотеками?
+
+> [!NOTE]
+> Tailwind можно совмещать с Vuetify и другими UI libraries, но важно разделить ответственность: component library отвечает за сложные готовые компоненты, Tailwind - за layout, spacing и кастомные элементы.
+
+## Хорошее разделение
+
+```txt
+Vuetify:
+  dialogs, data tables, forms, menus, navigation drawer
+
+Tailwind:
+  page layout, wrappers, custom cards, spacing, typography utilities
+```
+
+Так инструменты дополняют друг друга.
+
+## Плохой сценарий
+
+```vue
+<v-btn class="!rounded-none !bg-red-500 !px-12 !shadow-none">
+  Delete
+</v-btn>
+```
+
+Если каждый компонент Vuetify приходится ломать через `!important`, возможно выбран неправильный инструмент или нужна настройка theme/defaults.
+
+## Хороший сценарий
+
+```vue
+<section class="mx-auto max-w-6xl px-4 py-8">
+  <v-card>
+    <v-card-title>Пользователи</v-card-title>
+    <v-card-text>
+      <UsersTable />
+    </v-card-text>
+  </v-card>
+</section>
+```
+
+Tailwind управляет внешним layout, Vuetify - сложным компонентом.
+
+## Preflight и CSS reset
+
+Tailwind имеет base styles, Vuetify тоже имеет свои стили. Если появляются странные визуальные отличия, проверь:
+
+- порядок импортов CSS;
+- reset/base styles;
+- specificity;
+- theme variables;
+- component defaults.
+
+## Мини-шпаргалка
+
+- Tailwind + Vuetify возможны.
+- Разделяй ответственность инструментов.
+- Не ломай Vuetify deep styles без необходимости.
+- Для Vuetify сначала пробуй props/theme/defaults.
+- Tailwind хорошо подходит для wrappers и custom layout.

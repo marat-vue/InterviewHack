@@ -1,0 +1,66 @@
+# Что такое defineStore в Pinia?
+
+> [!NOTE]
+> `defineStore` объявляет store: уникальный id, state, getters и actions. Store не создается сразу при импорте файла, а становится доступным, когда компонент или composable вызывает `use...Store()`.
+
+## Базовая форма
+
+```typescript
+import { defineStore } from "pinia";
+
+export const useAuthStore = defineStore("auth", {
+  state: () => ({
+    user: null as User | null,
+    accessToken: null as string | null,
+  }),
+  getters: {
+    isAuthenticated: (state) => Boolean(state.user),
+  },
+  actions: {
+    setUser(user: User | null) {
+      this.user = user;
+    },
+  },
+});
+```
+
+Первый аргумент `"auth"` - уникальный id store. Он используется Pinia, devtools и plugins.
+
+## Почему имя функции начинается с use?
+
+```typescript
+export const useAuthStore = defineStore("auth", {});
+```
+
+Это convention из Composition API. Store используют как composable:
+
+```typescript
+const authStore = useAuthStore();
+```
+
+## Из чего состоит store?
+
+| Часть | Аналогия | Для чего нужна |
+|---|---|---|
+| `state` | `data` | хранит изменяемые данные |
+| `getters` | `computed` | вычисляет значения из state |
+| `actions` | `methods` | меняет state и выполняет async-логику |
+
+## Когда store реально создается?
+
+```typescript
+import { useAuthStore } from "@/stores/auth.store";
+
+const authStore = useAuthStore();
+```
+
+Именно вызов `useAuthStore()` дает instance store. Внутри компонента это безопасно, потому что Pinia уже подключена к app.
+
+## Мини-шпаргалка
+
+- `defineStore` объявляет store.
+- Id store должен быть уникальным.
+- `state` хранит данные.
+- `getters` вычисляют производные значения.
+- `actions` выполняют операции и могут быть async.
+- `use...Store` - стандартное имя для store composable.

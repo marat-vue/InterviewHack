@@ -1,0 +1,57 @@
+# Что делает параметр immediate?
+
+> [!NOTE] Коротко
+> Параметр `immediate: true` у `watch` запускает callback сразу при создании watcher-а, а затем продолжает запускать его при изменениях источника.
+
+## Вопрос
+
+Что делает параметр `immediate`?
+
+## Базовый пример
+
+```typescript
+import { ref, watch } from "vue";
+
+const userId = ref(1);
+
+watch(
+  userId,
+  (id) => {
+    loadUser(id);
+  },
+  { immediate: true }
+);
+```
+
+`loadUser` вызовется сразу для текущего `userId`, а потом при каждом изменении.
+
+## Без immediate
+
+```typescript
+watch(userId, (id) => {
+  loadUser(id);
+});
+```
+
+Callback сработает только после изменения `userId`.
+
+## Где полезно
+
+`immediate` часто используют для стартовой загрузки данных, синхронизации query-параметров, начальной валидации или применения настроек.
+
+## Отличие от watchEffect
+
+`watchEffect` тоже запускается сразу, но сам собирает зависимости. `watch` с `immediate` сохраняет явный источник.
+
+```typescript
+watchEffect(() => {
+  loadUser(userId.value);
+});
+```
+
+## Мини-шпаргалка
+
+- `immediate: true` запускает watcher сразу.
+- Потом watcher работает как обычно.
+- Полезен для initial load.
+- Если нужен явный источник, выбирай `watch`.

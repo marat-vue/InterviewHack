@@ -1,0 +1,72 @@
+# Что делает toRefs()?
+
+> [!NOTE] Коротко
+> `toRefs()` превращает свойства reactive-объекта в refs, сохраняя связь с исходным объектом. Это нужно, чтобы безопасно деструктурировать reactive-состояние.
+
+## Вопрос
+
+Что делает `toRefs()`?
+
+## Проблема деструктуризации
+
+```typescript
+import { reactive } from "vue";
+
+const state = reactive({
+  count: 0,
+  name: "Анна",
+});
+
+const { count } = state;
+```
+
+`count` становится обычным числом и теряет реактивную связь со `state.count`.
+
+## Решение через toRefs
+
+```typescript
+import { reactive, toRefs } from "vue";
+
+const state = reactive({
+  count: 0,
+  name: "Анна",
+});
+
+const { count, name } = toRefs(state);
+
+count.value++;
+```
+
+Теперь `count` и `name` - refs, связанные с исходным `state`.
+
+## Частый сценарий в composable
+
+```typescript
+export function useUserForm() {
+  const form = reactive({
+    name: "",
+    email: "",
+  });
+
+  return {
+    ...toRefs(form),
+  };
+}
+```
+
+Так потребитель composable может деструктурировать результат без потери реактивности.
+
+## toRef для одного поля
+
+```typescript
+const count = toRef(state, "count");
+```
+
+`toRef` полезен, когда нужен ref только для одного свойства.
+
+## Мини-шпаргалка
+
+- `toRefs(reactiveObject)` возвращает объект refs.
+- Нужен для безопасной деструктуризации.
+- Каждый ref связан с исходным свойством.
+- Для одного поля используй `toRef`.

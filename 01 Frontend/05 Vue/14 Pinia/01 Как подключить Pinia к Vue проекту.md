@@ -1,0 +1,81 @@
+# Как подключить Pinia к Vue проекту?
+
+> [!NOTE]
+> Pinia подключается как Vue plugin: пакет устанавливают через npm, создают `pinia` instance через `createPinia()` и передают его в `app.use(pinia)` до `mount`.
+
+## Установка
+
+```bash
+npm install pinia
+```
+
+## Подключение в main.ts
+
+```typescript
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import App from "./App.vue";
+
+const app = createApp(App);
+const pinia = createPinia();
+
+app.use(pinia);
+app.mount("#app");
+```
+
+`app.use(pinia)` регистрирует Pinia в Vue-приложении. После этого stores можно вызывать внутри компонентов и composables.
+
+## Где хранить stores?
+
+Обычно создают папку:
+
+```txt
+src/
+  stores/
+    auth.store.ts
+    cart.store.ts
+    products.store.ts
+```
+
+Один store - один файл. Так легче искать состояние по фичам и не превращать store в огромный глобальный объект.
+
+## Первый store
+
+```typescript
+import { defineStore } from "pinia";
+
+export const useCounterStore = defineStore("counter", {
+  state: () => ({
+    count: 0,
+  }),
+  actions: {
+    increment() {
+      this.count++;
+    },
+  },
+});
+```
+
+## Использование в компоненте
+
+```vue
+<script setup lang="ts">
+import { useCounterStore } from "@/stores/counter.store";
+
+const counter = useCounterStore();
+</script>
+
+<template>
+  <button @click="counter.increment">
+    {{ counter.count }}
+  </button>
+</template>
+```
+
+## Мини-шпаргалка
+
+- Установка: `npm install pinia`.
+- Подключение: `createPinia()` и `app.use(pinia)`.
+- Stores обычно лежат в `src/stores`.
+- Store создают через `defineStore`.
+- `useCounterStore()` создает или возвращает instance store.

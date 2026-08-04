@@ -1,0 +1,61 @@
+# Почему в Pinia нет мутаций?
+
+> [!NOTE] Коротко
+> В Pinia нет отдельного слоя mutations, потому что состояние можно менять напрямую или через actions, а devtools все равно умеют отслеживать изменения.
+
+## Вопрос
+
+Почему в Pinia нет мутаций?
+
+## Как было во Vuex
+
+В Vuex state обычно меняли через mutations.
+
+```javascript
+mutations: {
+  increment(state) {
+    state.count++;
+  },
+}
+```
+
+Actions вызывали mutations, особенно для async-логики.
+
+## Как в Pinia
+
+В Pinia action может менять state напрямую.
+
+```typescript
+export const useCounterStore = defineStore("counter", {
+  state: () => ({ count: 0 }),
+  actions: {
+    increment() {
+      this.count++;
+    },
+  },
+});
+```
+
+Это короче и проще читать.
+
+## Прямое изменение state
+
+```typescript
+const counter = useCounterStore();
+
+counter.count++;
+```
+
+Pinia допускает прямое изменение state. Но для бизнес-операций часто лучше actions, чтобы намерение было явным.
+
+## Почему это не ломает отладку
+
+Pinia интегрируется с devtools и отслеживает изменения state без отдельного слоя mutations.
+
+## Мини-шпаргалка
+
+- Mutations в Pinia не нужны.
+- State можно менять напрямую.
+- Actions подходят для бизнес-операций и async-логики.
+- Devtools видят изменения и без mutations.
+- Для читаемости сложные изменения лучше держать в actions.

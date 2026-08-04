@@ -1,0 +1,78 @@
+# Как подключить Vue Router к Vue проекту?
+
+> [!NOTE]
+> Vue Router подключается как plugin: устанавливают `vue-router`, создают router через `createRouter`, выбирают history mode, описывают routes и передают router в `app.use(router)`.
+
+## Установка
+
+```bash
+npm install vue-router
+```
+
+## Файл router
+
+```typescript
+// src/router/index.ts
+import { createRouter, createWebHistory } from "vue-router";
+import HomePage from "@/pages/HomePage.vue";
+
+export const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: "/",
+      name: "home",
+      component: HomePage,
+    },
+  ],
+});
+```
+
+## Подключение в main.ts
+
+```typescript
+import { createApp } from "vue";
+import App from "./App.vue";
+import { router } from "./router";
+
+createApp(App).use(router).mount("#app");
+```
+
+## RouterView и RouterLink
+
+```vue
+<template>
+  <nav>
+    <RouterLink to="/">Главная</RouterLink>
+    <RouterLink to="/profile">Профиль</RouterLink>
+  </nav>
+
+  <RouterView />
+</template>
+```
+
+`RouterView` показывает компонент текущего route. `RouterLink` делает SPA-навигацию без полной перезагрузки страницы.
+
+## Структура файлов
+
+```txt
+src/
+  router/
+    index.ts
+  pages/
+    HomePage.vue
+    ProfilePage.vue
+  components/
+    AppHeader.vue
+```
+
+Обычно route-level компоненты называют `pages` или `views`, а переиспользуемые части интерфейса - `components`.
+
+## Мини-шпаргалка
+
+- Установка: `npm install vue-router`.
+- Router создают через `createRouter`.
+- Для обычной SPA используют `createWebHistory`.
+- Routes связывают `path` и `component`.
+- `RouterView` показывает текущую страницу.
+- `RouterLink` навигирует без reload.

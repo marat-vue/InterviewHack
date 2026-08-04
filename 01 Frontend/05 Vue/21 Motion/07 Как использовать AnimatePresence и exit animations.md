@@ -1,0 +1,96 @@
+# Как использовать AnimatePresence и exit animations?
+
+> [!NOTE]
+> `AnimatePresence` позволяет проиграть `exit` animation перед удалением элемента из Vue tree. Это нужно для модалок, dropdowns, notifications, list items и page fragments, которые исчезают не резко, а плавно.
+
+## Почему обычный v-if удаляет сразу?
+
+```vue
+<Modal v-if="isOpen" />
+```
+
+Когда `isOpen` становится `false`, Vue удаляет компонент. Без специального механизма элемент исчезнет сразу.
+
+## AnimatePresence
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { AnimatePresence, motion } from "motion-v";
+
+const isOpen = ref(false);
+</script>
+
+<template>
+  <button @click="isOpen = !isOpen">Toggle</button>
+
+  <AnimatePresence>
+    <motion.div
+      v-if="isOpen"
+      key="modal"
+      class="rounded-xl bg-white p-6 shadow-xl"
+      :initial="{ opacity: 0, scale: 0.95 }"
+      :animate="{ opacity: 1, scale: 1 }"
+      :exit="{ opacity: 0, scale: 0.95 }"
+      :transition="{ duration: 0.2 }"
+    >
+      Modal content
+    </motion.div>
+  </AnimatePresence>
+</template>
+```
+
+`exit` выполнится перед удалением DOM node.
+
+## Важность key
+
+Direct children внутри `AnimatePresence` должны иметь уникальный `key`, чтобы Motion понимал, какой элемент входит, а какой выходит.
+
+```vue
+<motion.li
+  v-for="toast in toasts"
+  :key="toast.id"
+  :exit="{ opacity: 0, x: 40 }"
+/>
+```
+
+## Exit variants
+
+```vue
+<script setup lang="ts">
+const modal = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: { opacity: 1, scale: 1 },
+};
+</script>
+
+<template>
+  <AnimatePresence>
+    <motion.div
+      v-if="isOpen"
+      key="modal"
+      :variants="modal"
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+    />
+  </AnimatePresence>
+</template>
+```
+
+## Когда использовать?
+
+- modal close;
+- dropdown close;
+- toast removal;
+- route/page transition;
+- animated list removal;
+- conditional panels.
+
+## Мини-шпаргалка
+
+- `AnimatePresence` нужен для exit animations.
+- `exit` срабатывает перед удалением.
+- Direct child должен иметь стабильный `key`.
+- Для списков key обязателен.
+- Variants помогают не дублировать hidden/visible states.
