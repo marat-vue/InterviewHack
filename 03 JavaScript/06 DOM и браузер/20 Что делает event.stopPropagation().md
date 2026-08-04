@@ -1,0 +1,56 @@
+# Что делает event.stopPropagation()?
+
+> [!NOTE] Коротко
+> `event.stopPropagation()` останавливает дальнейшее распространение события по DOM-дереву.
+
+## Вопрос
+
+Что делает `stopPropagation()` и когда он нужен?
+
+## Определение
+
+События в DOM проходят через фазы: погружение, цель и всплытие. `event.stopPropagation()` не дает событию идти дальше к следующим элементам по дереву.
+
+Обычно метод используют, чтобы клик внутри вложенного элемента не запускал обработчик родителя.
+
+## Пример
+
+```html
+<div class="modal">
+  <button class="close">Close</button>
+</div>
+```
+
+```javascript
+const modal = document.querySelector('.modal');
+const close = document.querySelector('.close');
+
+modal.addEventListener('click', () => {
+  console.log('modal clicked');
+});
+
+close.addEventListener('click', (event) => {
+  event.stopPropagation();
+  console.log('close clicked');
+});
+```
+
+Клик по кнопке не дойдет до обработчика `modal`.
+
+## Чего он не делает
+
+`stopPropagation()` не отменяет действие браузера по умолчанию.
+
+```javascript
+link.addEventListener('click', (event) => {
+  event.stopPropagation(); // ссылка все равно может перейти по href
+});
+```
+
+Для отмены стандартного действия нужен `preventDefault()`.
+
+## Мини-шпаргалка
+
+```javascript
+event.stopPropagation(); // остановить распространение события
+```

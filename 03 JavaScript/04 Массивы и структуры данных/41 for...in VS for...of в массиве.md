@@ -1,0 +1,67 @@
+# for...in VS for...of в массиве
+
+> [!NOTE] Коротко
+> `for...in` перебирает ключи, а `for...of` перебирает значения. Для массивов почти всегда нужен `for...of`.
+
+## Вопрос
+
+Чем `for...in` отличается от `for...of` при работе с массивом?
+
+## Главное отличие
+
+`for...in` проходит по перечисляемым ключам объекта. У массива ключами будут строковые индексы: `"0"`, `"1"`, `"2"`.
+
+`for...of` работает с итерируемыми объектами и возвращает сами значения массива.
+
+## Наглядный пример
+
+```javascript
+const fruits = ['apple', 'banana', 'orange'];
+
+for (const key in fruits) {
+  console.log(key); // '0', '1', '2'
+}
+
+for (const fruit of fruits) {
+  console.log(fruit); // 'apple', 'banana', 'orange'
+}
+```
+
+## Почему for...in опасен для массивов
+
+```javascript
+const arr = ['a', 'b'];
+arr.extra = 'custom property';
+
+for (const key in arr) {
+  console.log(key); // '0', '1', 'extra'
+}
+```
+
+`for...in` может захватить не только индексы, но и дополнительные свойства. Поэтому для обычного обхода массива он плохо подходит.
+
+## Когда что использовать
+
+| Ситуация | Подход |
+| --- | --- |
+| Нужны значения массива | `for...of` |
+| Нужны индексы | обычный `for` или `arr.entries()` |
+| Нужно перебрать ключи объекта | `for...in` |
+| Нужно изменить каждый элемент | `map()` |
+
+## Пример с индексом и значением
+
+```javascript
+const names = ['Ann', 'Bob'];
+
+for (const [index, name] of names.entries()) {
+  console.log(index, name);
+}
+```
+
+## Мини-шпаргалка
+
+```javascript
+for (const key in arr) {}   // ключи
+for (const value of arr) {} // значения
+```

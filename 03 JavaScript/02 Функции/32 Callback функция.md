@@ -1,0 +1,83 @@
+# Callback-функция
+
+> [!NOTE] Коротко
+> Callback - это функция, переданная в другую функцию как аргумент, чтобы ее вызвали позже: после события, таймера, завершения операции или во время обработки данных.
+
+## Вопрос
+
+Что такое callback-функция?
+
+## Базовый пример
+
+```javascript
+function doSomething(callback) {
+  console.log("Начало");
+  callback();
+  console.log("Конец");
+}
+
+doSomething(() => {
+  console.log("Callback");
+});
+```
+
+Функция `callback` передается как значение.
+
+## Callback в массиве
+
+```javascript
+const numbers = [1, 2, 3];
+
+const doubled = numbers.map((number) => number * 2);
+
+console.log(doubled); // [2, 4, 6]
+```
+
+Функция `(number) => number * 2` - callback для `map`.
+
+## Callback в событиях
+
+```javascript
+button.addEventListener("click", () => {
+  console.log("Клик");
+});
+```
+
+Callback вызовется позже, когда произойдет событие.
+
+## Callback в асинхронном коде
+
+```javascript
+setTimeout(() => {
+  console.log("Прошла секунда");
+}, 1000);
+```
+
+Функция не вызывается сразу. Ее вызовет окружение после таймера.
+
+## Ошибки в callback
+
+В старом Node.js часто встречался error-first callback.
+
+```javascript
+function handleResult(error, data) {
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  console.log(data);
+}
+```
+
+Сейчас для асинхронного кода чаще используют промисы и `async/await`.
+
+## Мини-шпаргалка
+
+| Где встречается callback | Пример |
+| --- | --- |
+| массивы | `map`, `filter`, `reduce` |
+| события | `addEventListener` |
+| таймеры | `setTimeout`, `setInterval` |
+| асинхронный код | старые API, Node-style callbacks |
+| функции высшего порядка | декораторы, фабрики |

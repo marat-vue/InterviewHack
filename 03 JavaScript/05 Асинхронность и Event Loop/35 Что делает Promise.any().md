@@ -1,0 +1,61 @@
+# Что делает Promise.any()?
+
+> [!NOTE] Коротко
+> `Promise.any()` возвращает первый успешно выполненный промис и игнорирует ошибки, пока есть шанс на успех.
+
+## Вопрос
+
+Чем `Promise.any()` отличается от `Promise.race()`?
+
+## Определение
+
+`Promise.any(iterable)` запускает набор промисов и возвращает новый промис, который выполнится значением первого успешного промиса.
+
+Если все промисы отклонятся, общий промис тоже отклонится с `AggregateError`.
+
+## Пример успеха
+
+```javascript
+const result = await Promise.any([
+  Promise.reject(new Error('Server A failed')),
+  Promise.resolve('Server B response'),
+  Promise.resolve('Server C response'),
+]);
+
+console.log(result); // 'Server B response'
+```
+
+Первая ошибка проигнорирована, потому что один из промисов все-таки завершился успешно.
+
+## Если упали все
+
+```javascript
+try {
+  await Promise.any([
+    Promise.reject(new Error('A')),
+    Promise.reject(new Error('B')),
+  ]);
+} catch (error) {
+  console.log(error instanceof AggregateError); // true
+  console.log(error.errors.length);             // 2
+}
+```
+
+## Promise.any vs Promise.race
+
+| Метод | Что считает победой |
+| --- | --- |
+| `Promise.race()` | первый завершившийся результат: успех или ошибка |
+| `Promise.any()` | первый успешный результат |
+
+## Когда использовать
+
+- запросить данные из нескольких зеркал;
+- выбрать первый доступный источник;
+- продолжить работу, если хотя бы одна операция успешна.
+
+## Мини-шпаргалка
+
+```javascript
+const firstSuccess = await Promise.any(promises);
+```

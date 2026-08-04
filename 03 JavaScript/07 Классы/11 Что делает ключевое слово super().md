@@ -1,0 +1,74 @@
+# Что делает ключевое слово super()?
+
+> [!NOTE] Коротко
+> `super()` вызывает конструктор родительского класса внутри конструктора наследника.
+
+## Вопрос
+
+Зачем нужен `super()` в классе, который использует `extends`?
+
+## Определение
+
+В дочернем классе `super()` вызывает `constructor` родителя. Это нужно, чтобы родительская часть объекта была правильно инициализирована.
+
+Если в классе-наследнике есть свой `constructor`, нужно вызвать `super()` до обращения к `this`.
+
+## Пример
+
+```javascript
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+class Dog extends Animal {
+  constructor(name, breed) {
+    super(name);
+
+    this.breed = breed;
+  }
+}
+
+const dog = new Dog('Rex', 'Shepherd');
+
+console.log(dog.name);  // 'Rex'
+console.log(dog.breed); // 'Shepherd'
+```
+
+`super(name)` передает имя в конструктор `Animal`.
+
+## Ошибка без super()
+
+```javascript
+class Dog extends Animal {
+  constructor(name) {
+    this.name = name; // ReferenceError
+  }
+}
+```
+
+В наследнике нельзя использовать `this` до вызова `super()`.
+
+## super.method()
+
+`super` можно использовать и в методах, чтобы вызвать родительскую реализацию.
+
+```javascript
+class Dog extends Animal {
+  speak() {
+    return super.speak() + ' woof';
+  }
+}
+```
+
+## Мини-шпаргалка
+
+```javascript
+class Child extends Parent {
+  constructor(value) {
+    super(value);
+    this.extra = true;
+  }
+}
+```

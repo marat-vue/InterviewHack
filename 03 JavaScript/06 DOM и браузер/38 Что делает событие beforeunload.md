@@ -1,0 +1,61 @@
+# Что делает событие beforeunload?
+
+> [!NOTE] Коротко
+> `beforeunload` срабатывает перед уходом со страницы и может попросить браузер показать предупреждение о несохраненных данных.
+
+## Вопрос
+
+Когда использовать событие `beforeunload`?
+
+## Определение
+
+`beforeunload` возникает перед выгрузкой страницы: закрытием вкладки, обновлением, переходом по ссылке или вводом нового URL.
+
+Главный сценарий - предупредить пользователя, если на странице есть несохраненные изменения.
+
+## Пример
+
+```javascript
+let hasUnsavedChanges = true;
+
+window.addEventListener('beforeunload', (event) => {
+  if (!hasUnsavedChanges) return;
+
+  event.preventDefault();
+  event.returnValue = '';
+});
+```
+
+Современные браузеры не позволяют задавать свой текст предупреждения. Они показывают стандартное сообщение.
+
+## Когда добавлять обработчик
+
+Лучше включать `beforeunload` только тогда, когда он действительно нужен.
+
+```javascript
+function enableWarning() {
+  window.addEventListener('beforeunload', handleBeforeUnload);
+}
+
+function disableWarning() {
+  window.removeEventListener('beforeunload', handleBeforeUnload);
+}
+```
+
+Постоянный обработчик может мешать оптимизациям браузера.
+
+## Ограничения
+
+- нельзя выполнять долгую асинхронную работу;
+- нельзя показывать кастомный текст;
+- браузер может не показать диалог в некоторых условиях;
+- событие не подходит для надежной отправки аналитики.
+
+## Мини-шпаргалка
+
+```javascript
+window.addEventListener('beforeunload', (event) => {
+  event.preventDefault();
+  event.returnValue = '';
+});
+```

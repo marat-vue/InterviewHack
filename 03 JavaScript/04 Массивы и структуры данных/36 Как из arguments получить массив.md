@@ -1,0 +1,81 @@
+# Как из `arguments` получить массив?
+
+> [!NOTE] Коротко
+> `arguments` - псевдомассив. Чтобы использовать методы массива, его можно преобразовать через `Array.from(arguments)`, spread или `Array.prototype.slice.call(arguments)`.
+
+## Вопрос
+
+Как из `arguments` получить массив?
+
+## Современный способ
+
+```javascript
+function demo() {
+  const args = Array.from(arguments);
+
+  return args.map((value) => value * 2);
+}
+
+demo(1, 2, 3); // [2, 4, 6]
+```
+
+## Через spread
+
+```javascript
+function demo() {
+  const args = [...arguments];
+
+  return args;
+}
+```
+
+`arguments` в современных движках iterable, поэтому spread работает.
+
+## Старый способ
+
+```javascript
+function demo() {
+  const args = Array.prototype.slice.call(arguments);
+
+  return args;
+}
+```
+
+Так часто писали до ES6.
+
+## Лучший современный вариант: rest
+
+В новых функциях лучше сразу использовать rest-параметры.
+
+```javascript
+function demo(...args) {
+  return args.map((value) => value * 2);
+}
+```
+
+`args` уже настоящий массив.
+
+## Стрелочные функции
+
+У стрелочных функций нет собственного `arguments`.
+
+```javascript
+const demo = () => {
+  console.log(arguments); // своего arguments нет
+};
+```
+
+Используйте rest:
+
+```javascript
+const demo = (...args) => args;
+```
+
+## Мини-шпаргалка
+
+| Способ | Код |
+| --- | --- |
+| современный | `Array.from(arguments)` |
+| spread | `[...arguments]` |
+| старый | `Array.prototype.slice.call(arguments)` |
+| лучше для нового кода | `function fn(...args) {}` |

@@ -1,0 +1,95 @@
+# `setTimeout(fn, 0)`
+
+> [!NOTE] Коротко
+> `setTimeout(fn, 0)` не запускает функцию мгновенно. Он ставит callback в очередь macrotask, и функция выполнится после завершения текущего синхронного кода.
+
+## Вопрос
+
+Что делает `setTimeout(fn, 0)`?
+
+## Пример
+
+```javascript
+setTimeout(() => {
+  console.log("timeout");
+}, 0);
+
+console.log("sync");
+```
+
+Результат:
+
+```text
+sync
+timeout
+```
+
+Даже задержка `0` означает "не сейчас, а позже".
+
+## Почему так
+
+JavaScript сначала выполняет текущий call stack. Callback из `setTimeout` попадет в очередь задач и сможет выполниться только после того, как стек освободится.
+
+```javascript
+console.log("A");
+
+setTimeout(() => console.log("B"), 0);
+
+console.log("C");
+```
+
+Результат:
+
+```text
+A
+C
+B
+```
+
+## Microtask vs macrotask
+
+Промисы выполняются раньше таймеров.
+
+```javascript
+setTimeout(() => console.log("timeout"), 0);
+
+Promise.resolve().then(() => console.log("promise"));
+
+console.log("sync");
+```
+
+Результат:
+
+```text
+sync
+promise
+timeout
+```
+
+Потому что `.then` попадает в microtask queue, а `setTimeout` - в macrotask queue.
+
+## Зачем используют
+
+- отложить выполнение после текущего кода;
+- дать браузеру завершить текущие обработчики;
+- разбить тяжелую работу на части;
+- дождаться обновления состояния в некоторых старых паттернах.
+
+## Важная деталь
+
+`0` не гарантирует точную задержку 0 миллисекунд.
+
+```javascript
+setTimeout(fn, 0);
+```
+
+Означает минимальную задержку, но реальное время зависит от очереди задач, браузера и нагрузки.
+
+## Мини-шпаргалка
+
+| Код | Когда выполнится |
+| --- | --- |
+| синхронный код | сразу |
+| `Promise.then` | после sync, до timeout |
+| `queueMicrotask` | после sync, до timeout |
+| `setTimeout(fn, 0)` | в следующей macrotask |

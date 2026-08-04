@@ -1,0 +1,66 @@
+# Как создать элемент в DOM?
+
+> [!NOTE] Коротко
+> Элемент создают через `document.createElement()`, настраивают свойства и вставляют в DOM через `append`, `prepend` или похожие методы.
+
+## Вопрос
+
+Как создать новый DOM-элемент через JavaScript?
+
+## Создание элемента
+
+```javascript
+const item = document.createElement('li');
+```
+
+На этом этапе элемент создан в памяти, но еще не появился на странице.
+
+## Настройка элемента
+
+```javascript
+item.textContent = 'New item';
+item.classList.add('list-item');
+item.dataset.id = '42';
+```
+
+Лучше использовать `textContent` для текста, чтобы не вставлять HTML без необходимости.
+
+## Вставка в DOM
+
+```javascript
+const list = document.querySelector('.list');
+
+list.append(item);
+```
+
+После `append()` элемент появится внутри списка.
+
+## Другие методы вставки
+
+```javascript
+parent.prepend(element);        // в начало
+parent.append(element);         // в конец
+target.before(element);         // перед target
+target.after(element);          // после target
+target.replaceWith(element);    // заменить target
+```
+
+## Пример целиком
+
+```javascript
+const button = document.createElement('button');
+
+button.type = 'button';
+button.textContent = 'Save';
+button.className = 'button';
+
+document.body.append(button);
+```
+
+## Мини-шпаргалка
+
+```javascript
+const el = document.createElement('div');
+el.textContent = 'Hello';
+document.body.append(el);
+```

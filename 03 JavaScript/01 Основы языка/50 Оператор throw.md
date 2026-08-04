@@ -1,0 +1,117 @@
+# Оператор `throw`
+
+> [!NOTE] Коротко
+> `throw` выбрасывает исключение и прерывает текущий поток выполнения. Ближайший `catch` может поймать ошибку и обработать ее.
+
+## Вопрос
+
+Что делает оператор `throw`?
+
+## Синтаксис
+
+```javascript
+throw expression;
+```
+
+Технически можно бросить любое значение:
+
+```javascript
+throw "Ошибка";
+throw 123;
+throw { message: "Ошибка" };
+```
+
+Но в реальном коде лучше бросать `Error`.
+
+```javascript
+throw new Error("Что-то пошло не так");
+```
+
+## Как работает
+
+```javascript
+function divide(a, b) {
+  if (b === 0) {
+    throw new Error("Деление на ноль");
+  }
+
+  return a / b;
+}
+
+try {
+  divide(10, 0);
+} catch (error) {
+  console.log(error.message);
+}
+```
+
+Когда выполняется `throw`, функция сразу прекращает работу. Код после `throw` в этой ветке не выполнится.
+
+## Зачем нужен `Error`
+
+Объект `Error` хранит полезную информацию:
+
+- `message`;
+- `name`;
+- `stack`.
+
+```javascript
+const error = new Error("Invalid user");
+
+console.log(error.message); // "Invalid user"
+console.log(error.name);    // "Error"
+```
+
+## Свои ошибки
+
+```javascript
+class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ValidationError";
+  }
+}
+
+throw new ValidationError("Email обязателен");
+```
+
+Потом можно проверить:
+
+```javascript
+if (error instanceof ValidationError) {
+  console.log("Ошибка валидации");
+}
+```
+
+## Подводный камень
+
+Не используйте `throw` для обычного ветвления, где достаточно `return`.
+
+```javascript
+function getUserName(user) {
+  if (!user) return "Гость";
+
+  return user.name;
+}
+```
+
+Ошибки стоит бросать для действительно исключительных ситуаций или нарушения контракта функции.
+
+## Мини-шпаргалка
+
+```javascript
+throw new Error("Message");
+
+try {
+  risky();
+} catch (error) {
+  console.error(error.message);
+}
+```
+
+| Что бросать | Оценка |
+| --- | --- |
+| `new Error("...")` | хорошо |
+| `new TypeError("...")` | хорошо для ошибки типа |
+| строку | нежелательно |
+| число/объект без `Error` | нежелательно |

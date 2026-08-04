@@ -1,0 +1,84 @@
+# `forEach()` в массиве
+
+> [!NOTE] Коротко
+> `forEach()` выполняет callback для каждого элемента массива и всегда возвращает `undefined`. Его используют для side effects, а не для создания нового массива.
+
+## Вопрос
+
+Для чего используется `arr.forEach()`? Чем отличается от `map` и `filter`?
+
+## Синтаксис
+
+```javascript
+array.forEach((element, index, array) => {
+  // действие
+});
+```
+
+## Пример
+
+```javascript
+const users = ["Anna", "Max"];
+
+users.forEach((user) => {
+  console.log(user);
+});
+```
+
+## Возвращаемое значение
+
+```javascript
+const result = [1, 2, 3].forEach((number) => number * 2);
+
+console.log(result); // undefined
+```
+
+Если нужен новый массив, используйте `map`.
+
+```javascript
+const doubled = [1, 2, 3].map((number) => number * 2);
+```
+
+## Когда использовать
+
+`forEach` подходит для действий:
+
+- логирование;
+- запись в DOM;
+- вызов функции для каждого элемента;
+- изменение внешней структуры, если это осознанно.
+
+```javascript
+const names = [];
+
+users.forEach((user) => {
+  names.push(user.name);
+});
+```
+
+Но часто лучше:
+
+```javascript
+const names = users.map((user) => user.name);
+```
+
+## Нельзя остановить через `break`
+
+```javascript
+array.forEach((item) => {
+  if (item === target) {
+    // break здесь нельзя
+  }
+});
+```
+
+Если нужно остановиться, используйте `for...of`, `some`, `every` или `find`.
+
+## Мини-шпаргалка
+
+| Метод | Возвращает | Задача |
+| --- | --- | --- |
+| `forEach` | `undefined` | выполнить действие |
+| `map` | новый массив | преобразовать |
+| `filter` | новый массив | отфильтровать |
+| `find` | элемент или `undefined` | найти первый |

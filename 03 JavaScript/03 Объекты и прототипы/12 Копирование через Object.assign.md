@@ -1,0 +1,80 @@
+# Копирование через `Object.assign`
+
+> [!NOTE] Коротко
+> `Object.assign()` копирует свойства источников в целевой объект. При копировании объекта он делает поверхностную копию: вложенные объекты остаются общими ссылками.
+
+## Вопрос
+
+Что произойдет при копировании вложенного объекта через `Object.assign()`?
+
+## Синтаксис
+
+```javascript
+Object.assign(target, source1, source2, ...);
+```
+
+Пример:
+
+```javascript
+const user = { name: "Anna", age: 25 };
+const copy = Object.assign({}, user);
+```
+
+`{}` - новый целевой объект.
+
+## Поверхностная копия
+
+```javascript
+const user = {
+  name: "Anna",
+  address: {
+    city: "Moscow",
+  },
+};
+
+const copy = Object.assign({}, user);
+
+copy.name = "Max";
+copy.address.city = "Kazan";
+
+console.log(user.name); // "Anna"
+console.log(user.address.city); // "Kazan"
+```
+
+Поле `name` скопировалось как примитив, а `address` - как ссылка на объект.
+
+## Объединение объектов
+
+```javascript
+const defaults = { theme: "light", pageSize: 20 };
+const userSettings = { pageSize: 50 };
+
+const settings = Object.assign({}, defaults, userSettings);
+
+console.log(settings); // { theme: "light", pageSize: 50 }
+```
+
+Если ключи совпадают, побеждает последний источник.
+
+## Мутация target
+
+`Object.assign` изменяет первый аргумент.
+
+```javascript
+const target = {};
+
+Object.assign(target, { a: 1 });
+
+console.log(target); // { a: 1 }
+```
+
+Если не хотите мутировать существующий объект, первым аргументом передавайте `{}`.
+
+## Мини-шпаргалка
+
+| Код | Что делает |
+| --- | --- |
+| `Object.assign({}, obj)` | shallow copy |
+| `Object.assign(target, source)` | мутирует target |
+| `Object.assign({}, a, b)` | объединяет объекты |
+| `{ ...obj }` | похожая shallow copy |

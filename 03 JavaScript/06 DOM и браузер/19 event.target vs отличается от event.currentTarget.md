@@ -1,0 +1,59 @@
+# event.target vs event.currentTarget
+
+> [!NOTE] Коротко
+> `event.target` - где событие началось, а `event.currentTarget` - элемент, на котором сейчас выполняется обработчик.
+
+## Вопрос
+
+Чем `event.target` отличается от `event.currentTarget`?
+
+## Определение
+
+`event.target` указывает на исходный элемент события. `event.currentTarget` указывает на элемент, к которому привязан текущий обработчик.
+
+При простом клике они могут совпадать. При всплытии часто отличаются.
+
+## Пример
+
+```html
+<button class="button">
+  <span>Save</span>
+</button>
+```
+
+```javascript
+const button = document.querySelector('.button');
+
+button.addEventListener('click', (event) => {
+  console.log(event.target);        // span
+  console.log(event.currentTarget); // button
+});
+```
+
+Если кликнуть по `span`, событие началось на `span`, но обработчик выполняется на `button`.
+
+## Сравнение
+
+| Свойство | Значение |
+| --- | --- |
+| `event.target` | исходная цель события |
+| `event.currentTarget` | элемент текущего обработчика |
+| Меняется при всплытии | нет | да |
+| Полезно для | делегирования | работы с элементом-слушателем |
+
+## Частый прием
+
+```javascript
+button.addEventListener('click', (event) => {
+  event.currentTarget.disabled = true;
+});
+```
+
+Так мы точно отключаем кнопку, на которую повесили обработчик, а не вложенную иконку или текст.
+
+## Мини-шпаргалка
+
+```javascript
+event.target;        // where event started
+event.currentTarget; // where handler is running
+```

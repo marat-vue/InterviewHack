@@ -1,0 +1,96 @@
+# `typeof null`
+
+> [!NOTE] Коротко
+> `typeof null` возвращает `"object"`. Это историческая особенность JavaScript, а не доказательство того, что `null` является объектом.
+
+## Вопрос
+
+Что будет результатом `typeof null` и почему?
+
+## Результат
+
+```javascript
+typeof null; // "object"
+```
+
+На собеседовании важно сказать две вещи:
+
+- результат - строка `"object"`;
+- это исторический баг, сохраненный ради совместимости.
+
+## Почему так получилось
+
+В ранних версиях JavaScript значения внутри движка представлялись с помощью специальных меток типов. `null` имел нулевое машинное представление, которое ошибочно распознавалось как объект.
+
+Позже это поведение уже нельзя было спокойно исправить: слишком много сайтов и библиотек могли зависеть от старого результата.
+
+## Как проверять `null`
+
+Правильно:
+
+```javascript
+value === null;
+```
+
+Неправильно:
+
+```javascript
+typeof value === "null"; // такого результата не бывает
+```
+
+## Как проверить "объект, но не null"
+
+```javascript
+function isObject(value) {
+  return typeof value === "object" && value !== null;
+}
+
+isObject({});   // true
+isObject([]);   // true
+isObject(null); // false
+```
+
+Если нужно исключить массивы:
+
+```javascript
+function isPlainObject(value) {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    !Array.isArray(value)
+  );
+}
+```
+
+## Наглядный пример ошибки
+
+```javascript
+function printKeys(value) {
+  if (typeof value === "object") {
+    return Object.keys(value);
+  }
+
+  return [];
+}
+
+printKeys(null); // TypeError
+```
+
+Исправление:
+
+```javascript
+function printKeys(value) {
+  if (typeof value === "object" && value !== null) {
+    return Object.keys(value);
+  }
+
+  return [];
+}
+```
+
+## Мини-шпаргалка
+
+- `typeof null` - `"object"`.
+- `null` - отдельный примитивный тип.
+- Проверка `null`: `value === null`.
+- Проверка объекта: `typeof value === "object" && value !== null`.

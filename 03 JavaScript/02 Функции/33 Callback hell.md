@@ -1,0 +1,99 @@
+# Callback hell
+
+> [!NOTE] Коротко
+> Callback hell - ситуация, когда асинхронные callback вложены друг в друга слишком глубоко. Код становится трудным для чтения, обработки ошибок и поддержки.
+
+## Вопрос
+
+Почему callback-функции могут привести к callback hell?
+
+## Пример
+
+```javascript
+loadUser((user) => {
+  loadPosts(user.id, (posts) => {
+    loadComments(posts[0].id, (comments) => {
+      render(user, posts, comments);
+    });
+  });
+});
+```
+
+Каждый следующий шаг зависит от предыдущего, поэтому callback вкладываются один в другой.
+
+## Чем это плохо
+
+- код уезжает вправо;
+- трудно читать последовательность действий;
+- сложно обрабатывать ошибки;
+- трудно переиспользовать отдельные шаги;
+- легко забыть обработать один из сценариев.
+
+## Ошибки становятся особенно неприятными
+
+```javascript
+loadUser((error, user) => {
+  if (error) {
+    handleError(error);
+    return;
+  }
+
+  loadPosts(user.id, (error, posts) => {
+    if (error) {
+      handleError(error);
+      return;
+    }
+
+    render(posts);
+  });
+});
+```
+
+Обработка ошибок повторяется на каждом уровне.
+
+## Как уменьшить callback hell
+
+### Вынести функции
+
+```javascript
+loadUser(handleUser);
+
+function handleUser(user) {
+  loadPosts(user.id, handlePosts);
+}
+
+function handlePosts(posts) {
+  render(posts);
+}
+```
+
+### Использовать промисы
+
+```javascript
+loadUser()
+  .then((user) => loadPosts(user.id))
+  .then((posts) => render(posts))
+  .catch(handleError);
+```
+
+### Использовать `async/await`
+
+```javascript
+try {
+  const user = await loadUser();
+  const posts = await loadPosts(user.id);
+
+  render(posts);
+} catch (error) {
+  handleError(error);
+}
+```
+
+## Мини-шпаргалка
+
+| Проблема | Решение |
+| --- | --- |
+| глубокая вложенность | вынести функции |
+| повтор ошибок | промисы или `async/await` |
+| сложная последовательность | разбить на шаги |
+| зависимые операции | цепочка `.then` или `await` |

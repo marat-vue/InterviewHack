@@ -1,0 +1,109 @@
+# Hoisting функций
+
+> [!NOTE] Коротко
+> Hoisting - это обработка объявлений до выполнения кода. Function Declaration можно вызвать до объявления, а Function Expression ведет себя как переменная.
+
+## Вопрос
+
+Что такое hoisting? Что произойдет, если вызвать функцию до ее объявления?
+
+## Общая идея
+
+Hoisting не означает, что JavaScript физически переносит строки кода вверх. Правильнее думать так: перед выполнением движок создает привязки для объявлений.
+
+## Function Declaration
+
+```javascript
+sayHi(); // "Hi"
+
+function sayHi() {
+  return "Hi";
+}
+```
+
+Function Declaration всплывает целиком: имя функции и ее тело доступны до строки объявления.
+
+## Function Expression с `const`
+
+```javascript
+sayHi(); // ReferenceError
+
+const sayHi = function () {
+  return "Hi";
+};
+```
+
+Переменная `sayHi` существует в области видимости, но до строки объявления находится в TDZ.
+
+## Function Expression с `let`
+
+```javascript
+sayHi(); // ReferenceError
+
+let sayHi = function () {
+  return "Hi";
+};
+```
+
+Поведение такое же, как у `const`.
+
+## Function Expression с `var`
+
+```javascript
+sayHi(); // TypeError
+
+var sayHi = function () {
+  return "Hi";
+};
+```
+
+`var` всплывает и инициализируется `undefined`. Поэтому переменная есть, но вызвать ее нельзя.
+
+Упрощенно:
+
+```javascript
+var sayHi;
+
+sayHi(); // TypeError
+
+sayHi = function () {
+  return "Hi";
+};
+```
+
+## Arrow Function
+
+Стрелочная функция обычно записывается в переменную, поэтому ведет себя как Function Expression.
+
+```javascript
+double(2); // ReferenceError
+
+const double = (value) => value * 2;
+```
+
+## Практическое правило
+
+Если хотите, чтобы функцию можно было читать как "главный блок логики", используйте Function Declaration.
+
+```javascript
+function initApp() {
+  loadConfig();
+  renderApp();
+}
+```
+
+Если функция является значением, callback или частью объекта, используйте expression/arrow.
+
+```javascript
+const activeUsers = users.filter((user) => user.active);
+```
+
+## Мини-шпаргалка
+
+| Запись | Вызов до объявления |
+| --- | --- |
+| `function f() {}` | работает |
+| `const f = function () {}` | `ReferenceError` |
+| `let f = function () {}` | `ReferenceError` |
+| `var f = function () {}` | `TypeError` |
+| `const f = () => {}` | `ReferenceError` |

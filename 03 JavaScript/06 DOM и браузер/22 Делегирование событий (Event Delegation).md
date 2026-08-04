@@ -1,0 +1,60 @@
+# Делегирование событий (Event Delegation)
+
+> [!NOTE] Коротко
+> Делегирование событий - прием, при котором один обработчик на родителе обрабатывает события от дочерних элементов.
+
+## Вопрос
+
+Что такое Event Delegation и зачем он нужен?
+
+## Определение
+
+Делегирование основано на всплытии событий. Вместо того чтобы вешать обработчик на каждый дочерний элемент, мы вешаем один обработчик на общего родителя и определяем, по какому элементу кликнули.
+
+## Пример
+
+```html
+<ul class="list">
+  <li data-id="1">Item 1</li>
+  <li data-id="2">Item 2</li>
+  <li data-id="3">Item 3</li>
+</ul>
+```
+
+```javascript
+const list = document.querySelector('.list');
+
+list.addEventListener('click', (event) => {
+  const item = event.target.closest('li');
+
+  if (!item || !list.contains(item)) return;
+
+  console.log(item.dataset.id);
+});
+```
+
+Один обработчик работает для всех `li`.
+
+## Почему это удобно
+
+- меньше обработчиков в памяти;
+- работает для элементов, добавленных позже;
+- проще централизовать логику;
+- удобно использовать с `data-*` атрибутами.
+
+## Частая защита
+
+```javascript
+if (!item || !container.contains(item)) return;
+```
+
+Такая проверка защищает от кликов вне нужного контейнера.
+
+## Мини-шпаргалка
+
+```javascript
+parent.addEventListener('click', (event) => {
+  const target = event.target.closest(selector);
+  if (!target) return;
+});
+```

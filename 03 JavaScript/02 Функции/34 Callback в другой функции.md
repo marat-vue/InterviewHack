@@ -1,0 +1,105 @@
+# Callback в другой функции
+
+> [!NOTE] Коротко
+> Callback передают как обычный аргумент, потому что функции в JavaScript являются значениями. Принимающая функция может вызвать callback сразу или позже.
+
+## Вопрос
+
+Как передать callback в другую функцию?
+
+## Базовый пример
+
+```javascript
+function doSomething(callback) {
+  console.log("Делаю работу");
+  callback();
+}
+
+function afterWork() {
+  console.log("Работа закончена");
+}
+
+doSomething(afterWork);
+```
+
+Важно: передаем функцию без круглых скобок.
+
+```javascript
+doSomething(afterWork);   // правильно
+doSomething(afterWork()); // вызовет сразу и передаст результат
+```
+
+## Callback с аргументами
+
+```javascript
+function processUser(user, callback) {
+  const result = {
+    ...user,
+    active: true,
+  };
+
+  callback(result);
+}
+
+processUser({ name: "Anna" }, (user) => {
+  console.log(user.name);
+});
+```
+
+Принимающая функция сама решает, с какими аргументами вызвать callback.
+
+## Callback как условная логика
+
+```javascript
+function filterItems(items, predicate) {
+  const result = [];
+
+  for (const item of items) {
+    if (predicate(item)) {
+      result.push(item);
+    }
+  }
+
+  return result;
+}
+
+filterItems([1, 2, 3, 4], (n) => n > 2); // [3, 4]
+```
+
+Это упрощенная версия идеи `Array.prototype.filter`.
+
+## Проверка callback
+
+Если callback необязательный, проверьте его тип.
+
+```javascript
+function run(callback) {
+  if (typeof callback === "function") {
+    callback();
+  }
+}
+```
+
+Или используйте optional chaining:
+
+```javascript
+callback?.();
+```
+
+## Мини-шпаргалка
+
+```javascript
+function fn(callback) {
+  callback();
+}
+
+fn(() => {});
+fn(namedFunction);
+```
+
+| Нужно | Как |
+| --- | --- |
+| передать функцию | `fn(callback)` |
+| не вызвать сразу | без `()` |
+| передать данные в callback | `callback(data)` |
+| optional callback | `callback?.()` |
