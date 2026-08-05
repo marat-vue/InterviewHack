@@ -1,6 +1,6 @@
 # `JSON.parse()`
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `JSON.parse(json)` преобразует JSON-строку в JavaScript-значение. Если строка не является валидным JSON, будет `SyntaxError`.
 
 ## Вопрос

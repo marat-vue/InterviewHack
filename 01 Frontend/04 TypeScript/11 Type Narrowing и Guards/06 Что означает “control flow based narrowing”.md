@@ -1,6 +1,6 @@
 # Что означает control flow based narrowing?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Control flow based narrowing означает, что TypeScript учитывает ход выполнения программы: `if`, `return`, `throw`, циклы и присваивания, чтобы уточнять типы.
 
 ## Вопрос

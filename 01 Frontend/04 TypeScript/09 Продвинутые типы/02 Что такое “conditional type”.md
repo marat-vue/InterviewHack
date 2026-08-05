@@ -1,6 +1,6 @@
 # Что такое conditional type?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Conditional type выбирает один из двух типов по условию: `T extends U ? X : Y`. Это type-level аналог тернарного оператора.
 
 ## Вопрос

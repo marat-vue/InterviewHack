@@ -1,6 +1,6 @@
 # localStorage VS sessionStorage
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `localStorage` хранит данные между сессиями браузера, а `sessionStorage` очищается при закрытии вкладки.
 
 ## Вопрос

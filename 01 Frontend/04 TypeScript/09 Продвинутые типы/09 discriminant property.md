@@ -1,6 +1,6 @@
 # discriminant property
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Discriminant property - это общее поле в union объектов, по которому TypeScript различает варианты. Обычно его называют `type`, `kind`, `status` или `state`.
 
 ## Вопрос

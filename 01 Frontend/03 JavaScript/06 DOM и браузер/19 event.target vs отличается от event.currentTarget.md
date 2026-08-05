@@ -1,6 +1,6 @@
 # event.target vs event.currentTarget
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `event.target` - где событие началось, а `event.currentTarget` - элемент, на котором сейчас выполняется обработчик.
 
 ## Вопрос

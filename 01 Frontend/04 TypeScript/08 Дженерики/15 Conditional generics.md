@@ -1,6 +1,6 @@
 # Conditional generics
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Conditional generics - это generic-типы с условием: `T extends U ? X : Y`. Они выбирают один тип или другой в зависимости от входного типа.
 
 ## Вопрос

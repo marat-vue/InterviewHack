@@ -1,6 +1,6 @@
 # Что может содержать компонент во Vue?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Компонент Vue может содержать состояние, props, computed, methods, watchers, lifecycle hooks, дочерние компоненты, slots, emits и стили.
 
 ## Вопрос

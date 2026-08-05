@@ -1,6 +1,6 @@
 # IIFE
 
-> [!NOTE] Коротко
+> [!NOTE]
 > IIFE - Immediately Invoked Function Expression, то есть функциональное выражение, которое создается и сразу вызывается.
 
 ## Вопрос

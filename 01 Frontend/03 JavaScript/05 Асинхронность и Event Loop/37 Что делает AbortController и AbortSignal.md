@@ -1,6 +1,6 @@
 # Что делает AbortController и AbortSignal?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `AbortController` создает сигнал отмены, а `AbortSignal` передается в асинхронную операцию, чтобы ее можно было прервать.
 
 ## Вопрос

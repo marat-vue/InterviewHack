@@ -1,6 +1,6 @@
 # Чем отличаются хуки в Options API и Composition API?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > В Options API хуки задаются как методы объекта компонента, а в Composition API подключаются функциями `onMounted`, `onUpdated`, `onUnmounted` внутри `setup`.
 
 ## Вопрос

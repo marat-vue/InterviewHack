@@ -1,6 +1,6 @@
 # Что делает IntersectionObserver?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `IntersectionObserver` асинхронно отслеживает, пересекается ли элемент с viewport или другим контейнером.
 
 ## Вопрос

@@ -1,6 +1,6 @@
 # Utility types для строк
 
-> [!NOTE] Коротко
+> [!NOTE]
 > TypeScript имеет встроенные строковые utility-типы: `Uppercase`, `Lowercase`, `Capitalize`, `Uncapitalize`. Они преобразуют string literal types на уровне типов.
 
 ## Вопрос

@@ -1,6 +1,6 @@
 # Какие типы ошибок бывают в JavaScript?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > В JavaScript есть базовый `Error` и встроенные типы ошибок: `TypeError`, `ReferenceError`, `SyntaxError`, `RangeError` и другие.
 
 ## Вопрос

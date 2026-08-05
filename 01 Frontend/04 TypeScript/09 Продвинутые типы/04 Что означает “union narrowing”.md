@@ -1,6 +1,6 @@
 # Что означает union narrowing?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Union narrowing - это сужение union-типа до конкретного варианта после проверки: `typeof`, `in`, `instanceof`, сравнение литералов или пользовательский type guard.
 
 ## Вопрос

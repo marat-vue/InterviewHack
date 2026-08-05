@@ -1,6 +1,6 @@
 # type inference c generics
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Type inference с generics означает, что TypeScript часто сам подставляет generic-тип по переданным аргументам. Поэтому `identity("hi")` становится `identity<string>("hi")` без явной записи.
 
 ## Вопрос

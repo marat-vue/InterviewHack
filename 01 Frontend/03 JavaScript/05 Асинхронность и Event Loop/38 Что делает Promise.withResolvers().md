@@ -1,6 +1,6 @@
 # Что делает Promise.withResolvers()?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `Promise.withResolvers()` создает промис и сразу возвращает наружу его `resolve` и `reject`.
 
 ## Вопрос

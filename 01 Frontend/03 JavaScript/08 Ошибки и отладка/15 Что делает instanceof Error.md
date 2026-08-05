@@ -1,6 +1,6 @@
 # Что делает instanceof Error?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `value instanceof Error` проверяет, находится ли `Error.prototype` в цепочке прототипов значения.
 
 ## Вопрос

@@ -1,6 +1,6 @@
 # Что такое type guard function?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Type guard function - это функция-проверка с возвращаемым типом `value is Type`. Если она вернула `true`, TypeScript сужает значение до `Type`.
 
 ## Вопрос

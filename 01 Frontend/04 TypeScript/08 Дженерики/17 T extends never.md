@@ -1,6 +1,6 @@
 # T extends never
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `T extends never` часто ведет себя неожиданно из-за дистрибутивности conditional types. Если `T` равен `never`, условие может вернуть тоже `never`, а не ожидаемые `true` или `false`.
 
 ## Вопрос

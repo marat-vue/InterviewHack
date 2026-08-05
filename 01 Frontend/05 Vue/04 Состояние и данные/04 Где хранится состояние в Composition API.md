@@ -1,6 +1,6 @@
 # Где хранится состояние в Composition API?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > В Composition API состояние создают внутри `setup` или `<script setup>` через `ref`, `reactive`, `computed` и composable-функции.
 
 ## Вопрос

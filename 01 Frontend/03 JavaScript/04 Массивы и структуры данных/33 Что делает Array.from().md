@@ -1,6 +1,6 @@
 # `Array.from()`
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `Array.from()` создает новый массив из iterable или array-like объекта. Также может сразу применить mapping-функцию.
 
 ## Вопрос

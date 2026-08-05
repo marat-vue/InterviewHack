@@ -1,6 +1,6 @@
 # Что такое nested generics?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Nested generics - это вложенные generic-типы, например `Promise<ApiResponse<User[]>>`. Они описывают данные, которые завернуты в несколько типовых оболочек.
 
 ## Вопрос

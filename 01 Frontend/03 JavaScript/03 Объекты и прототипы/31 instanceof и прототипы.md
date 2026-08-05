@@ -1,6 +1,6 @@
 # `instanceof` и прототипы
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `obj instanceof Constructor` возвращает `true`, если `Constructor.prototype` встречается в цепочке прототипов объекта `obj`.
 
 ## Вопрос

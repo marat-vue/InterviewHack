@@ -1,6 +1,6 @@
 # Что такое тип number?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `number` описывает числовые значения JavaScript: целые, дробные, `NaN`, `Infinity` и `-Infinity`.
 
 ## Вопрос

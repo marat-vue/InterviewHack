@@ -1,6 +1,6 @@
 # Hoisting функций
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Hoisting - это обработка объявлений до выполнения кода. Function Declaration можно вызвать до объявления, а Function Expression ведет себя как переменная.
 
 ## Вопрос

@@ -1,6 +1,6 @@
 # Что такое type narrowing в TypeScript?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Type narrowing - это процесс, при котором TypeScript сужает широкий тип до более конкретного после проверки в коде.
 
 ## Вопрос

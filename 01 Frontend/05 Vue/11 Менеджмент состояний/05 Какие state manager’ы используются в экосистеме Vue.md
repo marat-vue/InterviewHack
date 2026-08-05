@@ -1,6 +1,6 @@
 # Какие state manager'ы используются в экосистеме Vue?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > В современной экосистеме Vue основной выбор для state management - Pinia. В legacy-проектах часто встречается Vuex, а для простых случаев хватает локального state, composables или provide/inject.
 
 ## Вопрос

@@ -1,6 +1,6 @@
 # Что такое Options API?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Options API - стиль написания Vue-компонентов, где логика раскладывается по опциям: `data`, `methods`, `computed`, `watch`, lifecycle hooks.
 
 ## Вопрос

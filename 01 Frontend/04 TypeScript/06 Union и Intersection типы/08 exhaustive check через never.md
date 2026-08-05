@@ -1,6 +1,6 @@
 # exhaustive check через never
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Exhaustive check через `never` заставляет TypeScript проверить, что в `switch` или `if` обработаны все варианты union.
 
 ## Вопрос

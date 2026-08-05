@@ -1,6 +1,6 @@
 # Как объявлять props в setup?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > В `<script setup>` props объявляют через `defineProps`. В обычном `setup(props)` props приходят первым аргументом.
 
 ## Вопрос

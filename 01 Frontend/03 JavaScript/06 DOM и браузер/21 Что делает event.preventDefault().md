@@ -1,6 +1,6 @@
 # Что делает event.preventDefault()?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `event.preventDefault()` отменяет стандартное действие браузера для события.
 
 ## Вопрос

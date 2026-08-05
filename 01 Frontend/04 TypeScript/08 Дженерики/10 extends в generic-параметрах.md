@@ -1,6 +1,6 @@
 # extends в generic-параметрах
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `extends` в generic-параметре задает ограничение: `T extends SomeType`. Это значит, что `T` может быть только типом, совместимым с `SomeType`.
 
 ## Вопрос

@@ -1,6 +1,6 @@
 # Что такое Composition API?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Composition API - стиль Vue 3, где логика компонента собирается через функции `ref`, `reactive`, `computed`, `watch` и lifecycle hooks внутри `setup` или `<script setup>`.
 
 ## Вопрос

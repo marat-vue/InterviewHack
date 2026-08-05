@@ -1,6 +1,6 @@
 # Как достать тип аргументов функции через infer?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Тип аргументов функции можно достать через conditional type с `infer`: `T extends (...args: infer P) => any ? P : never`.
 
 ## Вопрос

@@ -1,6 +1,6 @@
 # Что делает event.stopPropagation()?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `event.stopPropagation()` останавливает дальнейшее распространение события по DOM-дереву.
 
 ## Вопрос

@@ -1,6 +1,6 @@
 # Index Access Types
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Indexed access types позволяют достать тип свойства по ключу: `T[K]`. Это type-level аналог обращения `object[key]`.
 
 ## Вопрос

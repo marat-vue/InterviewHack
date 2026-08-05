@@ -1,6 +1,6 @@
 # `JSON.stringify()`
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `JSON.stringify(value)` преобразует JavaScript-значение в JSON-строку. Это называют сериализацией.
 
 ## Вопрос

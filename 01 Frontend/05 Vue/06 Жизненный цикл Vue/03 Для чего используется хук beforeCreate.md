@@ -1,6 +1,6 @@
 # Для чего используется хук beforeCreate?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `beforeCreate` - ранний хук Options API во Vue 2, который вызывается до инициализации `data`, `computed`, `methods` и watchers. В современном Vue 3 он почти не нужен, потому что его роль обычно закрывает `setup`.
 
 ## Вопрос

@@ -1,6 +1,6 @@
 # Что делает requestAnimationFrame()?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `requestAnimationFrame()` планирует callback перед следующей перерисовкой браузера и подходит для анимаций.
 
 ## Вопрос

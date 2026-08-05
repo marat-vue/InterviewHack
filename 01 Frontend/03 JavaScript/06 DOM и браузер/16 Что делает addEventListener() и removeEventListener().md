@@ -1,6 +1,6 @@
 # Что делает addEventListener() и removeEventListener()?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `addEventListener()` добавляет обработчик события, а `removeEventListener()` удаляет ранее добавленный обработчик.
 
 ## Вопрос

@@ -1,6 +1,6 @@
 # Function Declaration и Function Expression
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Function Declaration объявляет функцию как отдельную декларацию и всплывает целиком. Function Expression создает функцию как значение и присваивает ее переменной.
 
 ## Вопрос

@@ -1,6 +1,6 @@
 # Какая разница между value и modelValue?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `value` - обычный HTML-атрибут или prop, а `modelValue` во Vue 3 - стандартный prop для компонентного `v-model`.
 
 ## Вопрос

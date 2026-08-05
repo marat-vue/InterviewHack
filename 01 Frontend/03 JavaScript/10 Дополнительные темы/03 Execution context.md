@@ -1,6 +1,6 @@
 # Execution context
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Execution context - окружение, в котором JavaScript выполняет код и хранит информацию о переменных, `this` и области видимости.
 
 ## Вопрос

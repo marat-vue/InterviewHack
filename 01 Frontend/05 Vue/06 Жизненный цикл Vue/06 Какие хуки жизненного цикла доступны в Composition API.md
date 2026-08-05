@@ -1,6 +1,6 @@
 # Какие хуки жизненного цикла доступны в Composition API?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > В Composition API хуки жизненного цикла доступны как функции `onMounted`, `onUpdated`, `onUnmounted` и другие. Их вызывают синхронно внутри `setup` или `<script setup>`.
 
 ## Вопрос

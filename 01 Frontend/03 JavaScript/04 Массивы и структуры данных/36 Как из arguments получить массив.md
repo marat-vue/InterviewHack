@@ -1,6 +1,6 @@
 # Как из `arguments` получить массив?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `arguments` - псевдомассив. Чтобы использовать методы массива, его можно преобразовать через `Array.from(arguments)`, spread или `Array.prototype.slice.call(arguments)`.
 
 ## Вопрос

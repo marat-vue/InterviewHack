@@ -1,6 +1,6 @@
 # Что делает ConstructorParameters?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > `ConstructorParameters<T>` достает типы параметров конструктора класса или constructor signature в виде кортежа.
 
 ## Вопрос

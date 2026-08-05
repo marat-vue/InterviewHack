@@ -1,6 +1,6 @@
 # Что такое composable-функции?
 
-> [!NOTE] Коротко
+> [!NOTE]
 > Composable - функция, которая использует Composition API и возвращает переиспользуемую реактивную логику: state, computed, методы, watchers или lifecycle hooks.
 
 ## Вопрос
