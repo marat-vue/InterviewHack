@@ -18,26 +18,26 @@
 
 | Раздел | Что внутри | Количество материалов |
 | --- | --- | ---: |
-| [01. Frontend](<./01. Frontend/>) | HTML, CSS, JavaScript, TypeScript, Vue, Nuxt | 1008 |
-| [02. Backend](<./02. Backend/>) | SQL, Node.js, NestJS, Docker | 363 |
-| [03. Other](<./03. Other/>) | Web-технологии, SEO, тестирование, алгоритмы | 259 |
+| [01. Frontend](<./01. Frontend/>) | HTML, CSS, JavaScript, TypeScript, Vue, Nuxt | 1036 |
+| [02. Backend](<./02. Backend/>) | SQL, Node.js, Docker, Nitro, Redis | 403 |
+| [03. Other](<./03. Other/>) | Web-технологии, SEO, тестирование, алгоритмы | 272 |
 | [04. Настройка VS Code.md](<./04. Настройка VS Code.md>) | Настройка рабочего редактора | 1 |
 
-Всего в проекте: **1632 Markdown-файла** и **175 папок**.
+Всего в проекте: **1713 Markdown-файлов** и **184 папки**.
 
 ## Как пользоваться проектом
 
 1. Выберите крупное направление в [карте проекта](#карта-проекта).
 2. Перейдите в нужную папку по ссылке из таблицы.
 3. Изучайте материалы по порядку: префиксы `01`, `02`, `03` задают рекомендуемую последовательность.
-4. Для подготовки к интервью особенно полезны разделы `Практика и собеседования`, которые есть в Nuxt, SQL, Node.js, NestJS, Docker, SEO, тестировании и алгоритмах.
+4. Для подготовки к интервью особенно полезны разделы `Практика и собеседования`, которые есть в Nuxt, SQL, Node.js, Docker, Nitro, Redis, SEO, тестировании и алгоритмах.
 
 ## Карта проекта
 
 Проект организован как учебная дорожная карта:
 
 - **Frontend** - клиентская часть: разметка, стили, JavaScript/TypeScript, Vue-экосистема и Nuxt.
-- **Backend** - серверная часть: базы данных, Node.js, NestJS, контейнеризация и production-подходы.
+- **Backend** - серверная часть: базы данных, Node.js, контейнеризация, Nitro, Redis и production-подходы.
 - **Other** - смежные темы: HTTP, безопасность, SEO, тестирование и алгоритмы.
 
 ## Frontend
@@ -50,8 +50,8 @@
 | [CSS](<./01. Frontend/02. CSS/>) | Селекторы, box model, позиционирование, Flexbox, Grid, адаптивность, анимации | 115 |
 | [JavaScript](<./01. Frontend/03. JavaScript/>) | Основы языка, функции, объекты, массивы, асинхронность, DOM, классы, производительность | 372 |
 | [TypeScript](<./01. Frontend/04. TypeScript/>) | Типы, интерфейсы, функции, коллекции, union/intersection, utility-типы, generics, narrowing | 149 |
-| [Vue](<./01. Frontend/05. Vue/>) | Реактивность, компоненты, директивы, Composition API, роутинг, Pinia, Vuetify, VueUse, Vite | 224 |
-| [Nuxt](<./01. Frontend/06. Nuxt/>) | Роутинг, SSR/SSG/ISR, data fetching, Nitro, SEO, модули, практика | 64 |
+| [Vue](<./01. Frontend/05. Vue/>) | Реактивность, компоненты, директивы, Composition API, роутинг, Pinia, Vuetify, VueUse, Vite, testing, a11y/security, advanced production | 239 |
+| [Nuxt](<./01. Frontend/06. Nuxt/>) | Роутинг, SSR/SSG/ISR, data fetching, Nitro, SEO, модули, assets, styling, testing, advanced production | 77 |
 
 ### Frontend / HTML
 
@@ -142,6 +142,7 @@
 | [19. Tailwind](<./01. Frontend/05. Vue/19. Tailwind/>) | 6 |
 | [20. Vite](<./01. Frontend/05. Vue/20. Vite/>) | 8 |
 | [21. Motion](<./01. Frontend/05. Vue/21. Motion/>) | 10 |
+| [22. Advanced Vue и библиотеки production](<./01. Frontend/05. Vue/22. Advanced Vue и библиотеки production/>) | 15 |
 
 ### Frontend / Nuxt
 
@@ -155,6 +156,7 @@
 | [06. SEO и Nuxt SEO](<./01. Frontend/06. Nuxt/06. SEO и Nuxt SEO/>) | 9 |
 | [07. Оптимизация и Nuxt модули](<./01. Frontend/06. Nuxt/07. Оптимизация и Nuxt модули/>) | 10 |
 | [08. Практика и собеседования](<./01. Frontend/06. Nuxt/08. Практика и собеседования/>) | 6 |
+| [09. Advanced Nuxt и production frontend](<./01. Frontend/06. Nuxt/09. Advanced Nuxt и production frontend/>) | 13 |
 
 ## Backend
 
@@ -162,10 +164,11 @@
 
 | Подраздел | Темы | Материалов |
 | --- | --- | ---: |
-| [SQL](<./02. Backend/01. SQL/>) | Реляционные БД, запросы, JOIN, CTE, окна, транзакции, индексы, миграции | 89 |
-| [Node](<./02. Backend/02. Node/>) | Runtime, модули, event loop, HTTP, streams, процессы, безопасность, масштабирование | 88 |
-| [Nest](<./02. Backend/03. Nest/>) | Архитектура, DI, controllers, DTO, validation, auth, database, Swagger, Prisma, Zod | 143 |
-| [Docker](<./02. Backend/04. Docker/>) | Контейнеры, образы, Dockerfile, сети, volumes, Compose, production | 43 |
+| [SQL](<./02. Backend/01. SQL/>) | Реляционные БД, запросы, JOIN, CTE, окна, транзакции, индексы, миграции, PostgreSQL production | 105 |
+| [Node](<./02. Backend/02. Node/>) | Runtime, модули, event loop, HTTP, streams, процессы, безопасность, диагностика, современные API | 100 |
+| [Docker](<./02. Backend/04. Docker/>) | Контейнеры, образы, Dockerfile, сети, volumes, Compose, Nuxt/Nitro, PostgreSQL, Redis, production | 56 |
+| [Nitro](<./02. Backend/05. Nitro/>) | Server routes, H3, middleware, cache, storage, Redis, OpenAPI/Swagger, WebSocket, deployment, Prisma, Better Auth, Vitest, @nuxt/test-utils | 70 |
+| [Redis](<./02. Backend/06. Redis/>) | Cache, key-value, TTL, data structures, Pub/Sub, Streams, Node.js, replication, cluster, security, production | 72 |
 
 ### Backend / SQL
 
@@ -182,6 +185,7 @@
 | [09. Транзакции и конкурентность](<./02. Backend/01. SQL/09. Транзакции и конкурентность/>) | 10 |
 | [10. Индексы и оптимизация запросов](<./02. Backend/01. SQL/10. Индексы и оптимизация запросов/>) | 11 |
 | [11. Практика Backend и собеседования](<./02. Backend/01. SQL/11. Практика Backend и собеседования/>) | 10 |
+| [12. PostgreSQL advanced и production](<./02. Backend/01. SQL/12. PostgreSQL advanced и production/>) | 16 |
 
 ### Backend / Node
 
@@ -202,26 +206,7 @@
 | [13. Сеть, HTTP углубленно и WebSocket](<./02. Backend/02. Node/13. Сеть, HTTP углубленно и WebSocket/>) | 10 |
 | [14. Параллелизм и масштабирование](<./02. Backend/02. Node/14. Параллелизм и масштабирование/>) | 7 |
 | [15. Практика production Node.js](<./02. Backend/02. Node/15. Практика production Node.js/>) | 6 |
-
-### Backend / Nest
-
-| Раздел | Материалов |
-| --- | ---: |
-| [01. Основы NestJS и архитектура](<./02. Backend/03. Nest/01. Основы NestJS и архитектура/>) | 6 |
-| [02. CLI, структура проекта и bootstrap](<./02. Backend/03. Nest/02. CLI, структура проекта и bootstrap/>) | 12 |
-| [03. Модули, провайдеры и Dependency Injection](<./02. Backend/03. Nest/03. Модули, провайдеры и Dependency Injection/>) | 11 |
-| [04. Controllers, роутинг и DTO](<./02. Backend/03. Nest/04. Controllers, роутинг и DTO/>) | 8 |
-| [05. Pipes, validation и exception filters](<./02. Backend/03. Nest/05. Pipes, validation и exception filters/>) | 7 |
-| [06. Guards, auth и security](<./02. Backend/03. Nest/06. Guards, auth и security/>) | 9 |
-| [07. Middleware, interceptors и request lifecycle](<./02. Backend/03. Nest/07. Middleware, interceptors и request lifecycle/>) | 7 |
-| [08. Config, database и интеграции](<./02. Backend/03. Nest/08. Config, database и интеграции/>) | 8 |
-| [09. Testing, Swagger и документация API](<./02. Backend/03. Nest/09. Testing, Swagger и документация API/>) | 6 |
-| [10. WebSockets, GraphQL и microservices](<./02. Backend/03. Nest/10. WebSockets, GraphQL и microservices/>) | 7 |
-| [11. Production, архитектура и собеседования](<./02. Backend/03. Nest/11. Production, архитектура и собеседования/>) | 12 |
-| [12. Prisma в NestJS](<./02. Backend/03. Nest/12. Prisma в NestJS/>) | 15 |
-| [13. Better Auth в NestJS](<./02. Backend/03. Nest/13. Better Auth в NestJS/>) | 10 |
-| [14. Zod в NestJS](<./02. Backend/03. Nest/14. Zod в NestJS/>) | 12 |
-| [15. Swagger и OpenAPI подробно](<./02. Backend/03. Nest/15. Swagger и OpenAPI подробно/>) | 13 |
+| [16. Современные API диагностика и security](<./02. Backend/02. Node/16. Современные API диагностика и security/>) | 12 |
 
 ### Backend / Docker
 
@@ -235,6 +220,35 @@
 | [06. Frontend Backend и базы в Docker](<./02. Backend/04. Docker/06. Frontend Backend и базы в Docker/>) | 6 |
 | [07. Production безопасность и отладка](<./02. Backend/04. Docker/07. Production безопасность и отладка/>) | 5 |
 | [08. Практика и собеседования](<./02. Backend/04. Docker/08. Практика и собеседования/>) | 6 |
+| [09. Nuxt Nitro Docker и сервисы](<./02. Backend/04. Docker/09. Nuxt Nitro Docker и сервисы/>) | 13 |
+
+### Backend / Nitro
+
+| Раздел | Материалов |
+| --- | ---: |
+| [00. Источники и карта раздела](<./02. Backend/05. Nitro/00. Источники и карта раздела.md>) | 1 |
+| [01. Основы Nitro и архитектура](<./02. Backend/05. Nitro/01. Основы Nitro и архитектура/>) | 6 |
+| [02. Routing handlers и middleware](<./02. Backend/05. Nitro/02. Routing handlers и middleware/>) | 9 |
+| [03. H3 utilities и runtime API](<./02. Backend/05. Nitro/03. H3 utilities и runtime API/>) | 6 |
+| [04. Config cache storage и deployment](<./02. Backend/05. Nitro/04. Config cache storage и deployment/>) | 11 |
+| [05. Prisma в Nitro](<./02. Backend/05. Nitro/05. Prisma в Nitro/>) | 10 |
+| [06. Better Auth в Nitro](<./02. Backend/05. Nitro/06. Better Auth в Nitro/>) | 10 |
+| [07. Vitest и @nuxt test-utils](<./02. Backend/05. Nitro/07. Vitest и @nuxt test-utils/>) | 12 |
+| [08. Практика и собеседования](<./02. Backend/05. Nitro/08. Практика и собеседования/>) | 5 |
+
+### Backend / Redis
+
+| Раздел | Материалов |
+| --- | ---: |
+| [00. Источники и карта раздела Redis](<./02. Backend/06. Redis/00. Источники и карта раздела Redis.md>) | 1 |
+| [01. Основы Redis и архитектура](<./02. Backend/06. Redis/01. Основы Redis и архитектура/>) | 7 |
+| [02. Команды ключи TTL и CLI](<./02. Backend/06. Redis/02. Команды ключи TTL и CLI/>) | 8 |
+| [03. Структуры данных Redis](<./02. Backend/06. Redis/03. Структуры данных Redis/>) | 12 |
+| [04. Cache patterns и backend сценарии](<./02. Backend/06. Redis/04. Cache patterns и backend сценарии/>) | 8 |
+| [05. Atomicity transactions Lua PubSub и Streams](<./02. Backend/06. Redis/05. Atomicity transactions Lua PubSub и Streams/>) | 10 |
+| [06. Node.js интеграция](<./02. Backend/06. Redis/06. Node.js интеграция/>) | 8 |
+| [07. Persistence replication cluster и production](<./02. Backend/06. Redis/07. Persistence replication cluster и production/>) | 10 |
+| [08. Security observability testing и собеседования](<./02. Backend/06. Redis/08. Security observability testing и собеседования/>) | 8 |
 
 ## Other
 
@@ -245,7 +259,7 @@
 | [Web технологии](<./03. Other/01. Web технологии/>) | HTTP, headers, cookies, sessions, REST, CORS, cache, HTTPS, auth, web security | 49 |
 | [SEO](<./03. Other/02. SEO/>) | Техническое SEO, crawling/indexing, structured data, Core Web Vitals, аналитика | 71 |
 | [Тестирование](<./03. Other/03. Тестирование/>) | Основы, frontend/backend tests, Vitest, Vue Test Utils, Storybook, Jest, E2E, contract testing | 85 |
-| [Алгоритмы и структуры данных](<./03. Other/04. Алгоритмы и структуры данных/>) | Big O, структуры данных, поиск, сортировка, паттерны, деревья, графы, DP | 52 |
+| [Алгоритмы и структуры данных](<./03. Other/04. Алгоритмы и структуры данных/>) | Big O, структуры данных, поиск, сортировка, паттерны, деревья, графы, DP, beginner roadmap, Trie, DSU, bit manipulation | 65 |
 
 ### Other / Web технологии
 
@@ -302,6 +316,7 @@
 | [06. Деревья и графы](<./03. Other/04. Алгоритмы и структуры данных/06. Деревья и графы/>) | 7 |
 | [07. Рекурсия Dynamic Programming и greedy](<./03. Other/04. Алгоритмы и структуры данных/07. Рекурсия Dynamic Programming и greedy/>) | 6 |
 | [08. Практика и собеседования](<./03. Other/04. Алгоритмы и структуры данных/08. Практика и собеседования/>) | 6 |
+| [09. Для новичка и недостающие темы](<./03. Other/04. Алгоритмы и структуры данных/09. Для новичка и недостающие темы/>) | 13 |
 
 ## Корневые файлы
 
